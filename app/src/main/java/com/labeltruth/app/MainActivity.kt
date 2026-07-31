@@ -113,7 +113,11 @@ class MainActivity : ComponentActivity() {
                                 viewModel.clearSearch()
                                 navController.popBackStack()
                             },
-                            onSelect = viewModel::selectIngredient
+                            onSelect = viewModel::selectIngredient,
+                            onLookupBarcode = { barcode ->
+                                viewModel.lookupTypedBarcode(barcode)
+                                navController.popBackStack()
+                            }
                         )
                     }
                     composable(Routes.HISTORY) {

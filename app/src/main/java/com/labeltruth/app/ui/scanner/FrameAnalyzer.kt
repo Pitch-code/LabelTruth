@@ -30,12 +30,21 @@ class FrameAnalyzer(
 
     private val barcodeScanner = BarcodeScanning.getClient(
         BarcodeScannerOptions.Builder()
+            // Restricted to the formats that actually appear on retail packaging.
+            // Narrowing the set makes detection faster and reduces false reads,
+            // so QR and the industrial 2D formats are deliberately excluded.
+            //
+            // ITF is included for ITF-14, which is common on multipacks and
+            // outer cartons. The lookup validates digit count afterwards, which
+            // guards against ITF's tendency to misread striped artwork.
             .setBarcodeFormats(
                 Barcode.FORMAT_EAN_13,
                 Barcode.FORMAT_EAN_8,
                 Barcode.FORMAT_UPC_A,
                 Barcode.FORMAT_UPC_E,
-                Barcode.FORMAT_CODE_128
+                Barcode.FORMAT_CODE_128,
+                Barcode.FORMAT_ITF,
+                Barcode.FORMAT_CODE_39
             )
             .build()
     )

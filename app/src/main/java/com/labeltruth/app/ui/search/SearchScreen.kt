@@ -46,8 +46,13 @@ fun SearchScreen(
     results: List<Ingredient>,
     onQueryChange: (String) -> Unit,
     onBack: () -> Unit,
-    onSelect: (Ingredient) -> Unit
+    onSelect: (Ingredient) -> Unit,
+    onLookupBarcode: (String) -> Unit
 ) {
+    // A typed barcode is the fallback for a scratched or badly lit one, and for
+    // checking a product before you buy it.
+    val typed = query.trim()
+    val looksLikeBarcode = typed.length in 6..14 && typed.all { it.isDigit() }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -62,7 +67,7 @@ fun SearchScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp),
-            placeholder = { Text("Try \"E471\", \"aspartame\" or \"palm\"") },
+            placeholder = { Text("Ingredient, E-number, or a barcode") },
             singleLine = true,
             shape = RoundedCornerShape(14.dp),
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search)
@@ -70,15 +75,23 @@ fun SearchScreen(
 
         Spacer(Modifier.height(12.dp))
 
+        if (looksLikeBarcode) {
+            BarcodeLookupRow(barcode = typed, onClick = { onLookupBarcode(typed) })
+            HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.4f))
+        }
+
         when {
             query.isBlank() -> Hint(
-                "Search by name or E-number. Everything is stored on your " +
-                    "device, so this works offline."
+                "Search ingredients by name or E-number, or type a product " +
+                    "barcode. Ingredient lookup works offline; barcodes need " +
+                    "a connection."
             )
 
-            results.isEmpty() -> Hint(
+            results.isEmpty() && !looksLikeBarcode -> Hint(
                 "Nothing matched \"$query\". We would rather say so than guess."
             )
+
+            results.isEmpty() -> Unit
 
             else -> LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(results, key = { it.id }) { ingredient ->
@@ -88,6 +101,30 @@ fun SearchScreen(
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun BarcodeLookupRow(barcode: String, onClick: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickableNoRipple(onClick)
+            .padding(horizontal = 20.dp, vertical = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = "Look up barcode $barcode",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.primary
+            )
+            Text(
+                text = "Searches Open Food Facts and Open Beauty Facts",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 }

@@ -160,6 +160,44 @@ class ScannerViewModel(
         _state.value = _state.value.copy(searchQuery = "", searchResults = emptyList())
     }
 
+    /**
+     * Looks up a barcode the user typed in rather than scanned.
+     *
+     * Worth having for a scratched or badly lit barcode, and for checking a
+     * product before buying it. Unlike the camera path this has no
+     * already-handled guard, because repeating a deliberate action should work.
+     */
+    fun lookupTypedBarcode(barcode: String) {
+        if (_state.value.isProcessing) return
+        lastHandledBarcode = null
+        _state.value = _state.value.copy(isProcessing = true, message = null)
+
+        viewModelScope.launch {
+            when (val outcome = repository.analyzeBarcode(barcode, _state.value.profile)) {
+                is BarcodeOutcome.Success ->
+                    _state.value = _state.value.copy(
+                        isProcessing = false,
+                        analysis = outcome.analysis,
+                        searchQuery = "",
+                        searchResults = emptyList()
+                    )
+
+                BarcodeOutcome.NotFound -> fail(
+                    "Barcode $barcode is not in the Open Food Facts or Open Beauty " +
+                        "Facts databases yet. Try Label mode and scan the printed " +
+                        "ingredient list instead."
+                )
+
+                is BarcodeOutcome.NoIngredients -> fail(
+                    "Found \"${outcome.productName}\" but it has no ingredient list " +
+                        "on record. Try Label mode."
+                )
+
+                is BarcodeOutcome.Error -> fail(outcome.message)
+            }
+        }
+    }
+
     companion object {
         fun factory(
             repository: AnalysisRepository,
