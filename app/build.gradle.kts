@@ -17,11 +17,11 @@ val keystoreProps = Properties().apply {
 val hasReleaseSigning = keystoreProps.getProperty("storeFile") != null
 
 android {
-    namespace = "com.labellens.app"
+    namespace = "com.labeltruth.app"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.labellens.app"
+        applicationId = "com.labeltruth.app"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 1

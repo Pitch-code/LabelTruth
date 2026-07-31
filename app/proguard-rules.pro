@@ -1,4 +1,4 @@
-# ---- LabelLens R8 / ProGuard rules ----
+# ---- LabelTruth R8 / ProGuard rules ----
 
 # Keep line numbers so Play Console crash reports stay readable, but hide the
 # original source file name.
@@ -8,13 +8,13 @@
 # ---- kotlinx.serialization ----
 -keepattributes *Annotation*, InnerClasses
 -dontnote kotlinx.serialization.**
--keepclassmembers class com.labellens.app.** {
+-keepclassmembers class com.labeltruth.app.** {
     *** Companion;
 }
--keepclasseswithmembers class com.labellens.app.** {
+-keepclasseswithmembers class com.labeltruth.app.** {
     kotlinx.serialization.KSerializer serializer(...);
 }
--keep,includedescriptorclasses class com.labellens.app.**$$serializer { *; }
+-keep,includedescriptorclasses class com.labeltruth.app.**$$serializer { *; }
 
 # ---- Room ----
 -keep class * extends androidx.room.RoomDatabase { <init>(); }

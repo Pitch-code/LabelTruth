@@ -20,5 +20,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "LabelLens"
+rootProject.name = "LabelTruth"
 include(":app")
