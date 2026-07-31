@@ -140,16 +140,40 @@ private fun ResultContent(
             HorizontalDivider(color = MaterialTheme.colorScheme.outline)
         }
 
-        items(ordered) { item ->
-            IngredientRow(
-                item = item,
-                onClick = { item.matched?.let(onIngredientClick) }
-            )
-            HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.4f))
+        // Grouped under band headers rather than one long list. A flat list of
+        // twenty ingredients is unreadable; the bands let someone stop reading
+        // as soon as they have the answer they came for.
+        val bands = listOf(
+            RiskTier.AVOID to "Best avoided",
+            RiskTier.MODERATE to "Moderate concern",
+            RiskTier.CAUTION to "Minor concern",
+            RiskTier.SAFE to "No known concern",
+            RiskTier.NOT_ASSESSED to "No published assessment",
+            RiskTier.UNKNOWN to "Not recognised"
+        )
+
+        bands.forEach { (tier, heading) ->
+            val group = ordered.filter { it.riskTier == tier }
+            if (group.isEmpty()) return@forEach
+
+            item {
+                BandHeader(heading = heading, count = group.size, tier = tier)
+            }
+            items(group) { item ->
+                IngredientRow(
+                    item = item,
+                    onClick = { item.matched?.let(onIngredientClick) }
+                )
+                HorizontalDivider(
+                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.4f)
+                )
+            }
         }
 
         item {
             Spacer(Modifier.height(20.dp))
+            SourceNote(hasBarcode = analysis.barcode != null)
+            Spacer(Modifier.height(16.dp))
             DisclaimerFooter()
         }
     }
@@ -227,6 +251,76 @@ private fun IngredientRow(item: AnalyzedIngredient, onClick: () -> Unit) {
                 color = MaterialTheme.colorScheme.primary
             )
         }
+    }
+}
+
+@Composable
+private fun BandHeader(heading: String, count: Int, tier: RiskTier) {
+    val color = riskColor(tier)
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 20.dp, bottom = 6.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier
+                .size(width = 4.dp, height = 16.dp)
+                .background(color, RoundedCornerShape(2.dp))
+        )
+        Spacer(Modifier.size(10.dp))
+        Text(
+            text = heading.uppercase(),
+            style = MaterialTheme.typography.labelLarge,
+            color = color
+        )
+        Spacer(Modifier.size(8.dp))
+        Text(
+            text = "$count",
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
+/**
+ * Where this result came from, stated on the result itself rather than buried
+ * in an About screen.
+ *
+ * For an app called LabelTruth, being less transparent about our own data than
+ * a competitor is not defensible.
+ */
+@Composable
+private fun SourceNote(hasBarcode: Boolean) {
+    val body = if (hasBarcode) {
+        "Product name and ingredient list came from Open Food Facts, matched to " +
+            "the barcode you scanned. It is community-maintained, so it can be " +
+            "incomplete or out of date. Check the packaging if something looks wrong.\n\n" +
+            "Ingredient assessments come from EFSA, WHO/IARC, FDA and EU " +
+            "regulations, cited on each ingredient."
+    } else {
+        "Ingredients were read from the label on your device, so accuracy depends " +
+            "on the photo. Assessments come from EFSA, WHO/IARC, FDA and EU " +
+            "regulations, cited on each ingredient."
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(14.dp))
+            .padding(16.dp)
+    ) {
+        Text(
+            text = "Where this came from",
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+        Spacer(Modifier.height(6.dp))
+        Text(
+            text = body,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
     }
 }
 

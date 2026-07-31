@@ -12,6 +12,8 @@ import com.labeltruth.app.domain.model.Ingredient
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -23,7 +25,9 @@ data class ScannerUiState(
     val analysis: Analysis? = null,
     val selectedIngredient: Ingredient? = null,
     val message: String? = null,
-    val profile: HealthProfile = HealthProfile()
+    val profile: HealthProfile = HealthProfile(),
+    val searchQuery: String = "",
+    val searchResults: List<Ingredient> = emptyList()
 )
 
 class ScannerViewModel(
@@ -113,6 +117,32 @@ class ScannerViewModel(
 
     fun selectIngredient(ingredient: Ingredient?) {
         _state.value = _state.value.copy(selectedIngredient = ingredient)
+    }
+
+    private var searchJob: Job? = null
+
+    /**
+     * Debounced dictionary search. Each keystroke cancels the previous query so
+     * we do not run a LIKE scan over thousands of rows per character typed.
+     */
+    fun onSearchQueryChange(query: String) {
+        _state.value = _state.value.copy(searchQuery = query)
+        searchJob?.cancel()
+
+        if (query.isBlank()) {
+            _state.value = _state.value.copy(searchResults = emptyList())
+            return
+        }
+        searchJob = viewModelScope.launch {
+            delay(180)
+            val results = repository.searchIngredients(query)
+            _state.value = _state.value.copy(searchResults = results)
+        }
+    }
+
+    fun clearSearch() {
+        searchJob?.cancel()
+        _state.value = _state.value.copy(searchQuery = "", searchResults = emptyList())
     }
 
     companion object {

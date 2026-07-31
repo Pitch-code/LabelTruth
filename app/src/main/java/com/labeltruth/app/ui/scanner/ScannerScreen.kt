@@ -61,6 +61,7 @@ fun ScannerScreen(
     onOpenHistory: () -> Unit,
     onOpenProfile: () -> Unit,
     onOpenAbout: () -> Unit,
+    onOpenSearch: () -> Unit,
     onDismissMessage: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -154,6 +155,13 @@ fun ScannerScreen(
                             painter = painterResource(R.drawable.ic_flash),
                             contentDescription = "Toggle torch",
                             tint = if (state.torchOn) BrandGreen else Color.White
+                        )
+                    }
+                    IconButton(onClick = onOpenSearch) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_search),
+                            contentDescription = "Look up an ingredient",
+                            tint = Color.White
                         )
                     }
                     IconButton(onClick = onOpenProfile) {

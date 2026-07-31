@@ -9000,7 +9000,8 @@
     "breastfeeding",
     "children",
     "hypertension",
-    "migraine"
+    "migraine",
+    "caffeine_sensitivity"
    ],
    "dietary": [
     "vegan",
@@ -14611,7 +14612,8 @@
    "riskTier": "SAFE",
    "riskReason": "No safety concern as a food. It naturally contains caffeine and theobromine, so large amounts of dark chocolate have a mild stimulant effect. Cocoa can contain cadmium, which is why some markets set limits.",
    "cautionGroups": [
-    "migraine"
+    "migraine",
+    "caffeine_sensitivity"
    ],
    "dietary": [
     "vegan",
@@ -22875,7 +22877,8 @@
    "riskReason": "Foods containing it must carry the warning that it may have an adverse effect on activity and attention in children. Can also trigger reactions in people sensitive to salicylates.",
    "cautionGroups": [
     "children",
-    "asthma"
+    "asthma",
+    "salicylate_sensitivity"
    ],
    "dietary": [
     "vegan",
@@ -31238,7 +31241,8 @@
    "riskReason": "Not absorbed completely, so amounts above roughly 10 g can cause bloating, wind and a laxative effect. Foods with more than 10 percent added polyols must carry the warning 'excessive consumption may produce laxative effects'.",
    "cautionGroups": [
     "ibs",
-    "children"
+    "children",
+    "fodmap"
    ],
    "dietary": [
     "vegan",
@@ -39355,7 +39359,8 @@
    "cautionGroups": [
     "ibs",
     "diabetes",
-    "children"
+    "children",
+    "fodmap"
    ],
    "dietary": [
     "vegan",
@@ -39465,7 +39470,8 @@
    "riskReason": "Safe for people, and beneficial for dental health, but incompletely absorbed so it can cause wind and a laxative effect. Important: xylitol is highly toxic to dogs even in small amounts.",
    "cautionGroups": [
     "ibs",
-    "children"
+    "children",
+    "fodmap"
    ],
    "dietary": [
     "vegan",
@@ -40474,7 +40480,8 @@
     "pregnancy",
     "breastfeeding",
     "children",
-    "migraine"
+    "migraine",
+    "alcohol_sensitivity"
    ],
    "dietary": [
     "vegan",
@@ -49414,7 +49421,8 @@
    "riskReason": "Metabolically similar to table sugar, so the concern is quantity rather than the ingredient being uniquely harmful. It is a major contributor of free sugars, and the WHO recommends limiting free sugars to under 10 percent of daily energy, ideally under 5 percent.",
    "cautionGroups": [
     "diabetes",
-    "children"
+    "children",
+    "fructose"
    ],
    "dietary": [
     "vegan",
@@ -49611,7 +49619,8 @@
    "riskReason": "Nutritionally close to other sugars, so it counts toward free sugars. Importantly, honey must not be given to infants under 12 months because of the risk of infant botulism.",
    "cautionGroups": [
     "children",
-    "diabetes"
+    "diabetes",
+    "fructose"
    ],
    "dietary": [
     "vegetarian",
@@ -58814,6 +58823,9 @@
      "title": "EU Regulation 1169/2011 Annex II: allergens requiring declaration",
      "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32011R1169"
     }
+   ],
+   "cautionGroups": [
+    "lactose"
    ]
   },
   {
@@ -88666,7 +88678,8 @@
    "riskReason": "Not toxic, but a leading contributor of free sugars, which are linked to tooth decay, weight gain and type 2 diabetes risk. The WHO recommends free sugars stay below 10 percent of daily energy intake, and suggests under 5 percent for additional benefit.",
    "cautionGroups": [
     "diabetes",
-    "children"
+    "children",
+    "fructose"
    ],
    "dietary": [
     "vegan",

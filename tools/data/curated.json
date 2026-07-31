@@ -5,1384 +5,3303 @@
       "id": "e100",
       "name": "Curcumin (E100)",
       "eNumber": "E100",
-      "synonyms": ["curcumin", "turmeric colour", "turmeric extract", "ci 75300"],
+      "synonyms": [
+        "curcumin",
+        "turmeric colour",
+        "turmeric extract",
+        "ci 75300"
+      ],
       "whatItIs": "A yellow-orange colour extracted from turmeric root.",
       "whyUsed": "Colours mustards, curry powders, cheeses, margarine and confectionery.",
       "riskTier": "SAFE",
       "riskReason": "EFSA re-evaluated curcumin and set an acceptable daily intake; no safety concerns at normal use levels.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
       "adi": "3 mg per kg body weight per day (EFSA)",
-      "sources": [{ "title": "EFSA re-evaluation of curcumin (E100)", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/1679" }]
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of curcumin (E100)",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/1679"
+        }
+      ]
     },
     {
       "id": "e102",
       "name": "Tartrazine (E102)",
       "eNumber": "E102",
-      "synonyms": ["tartrazine", "fd&c yellow 5", "yellow 5", "ci 19140"],
+      "synonyms": [
+        "tartrazine",
+        "fd&c yellow 5",
+        "yellow 5",
+        "ci 19140"
+      ],
       "whatItIs": "A synthetic lemon-yellow azo dye.",
       "whyUsed": "Colours soft drinks, sweets, desserts, sauces and snack foods.",
       "riskTier": "MODERATE",
       "riskReason": "Foods containing it must carry the warning that it may have an adverse effect on activity and attention in children. Can also trigger reactions in people sensitive to salicylates.",
-      "cautionGroups": ["children", "asthma"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
+      "cautionGroups": [
+        "children",
+        "asthma",
+        "salicylate_sensitivity"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
       "adi": "7.5 mg per kg body weight per day (EFSA)",
-      "sources": [{ "title": "EU Regulation 1333/2008, Annex V warning labelling", "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32008R1333" }]
+      "sources": [
+        {
+          "title": "EU Regulation 1333/2008, Annex V warning labelling",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32008R1333"
+        }
+      ]
     },
     {
       "id": "e104",
       "name": "Quinoline Yellow (E104)",
       "eNumber": "E104",
-      "synonyms": ["quinoline yellow", "ci 47005"],
+      "synonyms": [
+        "quinoline yellow",
+        "ci 47005"
+      ],
       "whatItIs": "A synthetic yellow food dye.",
       "whyUsed": "Colours soft drinks, sauces, smoked fish and confectionery.",
       "riskTier": "MODERATE",
       "riskReason": "One of the six colours that require the 'may have an adverse effect on activity and attention in children' warning in the EU. Not permitted in foods in the United States.",
-      "cautionGroups": ["children"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EU Regulation 1333/2008, Annex V warning labelling", "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32008R1333" }]
+      "cautionGroups": [
+        "children"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EU Regulation 1333/2008, Annex V warning labelling",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32008R1333"
+        }
+      ]
     },
     {
       "id": "e110",
       "name": "Sunset Yellow FCF (E110)",
       "eNumber": "E110",
-      "synonyms": ["sunset yellow", "sunset yellow fcf", "yellow 6", "fd&c yellow 6", "orange yellow s", "ci 15985"],
+      "synonyms": [
+        "sunset yellow",
+        "sunset yellow fcf",
+        "yellow 6",
+        "fd&c yellow 6",
+        "orange yellow s",
+        "ci 15985"
+      ],
       "whatItIs": "A synthetic orange-yellow azo dye.",
       "whyUsed": "Colours orange drinks, sweets, jams, sauces and baked goods.",
       "riskTier": "MODERATE",
       "riskReason": "Requires the EU children's activity and attention warning. Occasional reports of hypersensitivity reactions.",
-      "cautionGroups": ["children"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
+      "cautionGroups": [
+        "children"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
       "adi": "4 mg per kg body weight per day (EFSA)",
-      "sources": [{ "title": "EU Regulation 1333/2008, Annex V warning labelling", "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32008R1333" }]
+      "sources": [
+        {
+          "title": "EU Regulation 1333/2008, Annex V warning labelling",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32008R1333"
+        }
+      ]
     },
     {
       "id": "e120",
       "name": "Cochineal / Carmine (E120)",
       "eNumber": "E120",
-      "synonyms": ["carmine", "cochineal", "carminic acid", "natural red 4", "ci 75470"],
+      "synonyms": [
+        "carmine",
+        "cochineal",
+        "carminic acid",
+        "natural red 4",
+        "ci 75470"
+      ],
       "whatItIs": "A red colour made from the dried bodies of cochineal insects.",
       "whyUsed": "Colours yoghurts, sweets, drinks, processed meats and cosmetics.",
       "riskTier": "CAUTION",
       "riskReason": "Considered safe at permitted levels, but is a recognised cause of rare allergic reactions including anaphylaxis in sensitised people. It is of insect origin.",
-      "cautionGroups": ["asthma"],
-      "dietary": ["gluten_free"],
-      "sources": [{ "title": "EFSA re-evaluation of cochineal, carminic acid, carmines (E120)", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/1852" }]
+      "cautionGroups": [
+        "asthma"
+      ],
+      "dietary": [
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of cochineal, carminic acid, carmines (E120)",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/1852"
+        }
+      ]
     },
     {
       "id": "e122",
       "name": "Azorubine / Carmoisine (E122)",
       "eNumber": "E122",
-      "synonyms": ["azorubine", "carmoisine", "ci 14720"],
+      "synonyms": [
+        "azorubine",
+        "carmoisine",
+        "ci 14720"
+      ],
       "whatItIs": "A synthetic red azo dye.",
       "whyUsed": "Colours desserts, sweets, jams, sauces and drinks.",
       "riskTier": "MODERATE",
       "riskReason": "Requires the EU children's activity and attention warning. Not permitted in foods in the United States.",
-      "cautionGroups": ["children"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EU Regulation 1333/2008, Annex V warning labelling", "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32008R1333" }]
+      "cautionGroups": [
+        "children"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EU Regulation 1333/2008, Annex V warning labelling",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32008R1333"
+        }
+      ]
     },
     {
       "id": "e124",
       "name": "Ponceau 4R (E124)",
       "eNumber": "E124",
-      "synonyms": ["ponceau 4r", "cochineal red a", "new coccine", "ci 16255"],
+      "synonyms": [
+        "ponceau 4r",
+        "cochineal red a",
+        "new coccine",
+        "ci 16255"
+      ],
       "whatItIs": "A synthetic red azo dye.",
       "whyUsed": "Colours confectionery, desserts, drinks and processed fish.",
       "riskTier": "MODERATE",
       "riskReason": "Requires the EU children's activity and attention warning. Not permitted in foods in the United States.",
-      "cautionGroups": ["children"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EU Regulation 1333/2008, Annex V warning labelling", "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32008R1333" }]
+      "cautionGroups": [
+        "children"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EU Regulation 1333/2008, Annex V warning labelling",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32008R1333"
+        }
+      ]
     },
     {
       "id": "e129",
       "name": "Allura Red AC (E129)",
       "eNumber": "E129",
-      "synonyms": ["allura red", "allura red ac", "red 40", "fd&c red 40", "ci 16035"],
+      "synonyms": [
+        "allura red",
+        "allura red ac",
+        "red 40",
+        "fd&c red 40",
+        "ci 16035"
+      ],
       "whatItIs": "A synthetic red azo dye, one of the most widely used food colours.",
       "whyUsed": "Colours soft drinks, sweets, cereals, sauces and baked goods.",
       "riskTier": "MODERATE",
       "riskReason": "Requires the EU children's activity and attention warning.",
-      "cautionGroups": ["children"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
+      "cautionGroups": [
+        "children"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
       "adi": "7 mg per kg body weight per day (EFSA)",
-      "sources": [{ "title": "EU Regulation 1333/2008, Annex V warning labelling", "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32008R1333" }]
+      "sources": [
+        {
+          "title": "EU Regulation 1333/2008, Annex V warning labelling",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32008R1333"
+        }
+      ]
     },
     {
       "id": "e133",
       "name": "Brilliant Blue FCF (E133)",
       "eNumber": "E133",
-      "synonyms": ["brilliant blue", "brilliant blue fcf", "blue 1", "fd&c blue 1", "ci 42090"],
+      "synonyms": [
+        "brilliant blue",
+        "brilliant blue fcf",
+        "blue 1",
+        "fd&c blue 1",
+        "ci 42090"
+      ],
       "whatItIs": "A synthetic blue food dye.",
       "whyUsed": "Colours ice cream, sweets, drinks and icings.",
       "riskTier": "CAUTION",
       "riskReason": "Permitted and considered safe within its acceptable daily intake; isolated reports of hypersensitivity.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
       "adi": "6 mg per kg body weight per day (EFSA)",
-      "sources": [{ "title": "EFSA re-evaluation of Brilliant Blue FCF (E133)", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/1853" }]
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of Brilliant Blue FCF (E133)",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/1853"
+        }
+      ]
     },
     {
       "id": "e150a",
       "name": "Plain Caramel (E150a)",
       "eNumber": "E150a",
-      "synonyms": ["plain caramel", "caramel colour", "caramel color", "caramel e150a"],
+      "synonyms": [
+        "plain caramel",
+        "caramel colour",
+        "caramel color",
+        "caramel e150a"
+      ],
       "whatItIs": "A brown colour made by heating sugars, with no added reactants.",
       "whyUsed": "Colours spirits, vinegars, baked goods and sauces.",
       "riskTier": "SAFE",
       "riskReason": "EFSA concluded plain caramel is of no safety concern at reported use levels.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA re-evaluation of caramel colours (E150a-d)", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/2004" }]
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of caramel colours (E150a-d)",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/2004"
+        }
+      ]
     },
     {
       "id": "e150d",
       "name": "Sulphite Ammonia Caramel (E150d)",
       "eNumber": "E150d",
-      "synonyms": ["sulphite ammonia caramel", "sulfite ammonia caramel", "caramel e150d", "class iv caramel"],
+      "synonyms": [
+        "sulphite ammonia caramel",
+        "sulfite ammonia caramel",
+        "caramel e150d",
+        "class iv caramel"
+      ],
       "whatItIs": "A dark caramel colour produced with sulphite and ammonium compounds.",
       "whyUsed": "Gives cola drinks, soy sauces and dark beers their colour.",
       "riskTier": "CAUTION",
       "riskReason": "Can contain the by-product 4-methylimidazole. EFSA set a group acceptable daily intake and concluded exposure is generally below it, though high consumers of cola-type drinks can approach it.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
       "adi": "300 mg per kg body weight per day, group ADI (EFSA)",
-      "sources": [{ "title": "EFSA re-evaluation of caramel colours (E150a-d)", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/2004" }]
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of caramel colours (E150a-d)",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/2004"
+        }
+      ]
     },
     {
       "id": "e160a",
       "name": "Carotenes (E160a)",
       "eNumber": "E160a",
-      "synonyms": ["carotenes", "beta carotene", "beta-carotene", "mixed carotenes", "carotene"],
+      "synonyms": [
+        "carotenes",
+        "beta carotene",
+        "beta-carotene",
+        "mixed carotenes",
+        "carotene"
+      ],
       "whatItIs": "Orange-yellow pigments found naturally in carrots and other plants, also made synthetically.",
       "whyUsed": "Colours margarine, cheese, drinks and desserts, and provides vitamin A activity.",
       "riskTier": "SAFE",
       "riskReason": "Safe as a colour at normal use levels. Separately, very high dose beta-carotene supplements have been linked to increased lung cancer risk in smokers, which does not apply to use as a food colour.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA re-evaluation of mixed carotenes and beta-carotene", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/2593" }]
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of mixed carotenes and beta-carotene",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/2593"
+        }
+      ]
     },
     {
       "id": "e160b",
       "name": "Annatto / Bixin (E160b)",
       "eNumber": "E160b",
-      "synonyms": ["annatto", "bixin", "norbixin", "achiote"],
+      "synonyms": [
+        "annatto",
+        "bixin",
+        "norbixin",
+        "achiote"
+      ],
       "whatItIs": "A yellow-orange colour from the seeds of the achiote tree.",
       "whyUsed": "Colours cheeses, butter, smoked fish, cereals and snacks.",
       "riskTier": "CAUTION",
       "riskReason": "Permitted and generally well tolerated, but a documented, uncommon cause of allergic reactions.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA scientific opinion on annatto extracts (E160b)", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4544" }]
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA scientific opinion on annatto extracts (E160b)",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4544"
+        }
+      ]
     },
     {
       "id": "e171",
       "name": "Titanium Dioxide (E171)",
       "eNumber": "E171",
-      "synonyms": ["titanium dioxide", "ci 77891", "tio2"],
+      "synonyms": [
+        "titanium dioxide",
+        "ci 77891",
+        "tio2"
+      ],
       "whatItIs": "A bright white mineral pigment.",
       "whyUsed": "Whitens and opacifies confectionery coatings, chewing gum, icings and sauces.",
       "riskTier": "AVOID",
       "riskReason": "In 2021 EFSA concluded that E171 can no longer be considered safe as a food additive, because a concern over genotoxicity could not be ruled out. Its use in food was banned across the EU from August 2022. It remains permitted in some other countries.",
-      "cautionGroups": ["children", "pregnancy"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA (2021): safety assessment of titanium dioxide (E171)", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/6585" }]
+      "cautionGroups": [
+        "children",
+        "pregnancy"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA (2021): safety assessment of titanium dioxide (E171)",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/6585"
+        }
+      ]
     },
     {
       "id": "e172",
       "name": "Iron Oxides and Hydroxides (E172)",
       "eNumber": "E172",
-      "synonyms": ["iron oxide", "iron oxides", "iron hydroxide", "ci 77491", "ci 77492", "ci 77499"],
+      "synonyms": [
+        "iron oxide",
+        "iron oxides",
+        "iron hydroxide",
+        "ci 77491",
+        "ci 77492",
+        "ci 77499"
+      ],
       "whatItIs": "Mineral pigments giving yellow, red, brown and black shades.",
       "whyUsed": "Colours confectionery coatings, decorations and some cheeses.",
       "riskTier": "SAFE",
       "riskReason": "EFSA found no safety concern at permitted use levels.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA re-evaluation of iron oxides and hydroxides (E172)", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4566" }]
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of iron oxides and hydroxides (E172)",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4566"
+        }
+      ]
     },
     {
       "id": "e200",
       "name": "Sorbic Acid (E200)",
       "eNumber": "E200",
-      "synonyms": ["sorbic acid"],
+      "synonyms": [
+        "sorbic acid"
+      ],
       "whatItIs": "A preservative that occurs naturally in some berries.",
       "whyUsed": "Stops mould and yeast growing in baked goods, cheese, drinks and dried fruit.",
       "riskTier": "SAFE",
       "riskReason": "Well studied with an established acceptable daily intake. Mild skin or mucous membrane irritation is possible at high concentrations.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
       "adi": "3 mg per kg body weight per day, group ADI (EFSA)",
-      "sources": [{ "title": "EFSA re-evaluation of sorbic acid and potassium sorbate", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4144" }]
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of sorbic acid and potassium sorbate",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4144"
+        }
+      ]
     },
     {
       "id": "e202",
       "name": "Potassium Sorbate (E202)",
       "eNumber": "E202",
-      "synonyms": ["potassium sorbate"],
+      "synonyms": [
+        "potassium sorbate"
+      ],
       "whatItIs": "The potassium salt of sorbic acid, the most widely used mould inhibitor.",
       "whyUsed": "Preserves cheese, baked goods, dried fruit, wine, soft drinks and sauces.",
       "riskTier": "SAFE",
       "riskReason": "EFSA confirmed an acceptable daily intake and found no safety concern at normal exposure.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
       "adi": "3 mg per kg body weight per day, group ADI (EFSA)",
-      "sources": [{ "title": "EFSA re-evaluation of sorbic acid and potassium sorbate", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4144" }]
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of sorbic acid and potassium sorbate",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4144"
+        }
+      ]
     },
     {
       "id": "e210",
       "name": "Benzoic Acid (E210)",
       "eNumber": "E210",
-      "synonyms": ["benzoic acid"],
+      "synonyms": [
+        "benzoic acid"
+      ],
       "whatItIs": "A preservative found naturally in cranberries and made synthetically.",
       "whyUsed": "Preserves acidic foods such as soft drinks, pickles and sauces.",
       "riskTier": "CAUTION",
       "riskReason": "Safe within its acceptable daily intake, but can trigger reactions in people with urticaria or asthma, and EFSA noted exposure in children can approach the ADI.",
-      "cautionGroups": ["children", "asthma"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
+      "cautionGroups": [
+        "children",
+        "asthma"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
       "adi": "5 mg per kg body weight per day (EFSA)",
-      "sources": [{ "title": "EFSA re-evaluation of benzoic acid and benzoates", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4433" }]
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of benzoic acid and benzoates",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4433"
+        }
+      ]
     },
     {
       "id": "e211",
       "name": "Sodium Benzoate (E211)",
       "eNumber": "E211",
-      "synonyms": ["sodium benzoate"],
+      "synonyms": [
+        "sodium benzoate"
+      ],
       "whatItIs": "The sodium salt of benzoic acid, a very common preservative.",
       "whyUsed": "Preserves soft drinks, fruit juices, pickles, sauces and dressings.",
       "riskTier": "CAUTION",
       "riskReason": "Considered safe within its acceptable daily intake. In drinks that also contain vitamin C, small amounts of benzene can form over time, which is why manufacturers control this combination. May trigger reactions in sensitive people with asthma or urticaria.",
-      "cautionGroups": ["children", "asthma"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
+      "cautionGroups": [
+        "children",
+        "asthma"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
       "adi": "5 mg per kg body weight per day, as benzoic acid (EFSA)",
-      "sources": [{ "title": "EFSA re-evaluation of benzoic acid and benzoates", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4433" }]
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of benzoic acid and benzoates",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4433"
+        }
+      ]
     },
     {
       "id": "e216",
       "name": "Propyl 4-hydroxybenzoate (E216)",
       "eNumber": "E216",
-      "synonyms": ["propylparaben", "propyl paraben", "propyl 4 hydroxybenzoate"],
+      "synonyms": [
+        "propylparaben",
+        "propyl paraben",
+        "propyl 4 hydroxybenzoate"
+      ],
       "whatItIs": "A paraben-type preservative.",
       "whyUsed": "Previously used as a food preservative; still used in cosmetics and some medicines.",
       "riskTier": "MODERATE",
       "riskReason": "Its use as a food additive was withdrawn in the EU after EFSA was unable to set an acceptable daily intake, due to effects seen on reproductive parameters in animal studies.",
-      "cautionGroups": ["pregnancy"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA opinion on para hydroxybenzoates (E214-219)", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/1110" }]
+      "cautionGroups": [
+        "pregnancy"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA opinion on para hydroxybenzoates (E214-219)",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/1110"
+        }
+      ]
     },
     {
       "id": "e220",
       "name": "Sulphur Dioxide (E220)",
       "eNumber": "E220",
-      "synonyms": ["sulphur dioxide", "sulfur dioxide", "sulphites", "sulfites", "so2"],
+      "synonyms": [
+        "sulphur dioxide",
+        "sulfur dioxide",
+        "sulphites",
+        "sulfites",
+        "so2"
+      ],
       "whatItIs": "A preservative gas, used with related sulphite salts.",
       "whyUsed": "Preserves dried fruit, wine, beer, fruit juices, processed potato and vinegar.",
       "riskTier": "MODERATE",
       "riskReason": "A known trigger for asthma attacks in sensitive people. Must be declared on labels above 10 mg per kg or litre because it is one of the 14 major allergens. EFSA's 2016 re-evaluation found exposure can exceed the ADI for some consumers.",
-      "allergens": ["sulphites"],
-      "cautionGroups": ["asthma", "children"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
+      "allergens": [
+        "sulphites"
+      ],
+      "cautionGroups": [
+        "asthma",
+        "children"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
       "adi": "0.7 mg per kg body weight per day, as SO2 (EFSA)",
-      "sources": [{ "title": "EFSA re-evaluation of sulphur dioxide and sulphites", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4438" }]
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of sulphur dioxide and sulphites",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4438"
+        }
+      ]
     },
     {
       "id": "e223",
       "name": "Sodium Metabisulphite (E223)",
       "eNumber": "E223",
-      "synonyms": ["sodium metabisulphite", "sodium metabisulfite", "sodium pyrosulphite"],
+      "synonyms": [
+        "sodium metabisulphite",
+        "sodium metabisulfite",
+        "sodium pyrosulphite"
+      ],
       "whatItIs": "A sulphite salt that releases sulphur dioxide.",
       "whyUsed": "Preserves and prevents browning in dried fruit, wine, prawns and processed potato.",
       "riskTier": "MODERATE",
       "riskReason": "Same considerations as sulphur dioxide: a recognised asthma trigger and a declarable allergen above 10 mg per kg or litre.",
-      "allergens": ["sulphites"],
-      "cautionGroups": ["asthma"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA re-evaluation of sulphur dioxide and sulphites", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4438" }]
+      "allergens": [
+        "sulphites"
+      ],
+      "cautionGroups": [
+        "asthma"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of sulphur dioxide and sulphites",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4438"
+        }
+      ]
     },
     {
       "id": "e250",
       "name": "Sodium Nitrite (E250)",
       "eNumber": "E250",
-      "synonyms": ["sodium nitrite", "nitrite"],
+      "synonyms": [
+        "sodium nitrite",
+        "nitrite"
+      ],
       "whatItIs": "A curing salt used in processed meat.",
       "whyUsed": "Prevents growth of Clostridium botulinum, and gives cured meats their pink colour and flavour.",
       "riskTier": "MODERATE",
       "riskReason": "Serves an important food safety purpose, but can form nitrosamines, some of which are carcinogenic. The IARC classifies processed meat as carcinogenic to humans (Group 1), and ingested nitrite under conditions that form nitrosamines as probably carcinogenic (Group 2A).",
-      "cautionGroups": ["children", "pregnancy"],
-      "dietary": ["halal", "kosher", "gluten_free"],
+      "cautionGroups": [
+        "children",
+        "pregnancy"
+      ],
+      "dietary": [
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
       "adi": "0.07 mg per kg body weight per day, as nitrite ion (EFSA)",
       "sources": [
-        { "title": "IARC Monographs Volume 114: red and processed meat", "url": "https://publications.iarc.fr/564" },
-        { "title": "EFSA re-evaluation of nitrites and nitrates", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4786" }
+        {
+          "title": "IARC Monographs Volume 114: red and processed meat",
+          "url": "https://publications.iarc.fr/564"
+        },
+        {
+          "title": "EFSA re-evaluation of nitrites and nitrates",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4786"
+        }
       ]
     },
     {
       "id": "e251",
       "name": "Sodium Nitrate (E251)",
       "eNumber": "E251",
-      "synonyms": ["sodium nitrate", "nitrate", "saltpetre"],
+      "synonyms": [
+        "sodium nitrate",
+        "nitrate",
+        "saltpetre"
+      ],
       "whatItIs": "A curing salt that converts slowly to nitrite.",
       "whyUsed": "Used in long-cured meats and some cheeses.",
       "riskTier": "MODERATE",
       "riskReason": "Converts to nitrite in the body, carrying the same nitrosamine considerations as sodium nitrite.",
-      "cautionGroups": ["children", "pregnancy"],
-      "dietary": ["halal", "kosher", "gluten_free"],
+      "cautionGroups": [
+        "children",
+        "pregnancy"
+      ],
+      "dietary": [
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
       "adi": "3.7 mg per kg body weight per day, as nitrate ion (EFSA)",
-      "sources": [{ "title": "EFSA re-evaluation of nitrites and nitrates", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4787" }]
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of nitrites and nitrates",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4787"
+        }
+      ]
     },
     {
       "id": "e260",
       "name": "Acetic Acid (E260)",
       "eNumber": "E260",
-      "synonyms": ["acetic acid", "vinegar acid"],
+      "synonyms": [
+        "acetic acid",
+        "vinegar acid"
+      ],
       "whatItIs": "The acid that makes vinegar sour.",
       "whyUsed": "Acidifies and preserves pickles, sauces, dressings and bread.",
       "riskTier": "SAFE",
       "riskReason": "A normal component of the diet with no acceptable daily intake considered necessary.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA re-evaluation of acetic acid and its salts", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/2760" }]
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of acetic acid and its salts",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/2760"
+        }
+      ]
     },
     {
       "id": "e270",
       "name": "Lactic Acid (E270)",
       "eNumber": "E270",
-      "synonyms": ["lactic acid"],
+      "synonyms": [
+        "lactic acid"
+      ],
       "whatItIs": "An acid produced by fermentation, found in yoghurt and sourdough. Despite the name it is not dairy-derived.",
       "whyUsed": "Adjusts acidity and acts as a mild preservative in drinks, dressings and baked goods.",
       "riskTier": "SAFE",
       "riskReason": "A normal metabolite in the human body; no safety concern at food use levels.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "JECFA evaluation of lactic acid", "url": "https://www.fao.org/food-additives" }]
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "JECFA evaluation of lactic acid",
+          "url": "https://www.fao.org/food-additives"
+        }
+      ]
     },
     {
       "id": "e282",
       "name": "Calcium Propionate (E282)",
       "eNumber": "E282",
-      "synonyms": ["calcium propionate", "calcium propanoate"],
+      "synonyms": [
+        "calcium propionate",
+        "calcium propanoate"
+      ],
       "whatItIs": "A mould inhibitor, the calcium salt of propionic acid.",
       "whyUsed": "Extends the shelf life of bread and other baked goods.",
       "riskTier": "CAUTION",
       "riskReason": "EFSA found no safety concern at reported use levels. Some individuals report sensitivity, though controlled evidence is limited.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA re-evaluation of propionic acid and its salts", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/img/4171" }]
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of propionic acid and its salts",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/img/4171"
+        }
+      ]
     },
     {
       "id": "e296",
       "name": "Malic Acid (E296)",
       "eNumber": "E296",
-      "synonyms": ["malic acid"],
+      "synonyms": [
+        "malic acid"
+      ],
       "whatItIs": "The sour acid naturally present in apples.",
       "whyUsed": "Provides tartness in sweets, drinks and fruit products.",
       "riskTier": "SAFE",
       "riskReason": "A normal part of the diet and of human metabolism; no safety concern at food use levels.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA re-evaluation of malic acid and malates", "url": "https://www.efsa.europa.eu/en/efsajournal" }]
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of malic acid and malates",
+          "url": "https://www.efsa.europa.eu/en/efsajournal"
+        }
+      ]
     },
     {
       "id": "e300",
       "name": "Ascorbic Acid / Vitamin C (E300)",
       "eNumber": "E300",
-      "synonyms": ["ascorbic acid", "vitamin c", "l ascorbic acid"],
+      "synonyms": [
+        "ascorbic acid",
+        "vitamin c",
+        "l ascorbic acid"
+      ],
       "whatItIs": "Vitamin C, used as an antioxidant.",
       "whyUsed": "Stops browning and rancidity in juices, cured meat, bread and fruit products.",
       "riskTier": "SAFE",
       "riskReason": "An essential nutrient. No acceptable daily intake considered necessary at food additive levels.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA re-evaluation of ascorbic acid and ascorbates", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4787" }]
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of ascorbic acid and ascorbates",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4787"
+        }
+      ]
     },
     {
       "id": "e306",
       "name": "Tocopherols / Vitamin E (E306)",
       "eNumber": "E306",
-      "synonyms": ["tocopherols", "tocopherol", "vitamin e", "mixed tocopherols", "tocopherol rich extract"],
+      "synonyms": [
+        "tocopherols",
+        "tocopherol",
+        "vitamin e",
+        "mixed tocopherols",
+        "tocopherol rich extract"
+      ],
       "whatItIs": "Vitamin E compounds extracted from vegetable oils.",
       "whyUsed": "A natural antioxidant that stops fats and oils going rancid.",
       "riskTier": "SAFE",
       "riskReason": "An essential nutrient with a long history of safe use as an antioxidant.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA re-evaluation of tocopherols (E306-E309)", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/dcb" }]
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of tocopherols (E306-E309)",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/dcb"
+        }
+      ]
     },
     {
       "id": "e319",
       "name": "TBHQ (E319)",
       "eNumber": "E319",
-      "synonyms": ["tbhq", "tertiary butylhydroquinone", "tert butylhydroquinone"],
+      "synonyms": [
+        "tbhq",
+        "tertiary butylhydroquinone",
+        "tert butylhydroquinone"
+      ],
       "whatItIs": "A synthetic antioxidant.",
       "whyUsed": "Stops frying fats, oils and instant noodles going rancid.",
       "riskTier": "MODERATE",
       "riskReason": "Permitted with a low acceptable daily intake. EFSA noted the ADI can be exceeded by high consumers, particularly children.",
-      "cautionGroups": ["children"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
+      "cautionGroups": [
+        "children"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
       "adi": "0.7 mg per kg body weight per day (EFSA)",
-      "sources": [{ "title": "EFSA re-evaluation of TBHQ (E319)", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4912" }]
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of TBHQ (E319)",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4912"
+        }
+      ]
     },
     {
       "id": "e320",
       "name": "BHA (E320)",
       "eNumber": "E320",
-      "synonyms": ["bha", "butylated hydroxyanisole"],
+      "synonyms": [
+        "bha",
+        "butylated hydroxyanisole"
+      ],
       "whatItIs": "A synthetic antioxidant.",
       "whyUsed": "Preserves fats, oils, snack foods, chewing gum and dehydrated potato.",
       "riskTier": "MODERATE",
       "riskReason": "Classified by the IARC as possibly carcinogenic to humans (Group 2B), based on forestomach tumours in rodents whose relevance to humans is debated. Permitted in food within a low acceptable daily intake.",
-      "cautionGroups": ["children"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
+      "cautionGroups": [
+        "children"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
       "adi": "1 mg per kg body weight per day (EFSA)",
-      "sources": [{ "title": "IARC Monographs Volume 40: butylated hydroxyanisole", "url": "https://publications.iarc.fr/58" }]
+      "sources": [
+        {
+          "title": "IARC Monographs Volume 40: butylated hydroxyanisole",
+          "url": "https://publications.iarc.fr/58"
+        }
+      ]
     },
     {
       "id": "e321",
       "name": "BHT (E321)",
       "eNumber": "E321",
-      "synonyms": ["bht", "butylated hydroxytoluene"],
+      "synonyms": [
+        "bht",
+        "butylated hydroxytoluene"
+      ],
       "whatItIs": "A synthetic antioxidant closely related to BHA.",
       "whyUsed": "Stops fats and oils going rancid in cereals, snacks and chewing gum.",
       "riskTier": "CAUTION",
       "riskReason": "EFSA re-evaluated BHT and confirmed an acceptable daily intake, concluding exposure is generally below it.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
       "adi": "0.25 mg per kg body weight per day (EFSA)",
-      "sources": [{ "title": "EFSA re-evaluation of BHT (E321)", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/2588" }]
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of BHT (E321)",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/2588"
+        }
+      ]
     },
     {
       "id": "e322",
       "name": "Lecithins (E322)",
       "eNumber": "E322",
-      "synonyms": ["lecithin", "lecithins", "soy lecithin", "soya lecithin", "sunflower lecithin"],
+      "synonyms": [
+        "lecithin",
+        "lecithins",
+        "soy lecithin",
+        "soya lecithin",
+        "sunflower lecithin"
+      ],
       "whatItIs": "A natural emulsifier, most often extracted from soya or sunflower.",
       "whyUsed": "Keeps chocolate, margarine, baked goods and sauces smooth and stable.",
       "riskTier": "SAFE",
       "riskReason": "A normal dietary component with no numerical acceptable daily intake considered necessary. If soya-derived it must be declared as an allergen.",
-      "allergens": ["soybeans"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA re-evaluation of lecithins (E322)", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/dcc" }]
+      "allergens": [
+        "soybeans"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of lecithins (E322)",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/dcc"
+        }
+      ]
     },
     {
       "id": "e330",
       "name": "Citric Acid (E330)",
       "eNumber": "E330",
-      "synonyms": ["citric acid"],
+      "synonyms": [
+        "citric acid"
+      ],
       "whatItIs": "The acid that makes citrus fruit sour, produced commercially by fermentation.",
       "whyUsed": "One of the most widely used additives: adjusts acidity, adds tartness and helps preserve.",
       "riskTier": "SAFE",
       "riskReason": "A normal part of human metabolism. No acceptable daily intake considered necessary. Frequent contact with acidic drinks can contribute to dental erosion.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA re-evaluation of citric acid and citrates", "url": "https://www.efsa.europa.eu/en/efsajournal" }]
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of citric acid and citrates",
+          "url": "https://www.efsa.europa.eu/en/efsajournal"
+        }
+      ]
     },
     {
       "id": "e334",
       "name": "Tartaric Acid (E334)",
       "eNumber": "E334",
-      "synonyms": ["tartaric acid", "l tartaric acid"],
+      "synonyms": [
+        "tartaric acid",
+        "l tartaric acid"
+      ],
       "whatItIs": "An acid found naturally in grapes.",
       "whyUsed": "Adds tartness and acts as a raising agent component in baking.",
       "riskTier": "SAFE",
       "riskReason": "Long-established safe use with an acceptable daily intake set by JECFA.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA re-evaluation of tartaric acid and tartrates", "url": "https://www.efsa.europa.eu/en/efsajournal" }]
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of tartaric acid and tartrates",
+          "url": "https://www.efsa.europa.eu/en/efsajournal"
+        }
+      ]
     },
     {
       "id": "e338",
       "name": "Phosphoric Acid (E338)",
       "eNumber": "E338",
-      "synonyms": ["phosphoric acid", "orthophosphoric acid"],
+      "synonyms": [
+        "phosphoric acid",
+        "orthophosphoric acid"
+      ],
       "whatItIs": "A mineral acid.",
       "whyUsed": "Gives cola drinks their sharp taste and adjusts acidity in other foods.",
       "riskTier": "CAUTION",
       "riskReason": "EFSA set a group acceptable daily intake for phosphates in 2019 and found that exposure exceeds it for some children and adolescents. High phosphate intake matters particularly for people with reduced kidney function, and acidic drinks contribute to dental erosion.",
-      "cautionGroups": ["kidney_disease", "children"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
+      "cautionGroups": [
+        "kidney_disease",
+        "children"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
       "adi": "40 mg per kg body weight per day, as phosphorus, group ADI (EFSA)",
-      "sources": [{ "title": "EFSA (2019) re-evaluation of phosphates", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/5674" }]
+      "sources": [
+        {
+          "title": "EFSA (2019) re-evaluation of phosphates",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/5674"
+        }
+      ]
     },
     {
       "id": "e385",
       "name": "Calcium Disodium EDTA (E385)",
       "eNumber": "E385",
-      "synonyms": ["calcium disodium edta", "edta", "disodium edta"],
+      "synonyms": [
+        "calcium disodium edta",
+        "edta",
+        "disodium edta"
+      ],
       "whatItIs": "A chelating agent that binds trace metals.",
       "whyUsed": "Prevents discolouration and rancidity in canned foods, dressings and sauces.",
       "riskTier": "CAUTION",
       "riskReason": "Permitted within an acceptable daily intake. Because it binds minerals, high intakes could in principle affect trace mineral status.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
       "adi": "2.5 mg per kg body weight per day (EFSA)",
-      "sources": [{ "title": "EFSA opinion on calcium disodium EDTA (E385)", "url": "https://www.efsa.europa.eu/en/efsajournal" }]
+      "sources": [
+        {
+          "title": "EFSA opinion on calcium disodium EDTA (E385)",
+          "url": "https://www.efsa.europa.eu/en/efsajournal"
+        }
+      ]
     },
     {
       "id": "e407",
       "name": "Carrageenan (E407)",
       "eNumber": "E407",
-      "synonyms": ["carrageenan", "carragheenan", "irish moss extract"],
+      "synonyms": [
+        "carrageenan",
+        "carragheenan",
+        "irish moss extract"
+      ],
       "whatItIs": "A thickener extracted from red seaweed.",
       "whyUsed": "Thickens and stabilises dairy drinks, ice cream, plant milks and processed meat.",
       "riskTier": "MODERATE",
       "riskReason": "EFSA kept the acceptable daily intake but could not conclude on the safety of carrageenan in infant formula, and recommended tighter specifications to limit low molecular weight fractions. Animal and cell studies have linked degraded carrageenan to gut inflammation; the relevance of food-grade carrageenan remains debated.",
-      "cautionGroups": ["ibs", "children"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
+      "cautionGroups": [
+        "ibs",
+        "children"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
       "adi": "75 mg per kg body weight per day (EFSA)",
-      "sources": [{ "title": "EFSA (2018) re-evaluation of carrageenan (E407)", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/5238" }]
+      "sources": [
+        {
+          "title": "EFSA (2018) re-evaluation of carrageenan (E407)",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/5238"
+        }
+      ]
     },
     {
       "id": "e410",
       "name": "Locust Bean Gum (E410)",
       "eNumber": "E410",
-      "synonyms": ["locust bean gum", "carob gum", "carob bean gum"],
+      "synonyms": [
+        "locust bean gum",
+        "carob gum",
+        "carob bean gum"
+      ],
       "whatItIs": "A thickener from carob tree seeds.",
       "whyUsed": "Thickens ice cream, sauces, dairy products and gluten-free baking.",
       "riskTier": "SAFE",
       "riskReason": "EFSA found no safety concern and no need for a numerical acceptable daily intake.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA re-evaluation of locust bean gum (E410)", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/util" }]
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of locust bean gum (E410)",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/util"
+        }
+      ]
     },
     {
       "id": "e412",
       "name": "Guar Gum (E412)",
       "eNumber": "E412",
-      "synonyms": ["guar gum", "guar flour"],
+      "synonyms": [
+        "guar gum",
+        "guar flour"
+      ],
       "whatItIs": "A thickener made from guar beans.",
       "whyUsed": "Thickens sauces, ice cream, dairy and gluten-free baked goods.",
       "riskTier": "SAFE",
       "riskReason": "No safety concern at food use levels. Being a soluble fibre, large amounts can cause bloating or wind.",
-      "cautionGroups": ["ibs"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA re-evaluation of guar gum (E412)", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/util" }]
+      "cautionGroups": [
+        "ibs"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of guar gum (E412)",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/util"
+        }
+      ]
     },
     {
       "id": "e414",
       "name": "Acacia Gum / Gum Arabic (E414)",
       "eNumber": "E414",
-      "synonyms": ["acacia gum", "gum arabic", "gum acacia"],
+      "synonyms": [
+        "acacia gum",
+        "gum arabic",
+        "gum acacia"
+      ],
       "whatItIs": "A natural gum from acacia tree sap.",
       "whyUsed": "Stabilises soft drinks, icings, confectionery and flavour emulsions.",
       "riskTier": "SAFE",
       "riskReason": "Long history of safe use; no numerical acceptable daily intake considered necessary.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA re-evaluation of acacia gum (E414)", "url": "https://www.efsa.europa.eu/en/efsajournal" }]
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of acacia gum (E414)",
+          "url": "https://www.efsa.europa.eu/en/efsajournal"
+        }
+      ]
     },
     {
       "id": "e415",
       "name": "Xanthan Gum (E415)",
       "eNumber": "E415",
-      "synonyms": ["xanthan gum", "xanthan"],
+      "synonyms": [
+        "xanthan gum",
+        "xanthan"
+      ],
       "whatItIs": "A thickener produced by bacterial fermentation of sugars.",
       "whyUsed": "Thickens dressings, sauces, gluten-free baking and plant milks.",
       "riskTier": "SAFE",
       "riskReason": "EFSA found no safety concern at reported use levels. Large amounts can have a mild laxative effect.",
-      "cautionGroups": ["ibs"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA re-evaluation of xanthan gum (E415)", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/util" }]
+      "cautionGroups": [
+        "ibs"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of xanthan gum (E415)",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/util"
+        }
+      ]
     },
     {
       "id": "e420",
       "name": "Sorbitol (E420)",
       "eNumber": "E420",
-      "synonyms": ["sorbitol", "sorbitol syrup", "d sorbitol"],
+      "synonyms": [
+        "sorbitol",
+        "sorbitol syrup",
+        "d sorbitol"
+      ],
       "whatItIs": "A sugar alcohol used as a sweetener and humectant.",
       "whyUsed": "Sweetens sugar-free sweets and gum, and keeps foods moist.",
       "riskTier": "CAUTION",
       "riskReason": "Not absorbed completely, so amounts above roughly 10 g can cause bloating, wind and a laxative effect. Foods with more than 10 percent added polyols must carry the warning 'excessive consumption may produce laxative effects'.",
-      "cautionGroups": ["ibs", "children"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EU Regulation 1333/2008, Annex III polyol labelling", "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32008R1333" }]
+      "cautionGroups": [
+        "ibs",
+        "children",
+        "fodmap"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EU Regulation 1333/2008, Annex III polyol labelling",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32008R1333"
+        }
+      ]
     },
     {
       "id": "e422",
       "name": "Glycerol (E422)",
       "eNumber": "E422",
-      "synonyms": ["glycerol", "glycerine", "glycerin"],
+      "synonyms": [
+        "glycerol",
+        "glycerine",
+        "glycerin"
+      ],
       "whatItIs": "A sweet-tasting alcohol used to retain moisture. Can be plant or animal derived.",
       "whyUsed": "Keeps cakes, bars and confectionery soft, and carries flavours.",
       "riskTier": "SAFE",
       "riskReason": "No safety concern at food use levels. Large amounts can cause headache or gastrointestinal upset.",
-      "dietary": ["halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA re-evaluation of glycerol (E422)", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/util" }]
+      "dietary": [
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of glycerol (E422)",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/util"
+        }
+      ]
     },
     {
       "id": "e433",
       "name": "Polysorbate 80 (E433)",
       "eNumber": "E433",
-      "synonyms": ["polysorbate 80", "polyoxyethylene sorbitan monooleate", "tween 80"],
+      "synonyms": [
+        "polysorbate 80",
+        "polyoxyethylene sorbitan monooleate",
+        "tween 80"
+      ],
       "whatItIs": "A synthetic emulsifier.",
       "whyUsed": "Keeps ice cream, sauces and dressings smooth and stable.",
       "riskTier": "CAUTION",
       "riskReason": "Permitted within a group acceptable daily intake for polysorbates. Some animal studies suggest emulsifiers of this type may affect the gut microbiome; human evidence is not yet established.",
-      "cautionGroups": ["ibs"],
-      "dietary": ["halal", "kosher", "gluten_free"],
+      "cautionGroups": [
+        "ibs"
+      ],
+      "dietary": [
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
       "adi": "25 mg per kg body weight per day, group ADI (EFSA)",
-      "sources": [{ "title": "EFSA re-evaluation of polysorbates (E432-E436)", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4152" }]
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of polysorbates (E432-E436)",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4152"
+        }
+      ]
     },
     {
       "id": "e440",
       "name": "Pectin (E440)",
       "eNumber": "E440",
-      "synonyms": ["pectin", "amidated pectin", "fruit pectin"],
+      "synonyms": [
+        "pectin",
+        "amidated pectin",
+        "fruit pectin"
+      ],
       "whatItIs": "A gelling fibre extracted from citrus peel and apple pomace.",
       "whyUsed": "Sets jams and jellies, and thickens yoghurts and fillings.",
       "riskTier": "SAFE",
       "riskReason": "A natural dietary fibre with no safety concern at food use levels.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA re-evaluation of pectins (E440)", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/util" }]
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of pectins (E440)",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/util"
+        }
+      ]
     },
     {
       "id": "e450",
       "name": "Diphosphates (E450)",
       "eNumber": "E450",
-      "synonyms": ["diphosphates", "disodium diphosphate", "sodium acid pyrophosphate", "pyrophosphate"],
+      "synonyms": [
+        "diphosphates",
+        "disodium diphosphate",
+        "sodium acid pyrophosphate",
+        "pyrophosphate"
+      ],
       "whatItIs": "Phosphate salts used as raising agents and stabilisers.",
       "whyUsed": "Raises baked goods, retains water in processed meat and stops potato products discolouring.",
       "riskTier": "CAUTION",
       "riskReason": "Covered by the phosphate group acceptable daily intake set by EFSA in 2019, which is exceeded by some children and adolescents. Relevant for people with reduced kidney function, who are advised to limit phosphate additives.",
-      "cautionGroups": ["kidney_disease", "children"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
+      "cautionGroups": [
+        "kidney_disease",
+        "children"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
       "adi": "40 mg per kg body weight per day, as phosphorus, group ADI (EFSA)",
-      "sources": [{ "title": "EFSA (2019) re-evaluation of phosphates", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/5674" }]
+      "sources": [
+        {
+          "title": "EFSA (2019) re-evaluation of phosphates",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/5674"
+        }
+      ]
     },
     {
       "id": "e466",
       "name": "Carboxymethyl Cellulose (E466)",
       "eNumber": "E466",
-      "synonyms": ["carboxymethyl cellulose", "cellulose gum", "cmc", "sodium carboxymethyl cellulose"],
+      "synonyms": [
+        "carboxymethyl cellulose",
+        "cellulose gum",
+        "cmc",
+        "sodium carboxymethyl cellulose"
+      ],
       "whatItIs": "A thickener made by modifying plant cellulose.",
       "whyUsed": "Thickens ice cream, sauces, drinks and gluten-free baking.",
       "riskTier": "CAUTION",
       "riskReason": "Long considered safe with no numerical ADI needed. Emerging research on emulsifiers and thickeners of this type suggests possible effects on the gut microbiome; the evidence in humans is preliminary.",
-      "cautionGroups": ["ibs"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA re-evaluation of celluloses (E460-E469)", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/5047" }]
+      "cautionGroups": [
+        "ibs"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of celluloses (E460-E469)",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/5047"
+        }
+      ]
     },
     {
       "id": "e471",
       "name": "Mono- and Diglycerides of Fatty Acids (E471)",
       "eNumber": "E471",
-      "synonyms": ["mono and diglycerides of fatty acids", "monoglycerides", "diglycerides", "mono- and di-glycerides"],
+      "synonyms": [
+        "mono and diglycerides of fatty acids",
+        "monoglycerides",
+        "diglycerides",
+        "mono- and di-glycerides"
+      ],
       "whatItIs": "Emulsifiers made from fats, which may be plant or animal derived.",
       "whyUsed": "Keeps bread soft, ice cream smooth and margarine stable.",
       "riskTier": "CAUTION",
       "riskReason": "EFSA found no safety concern at reported use levels. The label does not usually state whether the source is plant or animal, which matters for vegan, vegetarian, halal and kosher diets.",
-      "dietary": ["gluten_free"],
-      "sources": [{ "title": "EFSA re-evaluation of mono- and di-glycerides of fatty acids (E471)", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/util" }]
+      "dietary": [
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of mono- and di-glycerides of fatty acids (E471)",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/util"
+        }
+      ]
     },
     {
       "id": "e500",
       "name": "Sodium Bicarbonate (E500)",
       "eNumber": "E500",
-      "synonyms": ["sodium bicarbonate", "bicarbonate of soda", "baking soda", "sodium hydrogen carbonate"],
+      "synonyms": [
+        "sodium bicarbonate",
+        "bicarbonate of soda",
+        "baking soda",
+        "sodium hydrogen carbonate"
+      ],
       "whatItIs": "Baking soda.",
       "whyUsed": "A raising agent in baked goods and an acidity regulator.",
       "riskTier": "SAFE",
       "riskReason": "No safety concern at food use levels. It does contribute sodium, which is relevant on a low-salt diet.",
-      "cautionGroups": ["hypertension"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA re-evaluation of carbonates (E500-E504)", "url": "https://www.efsa.europa.eu/en/efsajournal" }]
+      "cautionGroups": [
+        "hypertension"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of carbonates (E500-E504)",
+          "url": "https://www.efsa.europa.eu/en/efsajournal"
+        }
+      ]
     },
     {
       "id": "e551",
       "name": "Silicon Dioxide (E551)",
       "eNumber": "E551",
-      "synonyms": ["silicon dioxide", "silica", "amorphous silica"],
+      "synonyms": [
+        "silicon dioxide",
+        "silica",
+        "amorphous silica"
+      ],
       "whatItIs": "A fine mineral powder used to keep powders free flowing.",
       "whyUsed": "Stops salt, spices, powdered drinks and supplements caking together.",
       "riskTier": "CAUTION",
       "riskReason": "EFSA's 2018 review could not fully conclude on safety because of missing data on particle size, and asked for better specifications. It remains permitted while that work continues.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA (2018) re-evaluation of silicon dioxide (E551)", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/5088" }]
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA (2018) re-evaluation of silicon dioxide (E551)",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/5088"
+        }
+      ]
     },
     {
       "id": "e621",
       "name": "Monosodium Glutamate (E621)",
       "eNumber": "E621",
-      "synonyms": ["monosodium glutamate", "msg", "sodium glutamate", "flavour enhancer 621"],
+      "synonyms": [
+        "monosodium glutamate",
+        "msg",
+        "sodium glutamate",
+        "flavour enhancer 621"
+      ],
       "whatItIs": "The sodium salt of glutamic acid, an amino acid found naturally in tomatoes, cheese and mushrooms.",
       "whyUsed": "Adds savoury, umami depth to snacks, soups, sauces and ready meals.",
       "riskTier": "SAFE",
       "riskReason": "Regulators including EFSA and the FDA consider MSG safe. Controlled trials have not reproduced the widely reported 'Chinese restaurant syndrome'. EFSA did set a group acceptable daily intake in 2017 and noted that some consumers may exceed it. It contributes sodium.",
-      "cautionGroups": ["hypertension"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
+      "cautionGroups": [
+        "hypertension"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
       "adi": "30 mg per kg body weight per day, as glutamic acid, group ADI (EFSA)",
       "sources": [
-        { "title": "EFSA (2017) re-evaluation of glutamic acid and glutamates", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4910" },
-        { "title": "US FDA: questions and answers on MSG", "url": "https://www.fda.gov/food/food-additives-petitions/questions-and-answers-monosodium-glutamate-msg" }
+        {
+          "title": "EFSA (2017) re-evaluation of glutamic acid and glutamates",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4910"
+        },
+        {
+          "title": "US FDA: questions and answers on MSG",
+          "url": "https://www.fda.gov/food/food-additives-petitions/questions-and-answers-monosodium-glutamate-msg"
+        }
       ]
     },
     {
       "id": "e627",
       "name": "Disodium Guanylate (E627)",
       "eNumber": "E627",
-      "synonyms": ["disodium guanylate", "sodium guanylate"],
+      "synonyms": [
+        "disodium guanylate",
+        "sodium guanylate"
+      ],
       "whatItIs": "A nucleotide flavour enhancer, usually paired with MSG.",
       "whyUsed": "Boosts savoury flavour in snacks, noodles and stock cubes.",
       "riskTier": "CAUTION",
       "riskReason": "Considered safe as a food additive. Because it is a purine, people managing gout are sometimes advised to moderate intake.",
-      "dietary": ["gluten_free"],
-      "sources": [{ "title": "EFSA re-evaluation of nucleotide flavour enhancers", "url": "https://www.efsa.europa.eu/en/efsajournal" }]
+      "dietary": [
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of nucleotide flavour enhancers",
+          "url": "https://www.efsa.europa.eu/en/efsajournal"
+        }
+      ]
     },
     {
       "id": "e631",
       "name": "Disodium Inosinate (E631)",
       "eNumber": "E631",
-      "synonyms": ["disodium inosinate", "sodium inosinate"],
+      "synonyms": [
+        "disodium inosinate",
+        "sodium inosinate"
+      ],
       "whatItIs": "A nucleotide flavour enhancer, which may be derived from meat or fish.",
       "whyUsed": "Intensifies savoury flavour in crisps, instant noodles and seasonings.",
       "riskTier": "CAUTION",
       "riskReason": "Considered safe as an additive. It is a purine, relevant to people managing gout, and its source is often animal, which matters for vegan, vegetarian and halal diets.",
-      "dietary": ["gluten_free"],
-      "sources": [{ "title": "EFSA re-evaluation of nucleotide flavour enhancers", "url": "https://www.efsa.europa.eu/en/efsajournal" }]
+      "dietary": [
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of nucleotide flavour enhancers",
+          "url": "https://www.efsa.europa.eu/en/efsajournal"
+        }
+      ]
     },
     {
       "id": "e900",
       "name": "Dimethylpolysiloxane (E900)",
       "eNumber": "E900",
-      "synonyms": ["dimethylpolysiloxane", "polydimethylsiloxane", "dimethyl silicone", "antifoaming agent"],
+      "synonyms": [
+        "dimethylpolysiloxane",
+        "polydimethylsiloxane",
+        "dimethyl silicone",
+        "antifoaming agent"
+      ],
       "whatItIs": "A silicone-based anti-foaming agent.",
       "whyUsed": "Stops frying oils foaming, and is used in some jams and drinks.",
       "riskTier": "SAFE",
       "riskReason": "Not absorbed by the body and permitted within an acceptable daily intake.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
       "adi": "1.5 mg per kg body weight per day (EFSA)",
-      "sources": [{ "title": "EFSA opinion on dimethyl polysiloxane (E900)", "url": "https://www.efsa.europa.eu/en/efsajournal" }]
+      "sources": [
+        {
+          "title": "EFSA opinion on dimethyl polysiloxane (E900)",
+          "url": "https://www.efsa.europa.eu/en/efsajournal"
+        }
+      ]
     },
     {
       "id": "e903",
       "name": "Carnauba Wax (E903)",
       "eNumber": "E903",
-      "synonyms": ["carnauba wax"],
+      "synonyms": [
+        "carnauba wax"
+      ],
       "whatItIs": "A hard plant wax from the leaves of a Brazilian palm.",
       "whyUsed": "Glazes sweets, chocolate and fresh fruit.",
       "riskTier": "SAFE",
       "riskReason": "Not absorbed and permitted as a glazing agent within an acceptable daily intake.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA opinion on carnauba wax (E903)", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/2913" }]
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA opinion on carnauba wax (E903)",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/2913"
+        }
+      ]
     },
     {
       "id": "e904",
       "name": "Shellac (E904)",
       "eNumber": "E904",
-      "synonyms": ["shellac", "confectioner's glaze", "lac resin"],
+      "synonyms": [
+        "shellac",
+        "confectioner's glaze",
+        "lac resin"
+      ],
       "whatItIs": "A resin secreted by the lac insect.",
       "whyUsed": "Glazes confectionery, chocolate and coated tablets.",
       "riskTier": "SAFE",
       "riskReason": "Not absorbed and permitted as a glazing agent. It is of insect origin.",
-      "dietary": ["gluten_free"],
-      "sources": [{ "title": "EFSA opinion on shellac (E904)", "url": "https://www.efsa.europa.eu/en/efsajournal" }]
+      "dietary": [
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA opinion on shellac (E904)",
+          "url": "https://www.efsa.europa.eu/en/efsajournal"
+        }
+      ]
     },
     {
       "id": "e927a",
       "name": "Azodicarbonamide (E927a)",
       "eNumber": "E927a",
-      "synonyms": ["azodicarbonamide", "ada"],
+      "synonyms": [
+        "azodicarbonamide",
+        "ada"
+      ],
       "whatItIs": "A flour treatment agent and dough conditioner.",
       "whyUsed": "Strengthens bread dough. Still used in some countries including the United States.",
       "riskTier": "AVOID",
       "riskReason": "Banned as a food additive in the EU, the UK and Australia. It breaks down during baking to semicarbazide and, when heated, can form urethane. It is also a recognised cause of occupational asthma in workers handling the powder.",
-      "cautionGroups": ["asthma"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher"],
-      "sources": [{ "title": "WHO/IPCS Concise International Chemical Assessment: azodicarbonamide", "url": "https://www.who.int/publications/i/item/9241530162" }]
+      "cautionGroups": [
+        "asthma"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher"
+      ],
+      "sources": [
+        {
+          "title": "WHO/IPCS Concise International Chemical Assessment: azodicarbonamide",
+          "url": "https://www.who.int/publications/i/item/9241530162"
+        }
+      ]
     },
     {
       "id": "potassium_bromate",
       "name": "Potassium Bromate",
-      "synonyms": ["potassium bromate", "bromated flour"],
+      "synonyms": [
+        "potassium bromate",
+        "bromated flour"
+      ],
       "whatItIs": "A flour oxidising agent.",
       "whyUsed": "Strengthens dough and improves bread volume. Still permitted in some countries.",
       "riskTier": "AVOID",
       "riskReason": "Classified by the IARC as possibly carcinogenic to humans (Group 2B). Banned as a food additive in the EU, the UK, Canada, Brazil, China and India, among others.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher"],
-      "sources": [{ "title": "IARC Monographs Volume 73: potassium bromate", "url": "https://publications.iarc.fr/91" }]
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher"
+      ],
+      "sources": [
+        {
+          "title": "IARC Monographs Volume 73: potassium bromate",
+          "url": "https://publications.iarc.fr/91"
+        }
+      ]
     },
     {
       "id": "e950",
       "name": "Acesulfame K (E950)",
       "eNumber": "E950",
-      "synonyms": ["acesulfame k", "acesulfame potassium", "acesulphame k", "ace k"],
+      "synonyms": [
+        "acesulfame k",
+        "acesulfame potassium",
+        "acesulphame k",
+        "ace k"
+      ],
       "whatItIs": "An intense synthetic sweetener, roughly 200 times sweeter than sugar.",
       "whyUsed": "Sweetens diet drinks, sugar-free gum, desserts and tabletop sweeteners, often blended with other sweeteners.",
       "riskTier": "CAUTION",
       "riskReason": "Approved by EFSA and the FDA within an acceptable daily intake. EFSA has been re-examining the older toxicology package, and long-term human outcome data remain limited.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
       "adi": "9 mg per kg body weight per day (EFSA)",
-      "sources": [{ "title": "EFSA statement on acesulfame K", "url": "https://www.efsa.europa.eu/en/topics/topic/sweeteners" }]
+      "sources": [
+        {
+          "title": "EFSA statement on acesulfame K",
+          "url": "https://www.efsa.europa.eu/en/topics/topic/sweeteners"
+        }
+      ]
     },
     {
       "id": "e951",
       "name": "Aspartame (E951)",
       "eNumber": "E951",
-      "synonyms": ["aspartame", "nutrasweet", "sweetener 951"],
+      "synonyms": [
+        "aspartame",
+        "nutrasweet",
+        "sweetener 951"
+      ],
       "whatItIs": "An intense sweetener made of two amino acids, about 200 times sweeter than sugar.",
       "whyUsed": "Sweetens diet soft drinks, yoghurts, chewing gum and tabletop sweeteners.",
       "riskTier": "MODERATE",
       "riskReason": "EFSA's 2013 review concluded aspartame is safe at the acceptable daily intake, and the WHO's JECFA reaffirmed that intake level in 2023. In the same year the IARC classified aspartame as possibly carcinogenic to humans (Group 2B), a category reflecting limited evidence. It must be avoided by people with phenylketonuria because it releases phenylalanine, and any product containing it must state that it is a source of phenylalanine.",
-      "cautionGroups": ["phenylketonuria"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
+      "cautionGroups": [
+        "phenylketonuria"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
       "adi": "40 mg per kg body weight per day (EFSA)",
       "sources": [
-        { "title": "IARC/WHO (2023) aspartame hazard and risk assessment summary", "url": "https://www.who.int/news/item/14-07-2023-aspartame-hazard-and-risk-assessment-results-released" },
-        { "title": "EFSA (2013) scientific opinion on aspartame", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/3496" }
+        {
+          "title": "IARC/WHO (2023) aspartame hazard and risk assessment summary",
+          "url": "https://www.who.int/news/item/14-07-2023-aspartame-hazard-and-risk-assessment-results-released"
+        },
+        {
+          "title": "EFSA (2013) scientific opinion on aspartame",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/3496"
+        }
       ]
     },
     {
       "id": "e954",
       "name": "Saccharin (E954)",
       "eNumber": "E954",
-      "synonyms": ["saccharin", "sodium saccharin", "saccharine"],
+      "synonyms": [
+        "saccharin",
+        "sodium saccharin",
+        "saccharine"
+      ],
       "whatItIs": "One of the oldest intense sweeteners.",
       "whyUsed": "Sweetens tabletop sweeteners, diet drinks and some medicines.",
       "riskTier": "CAUTION",
       "riskReason": "Earlier bladder tumour findings in male rats were shown to occur by a mechanism not relevant to humans, and saccharin was removed from the US list of suspected carcinogens. It is permitted within an acceptable daily intake.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
       "adi": "5 mg per kg body weight per day (EFSA, expressed as saccharin)",
-      "sources": [{ "title": "US National Toxicology Program: delisting of saccharin", "url": "https://ntp.niehs.nih.gov/whatwestudy/assessments/cancer/roc" }]
+      "sources": [
+        {
+          "title": "US National Toxicology Program: delisting of saccharin",
+          "url": "https://ntp.niehs.nih.gov/whatwestudy/assessments/cancer/roc"
+        }
+      ]
     },
     {
       "id": "e955",
       "name": "Sucralose (E955)",
       "eNumber": "E955",
-      "synonyms": ["sucralose", "splenda"],
+      "synonyms": [
+        "sucralose",
+        "splenda"
+      ],
       "whatItIs": "An intense sweetener made by chlorinating sucrose, around 600 times sweeter than sugar.",
       "whyUsed": "Sweetens diet drinks, baked goods, dairy and tabletop sweeteners.",
       "riskTier": "CAUTION",
       "riskReason": "Approved by EFSA and the FDA within an acceptable daily intake. Questions remain under study about effects on the gut microbiome and about compounds formed when it is heated to high temperatures during baking.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
       "adi": "15 mg per kg body weight per day (EFSA)",
-      "sources": [{ "title": "EFSA topic page: sweeteners", "url": "https://www.efsa.europa.eu/en/topics/topic/sweeteners" }]
+      "sources": [
+        {
+          "title": "EFSA topic page: sweeteners",
+          "url": "https://www.efsa.europa.eu/en/topics/topic/sweeteners"
+        }
+      ]
     },
     {
       "id": "e960",
       "name": "Steviol Glycosides (E960)",
       "eNumber": "E960",
-      "synonyms": ["steviol glycosides", "stevia", "rebaudioside a", "stevia extract"],
+      "synonyms": [
+        "steviol glycosides",
+        "stevia",
+        "rebaudioside a",
+        "stevia extract"
+      ],
       "whatItIs": "Sweet compounds extracted from the leaves of the stevia plant.",
       "whyUsed": "Sweetens drinks, dairy, confectionery and tabletop sweeteners.",
       "riskTier": "SAFE",
       "riskReason": "EFSA established an acceptable daily intake and found no safety concern at permitted use levels.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
       "adi": "4 mg per kg body weight per day, as steviol equivalents (EFSA)",
-      "sources": [{ "title": "EFSA scientific opinion on steviol glycosides", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/1537" }]
+      "sources": [
+        {
+          "title": "EFSA scientific opinion on steviol glycosides",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/1537"
+        }
+      ]
     },
     {
       "id": "e965",
       "name": "Maltitol (E965)",
       "eNumber": "E965",
-      "synonyms": ["maltitol", "maltitol syrup", "hydrogenated glucose syrup"],
+      "synonyms": [
+        "maltitol",
+        "maltitol syrup",
+        "hydrogenated glucose syrup"
+      ],
       "whatItIs": "A sugar alcohol with about 90 percent of the sweetness of sugar.",
       "whyUsed": "Sweetens sugar-free chocolate, sweets and baked goods.",
       "riskTier": "CAUTION",
       "riskReason": "Incompletely absorbed, so it commonly causes wind, bloating and a laxative effect. Products with more than 10 percent added polyols must carry a laxative-effect warning. It still raises blood glucose somewhat, which matters for diabetes.",
-      "cautionGroups": ["ibs", "diabetes", "children"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EU Regulation 1333/2008, Annex III polyol labelling", "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32008R1333" }]
+      "cautionGroups": [
+        "ibs",
+        "diabetes",
+        "children",
+        "fodmap"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EU Regulation 1333/2008, Annex III polyol labelling",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32008R1333"
+        }
+      ]
     },
     {
       "id": "e967",
       "name": "Xylitol (E967)",
       "eNumber": "E967",
-      "synonyms": ["xylitol", "birch sugar"],
+      "synonyms": [
+        "xylitol",
+        "birch sugar"
+      ],
       "whatItIs": "A sugar alcohol as sweet as sugar, found naturally in small amounts in fruit.",
       "whyUsed": "Sweetens sugar-free gum, mints and dental products; it does not feed the bacteria that cause tooth decay.",
       "riskTier": "CAUTION",
       "riskReason": "Safe for people, and beneficial for dental health, but incompletely absorbed so it can cause wind and a laxative effect. Important: xylitol is highly toxic to dogs even in small amounts.",
-      "cautionGroups": ["ibs", "children"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA opinion on xylitol and dental health claims", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/2554" }]
+      "cautionGroups": [
+        "ibs",
+        "children",
+        "fodmap"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA opinion on xylitol and dental health claims",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/2554"
+        }
+      ]
     },
     {
       "id": "e1442",
       "name": "Hydroxypropyl Distarch Phosphate (E1442)",
       "eNumber": "E1442",
-      "synonyms": ["hydroxypropyl distarch phosphate", "modified starch", "modified corn starch", "modified maize starch"],
+      "synonyms": [
+        "hydroxypropyl distarch phosphate",
+        "modified starch",
+        "modified corn starch",
+        "modified maize starch"
+      ],
       "whatItIs": "A chemically modified starch.",
       "whyUsed": "Thickens sauces, soups, dairy desserts and ready meals, and survives freezing and reheating.",
       "riskTier": "SAFE",
       "riskReason": "Modified starches are treated as foods rather than needing a numerical acceptable daily intake, and EFSA found no safety concern.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA re-evaluation of modified starches", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/util" }]
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of modified starches",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/util"
+        }
+      ]
     },
     {
       "id": "partially_hydrogenated_oil",
       "name": "Partially Hydrogenated Vegetable Oil",
-      "synonyms": ["partially hydrogenated vegetable oil", "partially hydrogenated oil", "partially hydrogenated palm oil", "partially hydrogenated soybean oil", "hydrogenated vegetable fat", "vanaspati"],
+      "synonyms": [
+        "partially hydrogenated vegetable oil",
+        "partially hydrogenated oil",
+        "partially hydrogenated palm oil",
+        "partially hydrogenated soybean oil",
+        "hydrogenated vegetable fat",
+        "vanaspati"
+      ],
       "whatItIs": "Vegetable oil partly hardened by adding hydrogen, which creates industrial trans fatty acids.",
       "whyUsed": "Historically used to make cheap solid fats for baking, frying and margarine with a long shelf life.",
       "riskTier": "AVOID",
       "riskReason": "Industrially produced trans fat raises LDL cholesterol and lowers HDL cholesterol, and is linked to increased coronary heart disease risk. The WHO has called for global elimination, the FDA removed its 'generally recognised as safe' status, and the EU limits industrial trans fat to 2 g per 100 g of fat.",
-      "cautionGroups": ["hypertension", "diabetes", "pregnancy", "children"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
+      "cautionGroups": [
+        "hypertension",
+        "diabetes",
+        "pregnancy",
+        "children"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
       "sources": [
-        { "title": "WHO: countdown to a trans fat free world", "url": "https://www.who.int/teams/nutrition-and-food-safety/replace-trans-fat" },
-        { "title": "US FDA final determination on partially hydrogenated oils", "url": "https://www.fda.gov/food/food-additives-petitions/trans-fat" }
+        {
+          "title": "WHO: countdown to a trans fat free world",
+          "url": "https://www.who.int/teams/nutrition-and-food-safety/replace-trans-fat"
+        },
+        {
+          "title": "US FDA final determination on partially hydrogenated oils",
+          "url": "https://www.fda.gov/food/food-additives-petitions/trans-fat"
+        }
       ]
     },
     {
       "id": "hfcs",
       "name": "High Fructose Corn Syrup",
-      "synonyms": ["high fructose corn syrup", "hfcs", "glucose fructose syrup", "fructose glucose syrup", "isoglucose", "corn syrup high fructose"],
+      "synonyms": [
+        "high fructose corn syrup",
+        "hfcs",
+        "glucose fructose syrup",
+        "fructose glucose syrup",
+        "isoglucose",
+        "corn syrup high fructose"
+      ],
       "whatItIs": "A liquid sweetener made from corn starch, with fructose and glucose in varying proportions.",
       "whyUsed": "Cheap sweetener for soft drinks, sauces, cereals, breads and confectionery.",
       "riskTier": "MODERATE",
       "riskReason": "Metabolically similar to table sugar, so the concern is quantity rather than the ingredient being uniquely harmful. It is a major contributor of free sugars, and the WHO recommends limiting free sugars to under 10 percent of daily energy, ideally under 5 percent.",
-      "cautionGroups": ["diabetes", "children"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "WHO guideline on sugars intake for adults and children", "url": "https://www.who.int/publications/i/item/9789241549028" }]
+      "cautionGroups": [
+        "diabetes",
+        "children",
+        "fructose"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "WHO guideline on sugars intake for adults and children",
+          "url": "https://www.who.int/publications/i/item/9789241549028"
+        }
+      ]
     },
     {
       "id": "sugar",
       "name": "Sugar (Sucrose)",
-      "synonyms": ["sugar", "sucrose", "cane sugar", "caster sugar", "granulated sugar", "invert sugar", "beet sugar"],
+      "synonyms": [
+        "sugar",
+        "sucrose",
+        "cane sugar",
+        "caster sugar",
+        "granulated sugar",
+        "invert sugar",
+        "beet sugar"
+      ],
       "whatItIs": "Table sugar, refined from sugar cane or sugar beet.",
       "whyUsed": "Sweetens, bulks, browns and preserves an enormous range of foods.",
       "riskTier": "MODERATE",
       "riskReason": "Not toxic, but a leading contributor of free sugars, which are linked to tooth decay, weight gain and type 2 diabetes risk. The WHO recommends free sugars stay below 10 percent of daily energy intake, and suggests under 5 percent for additional benefit.",
-      "cautionGroups": ["diabetes", "children"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "WHO guideline on sugars intake for adults and children", "url": "https://www.who.int/publications/i/item/9789241549028" }]
+      "cautionGroups": [
+        "diabetes",
+        "children",
+        "fructose"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "WHO guideline on sugars intake for adults and children",
+          "url": "https://www.who.int/publications/i/item/9789241549028"
+        }
+      ]
     },
     {
       "id": "salt",
       "name": "Salt (Sodium Chloride)",
-      "synonyms": ["salt", "sodium chloride", "sea salt", "table salt", "rock salt", "iodised salt"],
+      "synonyms": [
+        "salt",
+        "sodium chloride",
+        "sea salt",
+        "table salt",
+        "rock salt",
+        "iodised salt"
+      ],
       "whatItIs": "Sodium chloride.",
       "whyUsed": "Seasons, preserves, controls fermentation and improves texture.",
       "riskTier": "MODERATE",
       "riskReason": "Essential in small amounts, but high intake raises blood pressure, a leading risk factor for stroke and heart disease. The WHO recommends adults consume less than 5 g of salt, about 2 g of sodium, per day, and most people exceed this.",
-      "cautionGroups": ["hypertension", "kidney_disease", "children"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "WHO guideline: sodium intake for adults and children", "url": "https://www.who.int/publications/i/item/9789241504836" }]
+      "cautionGroups": [
+        "hypertension",
+        "kidney_disease",
+        "children"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "WHO guideline: sodium intake for adults and children",
+          "url": "https://www.who.int/publications/i/item/9789241504836"
+        }
+      ]
     },
     {
       "id": "palm_oil",
       "name": "Palm Oil",
-      "synonyms": ["palm oil", "palm fat", "palm", "palmitate", "palm kernel oil", "palm stearin", "vegetable oil palm", "palm oil fully refined"],
+      "synonyms": [
+        "palm oil",
+        "palm fat",
+        "palm",
+        "palmitate",
+        "palm kernel oil",
+        "palm stearin",
+        "vegetable oil palm",
+        "palm oil fully refined"
+      ],
       "whatItIs": "An edible oil from the fruit of the oil palm, semi-solid at room temperature.",
       "whyUsed": "Very widely used in spreads, baked goods, confectionery, instant noodles and frying fats.",
       "riskTier": "CAUTION",
       "riskReason": "High in saturated fat, which raises LDL cholesterol when it replaces unsaturated fats. Separately, refining palm oil at high temperatures can generate glycidyl esters and 3-MCPD, contaminants EFSA has flagged, and which industry has since worked to reduce. Palm oil cultivation is also a major driver of deforestation.",
-      "cautionGroups": ["hypertension"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA: risks for human health related to glycidyl esters and 3-MCPD in palm oil", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4426" }]
+      "cautionGroups": [
+        "hypertension"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA: risks for human health related to glycidyl esters and 3-MCPD in palm oil",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4426"
+        }
+      ]
     },
     {
       "id": "maltodextrin",
       "name": "Maltodextrin",
-      "synonyms": ["maltodextrin", "corn maltodextrin", "wheat maltodextrin"],
+      "synonyms": [
+        "maltodextrin",
+        "corn maltodextrin",
+        "wheat maltodextrin"
+      ],
       "whatItIs": "A lightly sweet carbohydrate powder made from starch.",
       "whyUsed": "Bulks, thickens and carries flavours in powdered drinks, sauces, snacks and sports products.",
       "riskTier": "CAUTION",
       "riskReason": "Safe as a food, but it is a rapidly digested carbohydrate with a high glycaemic index, so it can raise blood glucose quickly. Wheat-derived maltodextrin is normally processed enough to be gluten free, but the source should be checked in a coeliac diet.",
-      "cautionGroups": ["diabetes"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "US FDA: substances added to food inventory", "url": "https://www.fda.gov/food/food-additives-petitions/substances-added-food-formerly-eafus" }]
+      "cautionGroups": [
+        "diabetes"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "US FDA: substances added to food inventory",
+          "url": "https://www.fda.gov/food/food-additives-petitions/substances-added-food-formerly-eafus"
+        }
+      ]
     },
     {
       "id": "gelatin",
       "name": "Gelatine",
-      "synonyms": ["gelatin", "gelatine", "beef gelatine", "pork gelatine", "fish gelatine"],
+      "synonyms": [
+        "gelatin",
+        "gelatine",
+        "beef gelatine",
+        "pork gelatine",
+        "fish gelatine"
+      ],
       "whatItIs": "A protein obtained by boiling animal skin, bone and connective tissue, usually from pigs or cattle.",
       "whyUsed": "Sets sweets, marshmallows, mousses, yoghurts and capsule shells.",
       "riskTier": "SAFE",
       "riskReason": "No safety concern as a food. It is an animal product, so it is unsuitable for vegans and vegetarians, and its acceptability in halal and kosher diets depends entirely on the source animal and certification.",
-      "dietary": ["gluten_free"],
-      "sources": [{ "title": "EFSA opinion on the safety of collagen and gelatine", "url": "https://www.efsa.europa.eu/en/efsajournal" }]
+      "dietary": [
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA opinion on the safety of collagen and gelatine",
+          "url": "https://www.efsa.europa.eu/en/efsajournal"
+        }
+      ]
     },
     {
       "id": "caffeine",
       "name": "Caffeine",
-      "synonyms": ["caffeine", "anhydrous caffeine", "guarana extract"],
+      "synonyms": [
+        "caffeine",
+        "anhydrous caffeine",
+        "guarana extract"
+      ],
       "whatItIs": "A natural stimulant found in coffee, tea, cocoa and added to energy drinks.",
       "whyUsed": "Provides a stimulant effect and a slightly bitter taste.",
       "riskTier": "CAUTION",
       "riskReason": "EFSA considers single doses up to 200 mg and daily intakes up to 400 mg safe for healthy adults. Pregnant and breastfeeding women are advised to stay under 200 mg per day. Children and adolescents should have much less. Drinks with more than 150 mg per litre must be labelled as high caffeine content.",
-      "cautionGroups": ["pregnancy", "breastfeeding", "children", "hypertension", "migraine"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
+      "cautionGroups": [
+        "pregnancy",
+        "breastfeeding",
+        "children",
+        "hypertension",
+        "migraine",
+        "caffeine_sensitivity"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
       "adi": "400 mg per day for healthy adults, 200 mg per day in pregnancy (EFSA)",
-      "sources": [{ "title": "EFSA (2015) scientific opinion on the safety of caffeine", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4102" }]
+      "sources": [
+        {
+          "title": "EFSA (2015) scientific opinion on the safety of caffeine",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4102"
+        }
+      ]
     },
     {
       "id": "wheat_flour",
       "name": "Wheat Flour",
-      "synonyms": ["wheat flour", "wheat", "flour", "plain flour", "wholemeal wheat flour", "durum wheat", "semolina", "spelt"],
+      "synonyms": [
+        "wheat flour",
+        "wheat",
+        "flour",
+        "plain flour",
+        "wholemeal wheat flour",
+        "durum wheat",
+        "semolina",
+        "spelt"
+      ],
       "whatItIs": "Milled wheat grain, the base of most bread, pasta and baked goods.",
       "whyUsed": "Provides structure, bulk and texture in baking.",
       "riskTier": "SAFE",
       "riskReason": "A dietary staple. It contains gluten, so it must be declared as an allergen and strictly avoided by people with coeliac disease or wheat allergy.",
-      "allergens": ["gluten"],
-      "cautionGroups": ["coeliac"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher"],
-      "sources": [{ "title": "EU Regulation 1169/2011 Annex II: allergens requiring declaration", "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32011R1169" }]
+      "allergens": [
+        "gluten"
+      ],
+      "cautionGroups": [
+        "coeliac"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher"
+      ],
+      "sources": [
+        {
+          "title": "EU Regulation 1169/2011 Annex II: allergens requiring declaration",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32011R1169"
+        }
+      ]
     },
     {
       "id": "milk",
       "name": "Milk",
-      "synonyms": ["milk", "whole milk", "skimmed milk", "milk powder", "milk solids", "whey", "whey powder", "casein", "caseinate", "lactose", "butter", "cream", "buttermilk"],
+      "synonyms": [
+        "milk",
+        "whole milk",
+        "skimmed milk",
+        "milk powder",
+        "milk solids",
+        "whey",
+        "whey powder",
+        "casein",
+        "caseinate",
+        "lactose",
+        "butter",
+        "cream",
+        "buttermilk"
+      ],
       "whatItIs": "Dairy milk and the ingredients derived from it.",
       "whyUsed": "Provides protein, fat, sweetness and texture across chocolate, baked goods, sauces and desserts.",
       "riskTier": "SAFE",
       "riskReason": "A nutritious staple. Milk is one of the 14 allergens that must always be declared, and lactose intolerance is common worldwide.",
-      "allergens": ["milk"],
-      "dietary": ["vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EU Regulation 1169/2011 Annex II: allergens requiring declaration", "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32011R1169" }]
+      "allergens": [
+        "milk"
+      ],
+      "dietary": [
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EU Regulation 1169/2011 Annex II: allergens requiring declaration",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32011R1169"
+        }
+      ],
+      "cautionGroups": [
+        "lactose"
+      ]
     },
     {
       "id": "egg",
       "name": "Egg",
-      "synonyms": ["egg", "eggs", "egg white", "egg yolk", "albumen", "dried egg", "egg powder", "ovalbumin"],
+      "synonyms": [
+        "egg",
+        "eggs",
+        "egg white",
+        "egg yolk",
+        "albumen",
+        "dried egg",
+        "egg powder",
+        "ovalbumin"
+      ],
       "whatItIs": "Hen egg and its fractions.",
       "whyUsed": "Binds, emulsifies, aerates and enriches baked goods, sauces and pasta.",
       "riskTier": "SAFE",
       "riskReason": "Nutritious, and one of the 14 allergens that must always be declared. Egg allergy is common in young children.",
-      "allergens": ["eggs"],
-      "dietary": ["vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EU Regulation 1169/2011 Annex II: allergens requiring declaration", "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32011R1169" }]
+      "allergens": [
+        "eggs"
+      ],
+      "dietary": [
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EU Regulation 1169/2011 Annex II: allergens requiring declaration",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32011R1169"
+        }
+      ]
     },
     {
       "id": "peanut",
       "name": "Peanut",
-      "synonyms": ["peanut", "peanuts", "groundnut", "groundnuts", "peanut butter", "arachis oil", "peanut oil"],
+      "synonyms": [
+        "peanut",
+        "peanuts",
+        "groundnut",
+        "groundnuts",
+        "peanut butter",
+        "arachis oil",
+        "peanut oil"
+      ],
       "whatItIs": "A legume, botanically distinct from tree nuts.",
       "whyUsed": "Used in confectionery, snacks, sauces and baked goods.",
       "riskTier": "SAFE",
       "riskReason": "Nutritious, but one of the most significant food allergens, capable of causing severe and rapid anaphylaxis in sensitised people. Must always be declared.",
-      "allergens": ["peanuts"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EU Regulation 1169/2011 Annex II: allergens requiring declaration", "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32011R1169" }]
+      "allergens": [
+        "peanuts"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EU Regulation 1169/2011 Annex II: allergens requiring declaration",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32011R1169"
+        }
+      ]
     },
     {
       "id": "soy",
       "name": "Soya",
-      "synonyms": ["soy", "soya", "soybean", "soya bean", "soy protein", "soya flour", "tofu", "soy sauce", "edamame"],
+      "synonyms": [
+        "soy",
+        "soya",
+        "soybean",
+        "soya bean",
+        "soy protein",
+        "soya flour",
+        "tofu",
+        "soy sauce",
+        "edamame"
+      ],
       "whatItIs": "The soya bean and its many derived ingredients.",
       "whyUsed": "A major source of protein, oil and emulsifiers across processed foods.",
       "riskTier": "SAFE",
       "riskReason": "A nutritious protein source. Soya is one of the 14 allergens that must always be declared.",
-      "allergens": ["soybeans"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EU Regulation 1169/2011 Annex II: allergens requiring declaration", "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32011R1169" }]
+      "allergens": [
+        "soybeans"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EU Regulation 1169/2011 Annex II: allergens requiring declaration",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32011R1169"
+        }
+      ]
     },
     {
       "id": "tree_nuts",
       "name": "Tree Nuts",
-      "synonyms": ["tree nuts", "almond", "almonds", "hazelnut", "hazelnuts", "walnut", "walnuts", "cashew", "cashews", "pistachio", "pecan", "brazil nut", "macadamia"],
+      "synonyms": [
+        "tree nuts",
+        "almond",
+        "almonds",
+        "hazelnut",
+        "hazelnuts",
+        "walnut",
+        "walnuts",
+        "cashew",
+        "cashews",
+        "pistachio",
+        "pecan",
+        "brazil nut",
+        "macadamia"
+      ],
       "whatItIs": "Nuts grown on trees, including almond, hazelnut, walnut, cashew, pistachio, pecan, Brazil nut and macadamia.",
       "whyUsed": "Used in confectionery, baking, spreads, cereals and plant milks.",
       "riskTier": "SAFE",
       "riskReason": "Nutritious, but a major allergen group that must always be declared, and a common cause of severe reactions.",
-      "allergens": ["nuts"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EU Regulation 1169/2011 Annex II: allergens requiring declaration", "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32011R1169" }]
+      "allergens": [
+        "nuts"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EU Regulation 1169/2011 Annex II: allergens requiring declaration",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32011R1169"
+        }
+      ]
     },
     {
       "id": "sesame",
       "name": "Sesame",
-      "synonyms": ["sesame", "sesame seeds", "sesame oil", "tahini", "benne"],
+      "synonyms": [
+        "sesame",
+        "sesame seeds",
+        "sesame oil",
+        "tahini",
+        "benne"
+      ],
       "whatItIs": "Sesame seeds and products made from them.",
       "whyUsed": "Used in breads, snacks, oils and pastes such as tahini and hummus.",
       "riskTier": "SAFE",
       "riskReason": "Nutritious, and a declarable allergen in the EU, UK and, since 2023, the United States.",
-      "allergens": ["sesame"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EU Regulation 1169/2011 Annex II: allergens requiring declaration", "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32011R1169" }]
+      "allergens": [
+        "sesame"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EU Regulation 1169/2011 Annex II: allergens requiring declaration",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32011R1169"
+        }
+      ]
     },
     {
       "id": "mustard",
       "name": "Mustard",
-      "synonyms": ["mustard", "mustard seed", "mustard flour", "mustard powder", "dijon"],
+      "synonyms": [
+        "mustard",
+        "mustard seed",
+        "mustard flour",
+        "mustard powder",
+        "dijon"
+      ],
       "whatItIs": "Mustard seed and products made from it.",
       "whyUsed": "Flavours condiments, dressings, sauces, marinades and processed meats.",
       "riskTier": "SAFE",
       "riskReason": "A declarable allergen in the EU and UK, capable of causing severe reactions in sensitised people.",
-      "allergens": ["mustard"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EU Regulation 1169/2011 Annex II: allergens requiring declaration", "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32011R1169" }]
+      "allergens": [
+        "mustard"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EU Regulation 1169/2011 Annex II: allergens requiring declaration",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32011R1169"
+        }
+      ]
     },
     {
       "id": "celery",
       "name": "Celery",
-      "synonyms": ["celery", "celeriac", "celery salt", "celery seed", "celery extract"],
+      "synonyms": [
+        "celery",
+        "celeriac",
+        "celery salt",
+        "celery seed",
+        "celery extract"
+      ],
       "whatItIs": "Celery stalk, leaf, seed and root.",
       "whyUsed": "Flavours stocks, soups, sauces and processed meats.",
       "riskTier": "SAFE",
       "riskReason": "A declarable allergen in the EU and UK, including when present only as a flavouring.",
-      "allergens": ["celery"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EU Regulation 1169/2011 Annex II: allergens requiring declaration", "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32011R1169" }]
+      "allergens": [
+        "celery"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EU Regulation 1169/2011 Annex II: allergens requiring declaration",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32011R1169"
+        }
+      ]
     },
     {
       "id": "fish",
       "name": "Fish",
-      "synonyms": ["fish", "anchovy", "anchovies", "tuna", "cod", "salmon", "fish sauce", "fish oil", "worcestershire sauce"],
+      "synonyms": [
+        "fish",
+        "anchovy",
+        "anchovies",
+        "tuna",
+        "cod",
+        "salmon",
+        "fish sauce",
+        "fish oil",
+        "worcestershire sauce"
+      ],
       "whatItIs": "Fish and fish-derived ingredients.",
       "whyUsed": "Used directly and as a savoury base in sauces, stocks and condiments.",
       "riskTier": "SAFE",
       "riskReason": "Nutritious, and a declarable allergen. Note that some sauces contain anchovy without it being obvious from the product name.",
-      "allergens": ["fish"],
-      "dietary": ["halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EU Regulation 1169/2011 Annex II: allergens requiring declaration", "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32011R1169" }]
+      "allergens": [
+        "fish"
+      ],
+      "dietary": [
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EU Regulation 1169/2011 Annex II: allergens requiring declaration",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32011R1169"
+        }
+      ]
     },
     {
       "id": "crustaceans",
       "name": "Crustaceans",
-      "synonyms": ["crustaceans", "prawn", "prawns", "shrimp", "crab", "lobster", "krill", "crayfish"],
+      "synonyms": [
+        "crustaceans",
+        "prawn",
+        "prawns",
+        "shrimp",
+        "crab",
+        "lobster",
+        "krill",
+        "crayfish"
+      ],
       "whatItIs": "Shellfish such as prawns, crab, lobster and crayfish.",
       "whyUsed": "Used in seafood products, pastes, stocks and flavourings.",
       "riskTier": "SAFE",
       "riskReason": "A declarable allergen and a frequent cause of severe allergic reactions in adults.",
-      "allergens": ["crustaceans"],
-      "dietary": ["gluten_free"],
-      "sources": [{ "title": "EU Regulation 1169/2011 Annex II: allergens requiring declaration", "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32011R1169" }]
+      "allergens": [
+        "crustaceans"
+      ],
+      "dietary": [
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EU Regulation 1169/2011 Annex II: allergens requiring declaration",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32011R1169"
+        }
+      ]
     },
     {
       "id": "molluscs",
       "name": "Molluscs",
-      "synonyms": ["molluscs", "mollusks", "mussel", "mussels", "oyster", "oysters", "squid", "octopus", "clam", "scallop", "oyster sauce"],
+      "synonyms": [
+        "molluscs",
+        "mollusks",
+        "mussel",
+        "mussels",
+        "oyster",
+        "oysters",
+        "squid",
+        "octopus",
+        "clam",
+        "scallop",
+        "oyster sauce"
+      ],
       "whatItIs": "Shellfish such as mussels, oysters, squid, octopus, clams and scallops.",
       "whyUsed": "Used in seafood dishes and in sauces such as oyster sauce.",
       "riskTier": "SAFE",
       "riskReason": "A declarable allergen in the EU and UK.",
-      "allergens": ["molluscs"],
-      "dietary": ["gluten_free"],
-      "sources": [{ "title": "EU Regulation 1169/2011 Annex II: allergens requiring declaration", "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32011R1169" }]
+      "allergens": [
+        "molluscs"
+      ],
+      "dietary": [
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EU Regulation 1169/2011 Annex II: allergens requiring declaration",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32011R1169"
+        }
+      ]
     },
     {
       "id": "lupin",
       "name": "Lupin",
-      "synonyms": ["lupin", "lupine", "lupin flour", "lupin seed"],
+      "synonyms": [
+        "lupin",
+        "lupine",
+        "lupin flour",
+        "lupin seed"
+      ],
       "whatItIs": "A legume whose flour is used in some baked goods and pasta.",
       "whyUsed": "Adds protein and colour to breads, pastries and gluten-free products.",
       "riskTier": "SAFE",
       "riskReason": "A declarable allergen in the EU and UK. People allergic to peanuts have an increased chance of also reacting to lupin.",
-      "allergens": ["lupin"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EU Regulation 1169/2011 Annex II: allergens requiring declaration", "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32011R1169" }]
+      "allergens": [
+        "lupin"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EU Regulation 1169/2011 Annex II: allergens requiring declaration",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32011R1169"
+        }
+      ]
     },
     {
       "id": "yeast_extract",
       "name": "Yeast Extract",
-      "synonyms": ["yeast extract", "autolysed yeast", "autolyzed yeast extract", "hydrolysed yeast"],
+      "synonyms": [
+        "yeast extract",
+        "autolysed yeast",
+        "autolyzed yeast extract",
+        "hydrolysed yeast"
+      ],
       "whatItIs": "Concentrated yeast cell contents, naturally rich in free glutamates.",
       "whyUsed": "Adds savoury depth to spreads, crisps, soups and stocks. Often used where a label avoids declaring added MSG.",
       "riskTier": "SAFE",
       "riskReason": "A food ingredient rather than an additive, with no safety concern. It naturally contains glutamate, so people who believe they react to MSG may react similarly. It is also high in purines.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA (2017) re-evaluation of glutamic acid and glutamates", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4910" }]
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA (2017) re-evaluation of glutamic acid and glutamates",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4910"
+        }
+      ]
     },
     {
       "id": "natural_flavouring",
       "name": "Natural Flavouring",
-      "synonyms": ["natural flavouring", "natural flavoring", "natural flavour", "natural flavor", "flavouring", "flavoring", "flavourings"],
+      "synonyms": [
+        "natural flavouring",
+        "natural flavoring",
+        "natural flavour",
+        "natural flavor",
+        "flavouring",
+        "flavoring",
+        "flavourings"
+      ],
       "whatItIs": "A blend of aroma compounds obtained from natural sources. The exact composition is not usually disclosed.",
       "whyUsed": "Provides taste and aroma across almost every processed food category.",
       "riskTier": "CAUTION",
       "riskReason": "Flavourings are evaluated and authorised in the EU, so the components are assessed for safety. The reason for caution is transparency rather than toxicity: the label does not tell you what is in the blend, which is a problem if you have an allergy or follow a strict diet.",
-      "sources": [{ "title": "EU Regulation 1334/2008 on flavourings", "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32008R1334" }]
+      "sources": [
+        {
+          "title": "EU Regulation 1334/2008 on flavourings",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32008R1334"
+        }
+      ]
     },
     {
       "id": "vanillin",
       "name": "Vanillin",
-      "synonyms": ["vanillin", "ethyl vanillin", "synthetic vanilla"],
+      "synonyms": [
+        "vanillin",
+        "ethyl vanillin",
+        "synthetic vanilla"
+      ],
       "whatItIs": "The main aroma compound of vanilla, usually produced synthetically.",
       "whyUsed": "Gives vanilla flavour to chocolate, baked goods, ice cream and drinks.",
       "riskTier": "SAFE",
       "riskReason": "An authorised flavouring substance with no safety concern at use levels.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EU Union list of authorised flavouring substances", "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32012R0872" }]
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EU Union list of authorised flavouring substances",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32012R0872"
+        }
+      ]
     },
     {
       "id": "cocoa",
       "name": "Cocoa",
-      "synonyms": ["cocoa", "cocoa mass", "cocoa butter", "cocoa solids", "cacao", "chocolate liquor"],
+      "synonyms": [
+        "cocoa",
+        "cocoa mass",
+        "cocoa butter",
+        "cocoa solids",
+        "cacao",
+        "chocolate liquor"
+      ],
       "whatItIs": "Products from the roasted and ground cacao bean.",
       "whyUsed": "The basis of chocolate and cocoa-flavoured products.",
       "riskTier": "SAFE",
       "riskReason": "No safety concern as a food. It naturally contains caffeine and theobromine, so large amounts of dark chocolate have a mild stimulant effect. Cocoa can contain cadmium, which is why some markets set limits.",
-      "cautionGroups": ["migraine"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA opinion on cadmium in food", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/980" }]
+      "cautionGroups": [
+        "migraine",
+        "caffeine_sensitivity"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA opinion on cadmium in food",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/980"
+        }
+      ]
     },
     {
       "id": "ethanol",
       "name": "Alcohol (Ethanol)",
-      "synonyms": ["alcohol", "ethanol", "ethyl alcohol", "wine", "rum", "brandy"],
+      "synonyms": [
+        "alcohol",
+        "ethanol",
+        "ethyl alcohol",
+        "wine",
+        "rum",
+        "brandy"
+      ],
       "whatItIs": "Drinking alcohol, sometimes present in flavourings, desserts and sauces.",
       "whyUsed": "Carries flavour, preserves, and is a component of alcoholic drinks.",
       "riskTier": "MODERATE",
       "riskReason": "The IARC classifies alcohol as carcinogenic to humans (Group 1). There is no level established as risk free, and it should be avoided in pregnancy. It is also not permitted in halal diets.",
-      "cautionGroups": ["pregnancy", "breastfeeding", "children", "migraine"],
-      "dietary": ["vegan", "vegetarian", "kosher", "gluten_free"],
-      "sources": [{ "title": "IARC Monographs Volume 100E: alcohol consumption", "url": "https://publications.iarc.fr/122" }]
+      "cautionGroups": [
+        "pregnancy",
+        "breastfeeding",
+        "children",
+        "migraine",
+        "alcohol_sensitivity"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "IARC Monographs Volume 100E: alcohol consumption",
+          "url": "https://publications.iarc.fr/122"
+        }
+      ]
     },
     {
       "id": "water",
       "name": "Water",
-      "synonyms": ["water", "aqua", "purified water", "filtered water", "carbonated water", "sparkling water", "mineral water"],
+      "synonyms": [
+        "water",
+        "aqua",
+        "purified water",
+        "filtered water",
+        "carbonated water",
+        "sparkling water",
+        "mineral water"
+      ],
       "whatItIs": "Water, usually the largest ingredient by weight in drinks, sauces and many processed foods.",
       "whyUsed": "Dissolves, dilutes, hydrates and carries other ingredients.",
       "riskTier": "SAFE",
       "riskReason": "No concern. Worth noting only because when water is listed first it means the product is mostly water.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "WHO guidelines for drinking-water quality", "url": "https://www.who.int/publications/i/item/9789241549950" }]
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "WHO guidelines for drinking-water quality",
+          "url": "https://www.who.int/publications/i/item/9789241549950"
+        }
+      ]
     },
     {
       "id": "sunflower_oil",
       "name": "Sunflower Oil",
-      "synonyms": ["sunflower oil", "sunflower seed oil", "high oleic sunflower oil"],
+      "synonyms": [
+        "sunflower oil",
+        "sunflower seed oil",
+        "high oleic sunflower oil"
+      ],
       "whatItIs": "An oil pressed from sunflower seeds, high in unsaturated fat.",
       "whyUsed": "Frying, baking and as a base for spreads and dressings.",
       "riskTier": "SAFE",
       "riskReason": "A predominantly unsaturated fat. Dietary guidelines favour unsaturated oils over saturated fats.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "WHO guideline: saturated and trans-fatty acid intake", "url": "https://www.who.int/publications/i/item/9789240073630" }]
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "WHO guideline: saturated and trans-fatty acid intake",
+          "url": "https://www.who.int/publications/i/item/9789240073630"
+        }
+      ]
     },
     {
       "id": "rapeseed_oil",
       "name": "Rapeseed Oil",
-      "synonyms": ["rapeseed oil", "canola oil", "colza oil", "low erucic acid rapeseed oil"],
+      "synonyms": [
+        "rapeseed oil",
+        "canola oil",
+        "colza oil",
+        "low erucic acid rapeseed oil"
+      ],
       "whatItIs": "An oil pressed from rapeseed, also sold as canola oil.",
       "whyUsed": "General cooking, frying, spreads and mayonnaise.",
       "riskTier": "SAFE",
       "riskReason": "Low in saturated fat and a source of omega-3 alpha-linolenic acid. Food-grade rapeseed oil is bred to contain very little erucic acid.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA opinion on erucic acid in feed and food", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4593" }]
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA opinion on erucic acid in feed and food",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4593"
+        }
+      ]
     },
     {
       "id": "olive_oil",
       "name": "Olive Oil",
-      "synonyms": ["olive oil", "extra virgin olive oil", "virgin olive oil"],
+      "synonyms": [
+        "olive oil",
+        "extra virgin olive oil",
+        "virgin olive oil"
+      ],
       "whatItIs": "Oil pressed from olives, rich in monounsaturated fat.",
       "whyUsed": "Dressings, cooking, preserving and flavour.",
       "riskTier": "SAFE",
       "riskReason": "One of the better-studied dietary fats, central to Mediterranean dietary patterns associated with cardiovascular benefit.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA health claim opinion on olive oil polyphenols", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/2033" }]
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA health claim opinion on olive oil polyphenols",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/2033"
+        }
+      ]
     },
     {
       "id": "glucose_syrup",
       "name": "Glucose Syrup",
-      "synonyms": ["glucose syrup", "dextrose", "glucose", "corn syrup", "dried glucose syrup"],
+      "synonyms": [
+        "glucose syrup",
+        "dextrose",
+        "glucose",
+        "corn syrup",
+        "dried glucose syrup"
+      ],
       "whatItIs": "A sweet syrup made by breaking down starch, usually from maize or wheat.",
       "whyUsed": "Sweetens, controls crystallisation and adds body to sweets, ice cream and baked goods.",
       "riskTier": "MODERATE",
       "riskReason": "Counts as free sugars, which the WHO recommends keeping below 10 percent of daily energy intake. It is rapidly absorbed and raises blood glucose quickly.",
-      "cautionGroups": ["diabetes", "children"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "WHO guideline on sugars intake for adults and children", "url": "https://www.who.int/publications/i/item/9789241549028" }]
+      "cautionGroups": [
+        "diabetes",
+        "children"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "WHO guideline on sugars intake for adults and children",
+          "url": "https://www.who.int/publications/i/item/9789241549028"
+        }
+      ]
     },
     {
       "id": "barley",
       "name": "Barley",
-      "synonyms": ["barley", "barley malt", "malted barley", "malt extract", "pearl barley", "barley flour"],
+      "synonyms": [
+        "barley",
+        "barley malt",
+        "malted barley",
+        "malt extract",
+        "pearl barley",
+        "barley flour"
+      ],
       "whatItIs": "A cereal grain, also widely used as malt.",
       "whyUsed": "Used in breads, cereals, soups, beer and as malt extract for flavour and colour.",
       "riskTier": "SAFE",
       "riskReason": "A nutritious wholegrain. It contains gluten, so it must be declared and avoided by people with coeliac disease.",
-      "allergens": ["gluten"],
-      "cautionGroups": ["coeliac"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher"],
-      "sources": [{ "title": "EU Regulation 1169/2011 Annex II: allergens requiring declaration", "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32011R1169" }]
+      "allergens": [
+        "gluten"
+      ],
+      "cautionGroups": [
+        "coeliac"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher"
+      ],
+      "sources": [
+        {
+          "title": "EU Regulation 1169/2011 Annex II: allergens requiring declaration",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32011R1169"
+        }
+      ]
     },
     {
       "id": "oats",
       "name": "Oats",
-      "synonyms": ["oats", "oat", "oat flour", "rolled oats", "oatmeal", "oat fibre", "wholegrain oats"],
+      "synonyms": [
+        "oats",
+        "oat",
+        "oat flour",
+        "rolled oats",
+        "oatmeal",
+        "oat fibre",
+        "wholegrain oats"
+      ],
       "whatItIs": "A cereal grain high in soluble beta-glucan fibre.",
       "whyUsed": "Used in breakfast cereals, breads, biscuits, bars and oat drinks.",
       "riskTier": "SAFE",
       "riskReason": "Nutritious, with beta-glucan recognised for helping maintain normal blood cholesterol. Oats are a declarable cereal containing gluten in the EU, and are frequently cross-contaminated with wheat unless certified gluten free.",
-      "allergens": ["gluten"],
-      "cautionGroups": ["coeliac"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher"],
-      "sources": [{ "title": "EFSA health claim opinion on oat beta-glucan and blood cholesterol", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/1254" }]
+      "allergens": [
+        "gluten"
+      ],
+      "cautionGroups": [
+        "coeliac"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher"
+      ],
+      "sources": [
+        {
+          "title": "EFSA health claim opinion on oat beta-glucan and blood cholesterol",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/1254"
+        }
+      ]
     },
     {
       "id": "rye",
       "name": "Rye",
-      "synonyms": ["rye", "rye flour", "wholemeal rye flour"],
+      "synonyms": [
+        "rye",
+        "rye flour",
+        "wholemeal rye flour"
+      ],
       "whatItIs": "A cereal grain used mainly in dense breads and crispbreads.",
       "whyUsed": "Provides flavour, structure and fibre in breads and crackers.",
       "riskTier": "SAFE",
       "riskReason": "A nutritious wholegrain that contains gluten, so it must be declared and avoided in a coeliac diet.",
-      "allergens": ["gluten"],
-      "cautionGroups": ["coeliac"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher"],
-      "sources": [{ "title": "EU Regulation 1169/2011 Annex II: allergens requiring declaration", "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32011R1169" }]
+      "allergens": [
+        "gluten"
+      ],
+      "cautionGroups": [
+        "coeliac"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher"
+      ],
+      "sources": [
+        {
+          "title": "EU Regulation 1169/2011 Annex II: allergens requiring declaration",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32011R1169"
+        }
+      ]
     },
     {
       "id": "rice",
       "name": "Rice",
-      "synonyms": ["rice", "rice flour", "brown rice", "white rice", "rice starch", "puffed rice"],
+      "synonyms": [
+        "rice",
+        "rice flour",
+        "brown rice",
+        "white rice",
+        "rice starch",
+        "puffed rice"
+      ],
       "whatItIs": "A cereal grain, naturally gluten free.",
       "whyUsed": "Used whole, as flour and as starch in a wide range of foods and gluten-free products.",
       "riskTier": "SAFE",
       "riskReason": "A staple food. Rice takes up more inorganic arsenic from soil than most crops, which is why some authorities advise against rice drinks as a milk substitute for young children.",
-      "cautionGroups": ["children"],
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA opinion on inorganic arsenic in food", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/dbb" }]
+      "cautionGroups": [
+        "children"
+      ],
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA opinion on inorganic arsenic in food",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/dbb"
+        }
+      ]
     },
     {
       "id": "maize",
       "name": "Maize / Corn",
-      "synonyms": ["maize", "corn", "corn starch", "cornstarch", "maize starch", "corn flour", "maize flour", "polenta", "corn grits"],
+      "synonyms": [
+        "maize",
+        "corn",
+        "corn starch",
+        "cornstarch",
+        "maize starch",
+        "corn flour",
+        "maize flour",
+        "polenta",
+        "corn grits"
+      ],
       "whatItIs": "A cereal grain, naturally gluten free.",
       "whyUsed": "Used as flour, starch, grits and syrup across an enormous range of foods.",
       "riskTier": "SAFE",
       "riskReason": "A staple food with no safety concern as an ingredient.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "US FDA: substances added to food inventory", "url": "https://www.fda.gov/food/food-additives-petitions/substances-added-food-formerly-eafus" }]
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "US FDA: substances added to food inventory",
+          "url": "https://www.fda.gov/food/food-additives-petitions/substances-added-food-formerly-eafus"
+        }
+      ]
     },
     {
       "id": "potato",
       "name": "Potato",
-      "synonyms": ["potato", "potatoes", "potato starch", "dehydrated potato", "potato flakes"],
+      "synonyms": [
+        "potato",
+        "potatoes",
+        "potato starch",
+        "dehydrated potato",
+        "potato flakes"
+      ],
       "whatItIs": "A starchy tuber.",
       "whyUsed": "Used whole, dried, and as starch for thickening.",
       "riskTier": "SAFE",
       "riskReason": "A staple food. Note that frying or roasting potato at high temperatures forms acrylamide, which is why cooking guidance advises golden rather than dark browning.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA opinion on acrylamide in food", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4104" }]
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA opinion on acrylamide in food",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/4104"
+        }
+      ]
     },
     {
       "id": "yeast",
       "name": "Yeast",
-      "synonyms": ["yeast", "bakers yeast", "dried yeast", "fresh yeast", "nutritional yeast"],
+      "synonyms": [
+        "yeast",
+        "bakers yeast",
+        "dried yeast",
+        "fresh yeast",
+        "nutritional yeast"
+      ],
       "whatItIs": "A single-celled fungus used for fermentation.",
       "whyUsed": "Raises bread and ferments beer and wine.",
       "riskTier": "SAFE",
       "riskReason": "No safety concern as a food ingredient.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA opinion on yeast as a food ingredient", "url": "https://www.efsa.europa.eu/en/efsajournal" }]
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA opinion on yeast as a food ingredient",
+          "url": "https://www.efsa.europa.eu/en/efsajournal"
+        }
+      ]
     },
     {
       "id": "vinegar",
       "name": "Vinegar",
-      "synonyms": ["vinegar", "spirit vinegar", "white vinegar", "wine vinegar", "cider vinegar", "malt vinegar"],
+      "synonyms": [
+        "vinegar",
+        "spirit vinegar",
+        "white vinegar",
+        "wine vinegar",
+        "cider vinegar",
+        "malt vinegar"
+      ],
       "whatItIs": "A dilute acetic acid solution made by fermentation.",
       "whyUsed": "Acidifies, preserves and adds sourness to pickles, sauces and dressings.",
       "riskTier": "SAFE",
       "riskReason": "No safety concern. Malt vinegar is made from barley, so it is relevant to a strict gluten-free diet.",
-      "dietary": ["vegan", "vegetarian", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA re-evaluation of acetic acid and its salts", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/2760" }]
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA re-evaluation of acetic acid and its salts",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/2760"
+        }
+      ]
     },
     {
       "id": "tomato",
       "name": "Tomato",
-      "synonyms": ["tomato", "tomatoes", "tomato puree", "tomato paste", "tomato concentrate", "chopped tomatoes", "sun dried tomato"],
+      "synonyms": [
+        "tomato",
+        "tomatoes",
+        "tomato puree",
+        "tomato paste",
+        "tomato concentrate",
+        "chopped tomatoes",
+        "sun dried tomato"
+      ],
       "whatItIs": "A fruit used as a vegetable, often concentrated into purée or paste.",
       "whyUsed": "Base for sauces, soups, ketchup and ready meals.",
       "riskTier": "SAFE",
       "riskReason": "Nutritious and a source of lycopene. Tomatoes are naturally high in glutamate, which is why they taste savoury.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EFSA opinion on lycopene as a food colour and nutrient", "url": "https://www.efsa.europa.eu/en/efsajournal/pub/1444" }]
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EFSA opinion on lycopene as a food colour and nutrient",
+          "url": "https://www.efsa.europa.eu/en/efsajournal/pub/1444"
+        }
+      ]
     },
     {
       "id": "spices",
       "name": "Spices and Herbs",
-      "synonyms": ["spices", "spice", "herbs", "mixed spices", "mixed herbs", "black pepper", "pepper", "paprika", "cumin", "coriander", "turmeric", "cinnamon", "oregano", "basil", "onion powder", "garlic powder", "onion", "garlic"],
+      "synonyms": [
+        "spices",
+        "spice",
+        "herbs",
+        "mixed spices",
+        "mixed herbs",
+        "black pepper",
+        "pepper",
+        "paprika",
+        "cumin",
+        "coriander",
+        "turmeric",
+        "cinnamon",
+        "oregano",
+        "basil",
+        "onion powder",
+        "garlic powder",
+        "onion",
+        "garlic"
+      ],
       "whatItIs": "Dried plant parts used for flavour and aroma.",
       "whyUsed": "Season and flavour almost every savoury category.",
       "riskTier": "SAFE",
       "riskReason": "No concern at culinary levels. The generic term 'spices' does not tell you which ones are present, which matters if you react to a specific spice.",
-      "dietary": ["vegan", "vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "EU Regulation 1334/2008 on flavourings", "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32008R1334" }]
+      "dietary": [
+        "vegan",
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "EU Regulation 1334/2008 on flavourings",
+          "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32008R1334"
+        }
+      ]
     },
     {
       "id": "honey",
       "name": "Honey",
-      "synonyms": ["honey", "clear honey", "runny honey"],
+      "synonyms": [
+        "honey",
+        "clear honey",
+        "runny honey"
+      ],
       "whatItIs": "A sweet syrup produced by bees.",
       "whyUsed": "Sweetens and flavours cereals, drinks, baked goods and sauces.",
       "riskTier": "CAUTION",
       "riskReason": "Nutritionally close to other sugars, so it counts toward free sugars. Importantly, honey must not be given to infants under 12 months because of the risk of infant botulism.",
-      "cautionGroups": ["children", "diabetes"],
-      "dietary": ["vegetarian", "halal", "kosher", "gluten_free"],
-      "sources": [{ "title": "NHS guidance: foods to avoid giving babies", "url": "https://www.nhs.uk/conditions/baby/weaning-and-feeding/foods-to-avoid-giving-babies-and-young-children/" }]
+      "cautionGroups": [
+        "children",
+        "diabetes",
+        "fructose"
+      ],
+      "dietary": [
+        "vegetarian",
+        "halal",
+        "kosher",
+        "gluten_free"
+      ],
+      "sources": [
+        {
+          "title": "NHS guidance: foods to avoid giving babies",
+          "url": "https://www.nhs.uk/conditions/baby/weaning-and-feeding/foods-to-avoid-giving-babies-and-young-children/"
+        }
+      ]
     }
   ]
 }

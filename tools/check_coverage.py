@@ -45,6 +45,12 @@ LABELS = {
     "Yoghurt":
         "Whole Milk, Strawberries, Sugar, Modified Maize Starch, Pectin, "
         "Concentrated Lemon Juice, Colour (Carmine), Natural Flavouring",
+    "Hand wash, hygiene label with usage text mixed in":
+        "Ingredients: Aqua, Ammonium Lauryl Sulfate, Sodium Laureth Sulfate, "
+        "Glycerin, Cocamide MEA, Parfum, Sodium Chloride, Citric Acid, "
+        "Tetrasodium EDTA, CI 11710. Directions: Wet hands, apply and rinse. "
+        "For external use only. Keep out of reach of children. Warnings: avoid "
+        "contact with eyes. Mfg by XYZ Ltd. Net wt 200ml.",
 }
 
 # --- mirrors TextNormalizer -------------------------------------------------
@@ -81,9 +87,23 @@ PREFIX = re.compile(rf"^({CLASSES})\s*[:\-]\s*", re.IGNORECASE)
 CLASS_ONLY = re.compile(rf"^({CLASSES})$", re.IGNORECASE)
 LEAD = re.compile(r"^\s*(ingredients?|composition|contains)\s*[:\-]\s*", re.IGNORECASE)
 PCT = re.compile(r"\d+([.,]\d+)?\s*%")
+# Mirrors IngredientListParser.boilerplate, including the hygiene and household
+# phrases. A competitor's app displayed "For external use only" and "Keep out
+# of" as if they were ingredients; these cases exist to prove we do not.
 BOILER = re.compile(
     r"^(gluten free|dairy free|sugar free|contains a source of.*|may contain.*|"
-    r"suitable for.*|allergy advice.*|produced in.*|best before.*)$", re.IGNORECASE)
+    r"suitable for.*|allergy advice.*|produced in.*|best before.*|"
+    r"store .*|keep .*|use by.*|once opened.*|packed in.*|made in.*|"
+    r"for external use only|external use only|"
+    r"direction(s)?.*|instruction(s)?.*|how to use.*|usage.*|"
+    r"warning(s)?.*|caution.*|precaution(s)?.*|"
+    r"avoid contact.*|in case of.*|if swallowed.*|if irritation.*|"
+    r"discontinue use.*|rinse.*|wet hands.*|apply .*|"
+    r"not to be taken.*|for best results.*|"
+    r"batch no.*|mfg.*|mfd.*|exp.*|lot no.*|net (wt|weight).*|"
+    r"marketed by.*|manufactured by.*|imported by.*|customer care.*|"
+    r"consumer complaint.*|shelf life.*|"
+    r"recyclable|please recycle.*|dispose of.*)$", re.IGNORECASE)
 
 
 def split_top(text: str) -> list[str]:

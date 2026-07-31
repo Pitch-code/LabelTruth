@@ -26,6 +26,7 @@ class ProfileStore(private val context: Context) {
     private val dietsKey = stringSetPreferencesKey("diets")
     private val conditionsKey = stringSetPreferencesKey("conditions")
     private val disclaimerKey = booleanPreferencesKey("disclaimer_accepted")
+    private val onboardedKey = booleanPreferencesKey("onboarding_complete")
 
     val profile: Flow<HealthProfile> = context.dataStore.data.map { prefs ->
         HealthProfile(
@@ -43,8 +44,17 @@ class ProfileStore(private val context: Context) {
     suspend fun toggleDiet(value: String) = toggle(dietsKey, value)
     suspend fun toggleCondition(value: String) = toggle(conditionsKey, value)
 
+    /** Shown once. Skipping still counts as done, so we never nag. */
+    val onboardingComplete: Flow<Boolean> = context.dataStore.data.map { prefs ->
+        prefs[onboardedKey] ?: false
+    }
+
     suspend fun acceptDisclaimer() {
         context.dataStore.edit { it[disclaimerKey] = true }
+    }
+
+    suspend fun completeOnboarding() {
+        context.dataStore.edit { it[onboardedKey] = true }
     }
 
     private suspend fun toggle(key: Preferences.Key<Set<String>>, value: String) {

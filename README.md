@@ -364,6 +364,28 @@ with a rough-but-working build rather than waiting for polish.
 
 ---
 
+## What we deliberately did not copy
+
+Two competitors were installed and worked through in detail: **KnowTox** and
+**Toxly**. Several of their ideas were adopted. These were rejected on purpose.
+
+| Their pattern | Why we are not doing it |
+|---|---|
+| **Free scan quota** (5/month, or ad-gated) | Rationing the core function of a trust app teaches users to distrust it. Ship v1 unlimited. |
+| **Daily streaks**, "4 more days to +1 ad-free scan" | Engagement farming. Nobody should scan food daily to keep a streak alive. This is a utility, not a game. |
+| **Ads on the results screen** | The verdict is the moment the user is deciding something. Selling that attention undermines the product's only real asset. |
+| **"AI" badges** on generated descriptions | Honest of them, but it advertises that the content was guessed. We inverted it: a **SOURCED** badge marks entries backed by a citation. |
+| **Health goals** onboarding (immune support, energy, sleep) | We cannot connect a food label to "brain function" with any published evidence. Asking implies we can. |
+| **Skin type** onboarding | Meaningless until cosmetics ship, and asking for data we cannot use is a dark pattern. |
+
+One thing worth recording: Toxly's ingredient list showed **"For external use only"**,
+**"Keep out of"** and **"CI 12085 Directions"** as if they were ingredients. That is
+the parser leaking label text. `IngredientListParser` now filters hygiene and
+household boilerplate specifically, and `tools/check_coverage.py` has a hand wash
+label as a regression case.
+
+---
+
 ## Competitive position
 
 This category is crowded. Apps shipped in roughly the last year include Labelens,
