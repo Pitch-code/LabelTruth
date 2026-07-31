@@ -42,7 +42,12 @@ class SeedLoader(
             for (synonym in candidates) {
                 val normalized = TextNormalizer.normalize(synonym)
                 if (normalized.isBlank() || normalized == canonicalNormalized) continue
-                synonyms.putIfAbsent(normalized, SynonymEntity(normalized, item.id))
+                // Keyed by category as well, so food and cosmetic entries can
+                // both own the same synonym without colliding.
+                synonyms.putIfAbsent(
+                    "${item.category}|$normalized",
+                    SynonymEntity(normalized, item.category, item.id)
+                )
             }
         }
 

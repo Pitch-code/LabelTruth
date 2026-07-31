@@ -58,7 +58,16 @@ SOURCES = {
     "ingredients.json": f"{OFF_STATIC}/ingredients.json",
     "ingredients.txt": f"{OFF_RAW}/food/ingredients.txt",
     "additives.txt": f"{OFF_RAW}/additives.txt",
+    # Cosmetics. The CosIng-derived file carries INCI names, descriptions,
+    # functions and, for 1,220 entries, the EU annex restriction that applies.
+    "ingredients-cosing-obf.txt": f"{OFF_RAW}/beauty/ingredients-cosing-obf.txt",
+    "beauty-allergens.txt": f"{OFF_RAW}/beauty/allergens.txt",
 }
+
+COSMETICS_REGULATION = (
+    "EU Regulation 1223/2009 on cosmetic products",
+    "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A32009R1223",
+)
 
 # Open Food Facts allergen ids mapped to the 14 declarable allergens the app
 # uses in HealthProfile.ALL_ALLERGENS.
@@ -281,6 +290,13 @@ def derive_risk(entry: dict) -> tuple[str, str, list[str]]:
     def finish(tier: str, reason: str) -> tuple[str, str, list[str]]:
         return tier, " ".join([reason] + notes), caution
 
+    # If nothing is published that we can point at, any ANSES note is factual
+    # regulatory context, not a risk finding. The "@" prefix routes it to
+    # whyUsed so the invariant holds: NOT_ASSESSED never carries a riskReason.
+    if not has_efsa and not overexposure and adi_established != "no" \
+            and not mean_over and not p95_over:
+        return "NOT_ASSESSED", ("@" + " ".join(notes) if notes else ""), caution
+
     if adi_established == "no":
         return finish(
             "MODERATE",
@@ -413,6 +429,11 @@ def build_additives(additives: dict, text_index: dict) -> list[dict]:
         why = f"Used as a {', '.join(dict.fromkeys(classes))}." if classes else ""
 
         tier, reason, caution = derive_risk(entry)
+        status_note = ""
+        if reason.startswith("@"):
+            status_note, reason = reason[1:].strip(), ""
+        if status_note:
+            why = f"{why} {status_note}".strip()
         adi = en(entry, "efsa_evaluation_adi")
 
         synonyms = {plain, e_number, e_number.replace("E", "E "), f"{e_number} {plain}"}
@@ -513,6 +534,9 @@ def build_ingredients(ingredients: dict, text_index: dict) -> list[dict]:
         allergens = resolve_allergens(tag, ingredients, text_index, memo)
 
         tier, reason, caution = derive_risk(entry)
+        note = ""
+        if reason.startswith("@"):
+            note, reason = reason[1:].strip(), ""
 
         out.append({
             "id": strip_tag(tag),
@@ -521,7 +545,7 @@ def build_ingredients(ingredients: dict, text_index: dict) -> list[dict]:
             "synonyms": sorted(set(synonyms)),
             "category": "food",
             "whatItIs": en(entry, "description") or "",
-            "whyUsed": "",
+            "whyUsed": note,
             "riskTier": tier,
             "riskReason": reason,
             "allergens": allergens,
@@ -529,6 +553,252 @@ def build_ingredients(ingredients: dict, text_index: dict) -> list[dict]:
             "cautionGroups": caution,
             "adi": None,
             "sources": efsa_citation(entry),
+            "_tier": "assessed" if tier != "NOT_ASSESSED" else "recognised",
+        })
+    return out
+
+
+# --------------------------------------------------------------------------- #
+# cosmetics, from the CosIng-derived taxonomy
+# --------------------------------------------------------------------------- #
+
+INCI_FUNCTION_LABELS = {
+    "skin-conditioning": "skin conditioning",
+    "skin-protecting": "skin protection",
+    "hair-conditioning": "hair conditioning",
+    "emollient": "emollient",
+    "humectant": "humectant",
+    "emulsifying": "emulsifier",
+    "surfactant": "surfactant",
+    "surfactant-cleansing": "cleansing surfactant",
+    "surfactant-foaming": "foaming surfactant",
+    "preservative": "preservative",
+    "antioxidant": "antioxidant",
+    "uv-filter": "UV filter",
+    "uv-absorber": "UV absorber",
+    "perfuming": "fragrance",
+    "masking": "masking fragrance",
+    "hair-dyeing": "hair dye",
+    "cosmetic-colorant": "colourant",
+    "viscosity-controlling": "thickener",
+    "solvent": "solvent",
+    "film-forming": "film former",
+    "opacifying": "opacifier",
+    "abrasive": "abrasive",
+    "antimicrobial": "antimicrobial",
+    "antiperspirant": "antiperspirant",
+    "buffering": "pH buffer",
+    "chelating": "chelating agent",
+    "plasticiser": "plasticiser",
+    "propellant": "propellant",
+    "bulking": "bulking agent",
+    "binding": "binder",
+    "anticaking": "anti-caking agent",
+    "antistatic": "antistatic",
+    "denaturant": "denaturant",
+    "hair-fixing": "hair fixative",
+    "moisturising": "moisturiser",
+    "refatting": "refatting agent",
+    "soothing": "soothing agent",
+    "smoothing": "smoothing agent",
+    "cleansing": "cleansing agent",
+    "foam-boosting": "foam booster",
+    "hydrotrope": "hydrotrope",
+}
+
+# Descriptions in CosIng are often just the IUPAC name, which tells a shopper
+# nothing. This spots them so they can be dropped rather than shown.
+_nomenclature = re.compile(r"^[\d(\[]")
+
+
+_cosing_boilerplate = re.compile(
+    r"^(see regulatory|see annex|refer to|this ingredient is listed)", re.IGNORECASE
+)
+
+
+def useful_description(text: str) -> str:
+    text = text.strip()
+    if not text or len(text) < 12:
+        return ""
+    if _nomenclature.match(text) or _cosing_boilerplate.match(text):
+        return ""
+    digits = sum(c.isdigit() for c in text)
+    if digits / len(text) > 0.12:
+        return ""
+    if len(text) > 320:
+        cut = text[:320].rsplit(" ", 1)[0]
+        return cut + "..."
+    return text
+
+
+def parse_cosing(path: Path) -> list[dict]:
+    """
+    Parses the CosIng taxonomy. Blocks look like:
+
+        en: PHENOXYETHANOL
+        cas:en: 122-99-6
+        inci_description:en: Phenoxyethanol is the aromatic ether ...
+        inci_functions:en: en:preservative
+        inci_restriction:en: V/29
+    """
+    out: list[dict] = []
+
+    def flush(lines: list[str]) -> None:
+        name = None
+        synonyms: list[str] = []
+        props: dict[str, str] = {}
+        for line in lines:
+            if line.startswith("#") or line.startswith("<"):
+                continue
+            if line.startswith("en:"):
+                body = line[3:].strip()
+                if not body or name is not None:
+                    continue
+                # Crucially, do NOT split on commas here. Unlike the food
+                # taxonomy, this file's language line is a single INCI name, and
+                # chemical nomenclature is full of commas:
+                # "1-(3,4-DIMETHOXYPHENYL)-4,4-DIMETHYL-1,3-PENTANEDIONE"
+                # would otherwise be shredded into fake synonyms.
+                name = body
+            else:
+                m = re.match(r"^([a-z_0-9]+):en:\s*(.*)$", line)
+                if m:
+                    props.setdefault(m.group(1), m.group(2).strip())
+        if name:
+            out.append({"name": name, "synonyms": synonyms, "props": props})
+
+    block: list[str] = []
+    for raw in path.read_text(encoding="utf-8", errors="replace").splitlines():
+        if not raw.strip():
+            flush(block)
+            block = []
+        else:
+            block.append(raw.rstrip())
+    flush(block)
+    return out
+
+
+def derive_cosmetic_risk(restriction: str) -> tuple[str, str]:
+    """
+    Maps a CosIng annex reference to a tier. Each branch is a statement of EU
+    regulatory status, not an opinion of ours.
+
+      Annex II  prohibited in cosmetic products
+      Annex III restricted, permitted only under stated conditions
+      Annex IV  permitted colourants
+      Annex V   permitted preservatives
+      Annex VI  permitted UV filters
+      CMR       classified carcinogenic, mutagenic or reprotoxic
+    """
+    if not restriction:
+        return "NOT_ASSESSED", ""
+
+    tokens = restriction.upper()
+
+    if "CMR" in tokens:
+        return ("AVOID",
+                "Classified in the EU as carcinogenic, mutagenic or toxic for "
+                "reproduction (CMR). Substances in this classification are "
+                "prohibited in cosmetic products, subject to narrow exemptions.")
+    if re.search(r"\bII/", tokens) or re.search(r"\bANNEX\s*II\b", tokens):
+        return ("AVOID",
+                "Listed in Annex II of the EU Cosmetics Regulation, which is the "
+                "list of substances prohibited in cosmetic products.")
+    if re.search(r"\bIII\b", tokens):
+        return ("CAUTION",
+                "Listed in Annex III of the EU Cosmetics Regulation: permitted "
+                "only within stated limits and conditions of use, and sometimes "
+                "only in rinse-off products.")
+    # Annexes IV, V and VI are positive lists: "authorised within limits", which
+    # is a statement of legal status, NOT a finding of no concern. Calling these
+    # SAFE would be an overclaim. Methylisothiazolinone is on Annex V and is a
+    # notorious contact allergen the EU later banned from leave-on products.
+    # So these return NOT_ASSESSED, and the regulatory status is reported as
+    # factual context instead of as a safety verdict.
+    if re.search(r"\bIV\b", tokens):
+        return ("NOT_ASSESSED",
+                "@Authorised in the EU as a permitted cosmetic colourant "
+                "(Annex IV), within stated limits.")
+    if re.search(r"\bV\b", tokens):
+        return ("NOT_ASSESSED",
+                "@Authorised in the EU as a permitted preservative (Annex V), "
+                "within stated limits.")
+    if re.search(r"\bVI\b", tokens):
+        return ("NOT_ASSESSED",
+                "@Authorised in the EU as a permitted UV filter (Annex VI), "
+                "within stated limits.")
+    return "NOT_ASSESSED", ""
+
+
+def build_cosmetics(entries: list[dict], allergen_names: set[str]) -> list[dict]:
+    out = []
+    seen: set[str] = set()
+
+    for item in entries:
+        raw_name = item["name"]
+        if len(raw_name) < 3 or len(raw_name) > 90:
+            continue
+
+        # INCI names are printed in capitals; title case reads far better.
+        name = tidy_name(raw_name.title() if raw_name.isupper() else raw_name)
+        key = normalize(name)
+        if not key or key in seen:
+            continue
+        seen.add(key)
+
+        props = item["props"]
+        functions = [
+            INCI_FUNCTION_LABELS.get(strip_tag(f).strip(),
+                                     strip_tag(f).strip().replace("-", " "))
+            for f in (props.get("inci_functions", "").split(",") if
+                      props.get("inci_functions") else [])
+        ]
+        functions = [f for f in dict.fromkeys(functions) if f]
+
+        tier, reason = derive_cosmetic_risk(props.get("inci_restriction", ""))
+
+        # A leading "@" marks regulatory status that is factual context rather
+        # than a risk finding, so it belongs in whyUsed, not riskReason.
+        status_note = ""
+        if reason.startswith("@"):
+            status_note, reason = reason[1:], ""
+
+        is_allergen = key in allergen_names
+        caution = ["fragrance_sensitivity"] if is_allergen else []
+        if is_allergen:
+            note = ("Recognised as a contact allergen. The EU requires a number of "
+                    "these to be named on the label rather than hidden under "
+                    "'parfum', because they can cause allergic skin reactions.")
+            reason = f"{reason} {note}".strip()
+            if tier == "NOT_ASSESSED":
+                tier = "CAUTION"
+
+        sources = []
+        if tier != "NOT_ASSESSED" or status_note:
+            sources = [{"title": COSMETICS_REGULATION[0], "url": COSMETICS_REGULATION[1]}]
+
+        synonyms = {s for s in item["synonyms"] if 2 <= len(s) <= 90}
+        if props.get("cas"):
+            synonyms.add(f"CAS {props['cas']}")
+
+        out.append({
+            "id": "inci-" + re.sub(r"[^a-z0-9]+", "-", key).strip("-")[:70],
+            "name": name,
+            "eNumber": None,
+            "synonyms": sorted(synonyms),
+            "category": "cosmetic",
+            "whatItIs": useful_description(props.get("inci_description", "")),
+            "whyUsed": " ".join(filter(None, [
+                (f"Used for {', '.join(functions)}." if functions else ""),
+                status_note,
+            ])),
+            "riskTier": tier,
+            "riskReason": reason,
+            "allergens": [],
+            "dietary": (["vegan", "vegetarian"] if props.get("vegan") == "yes" else []),
+            "cautionGroups": caution,
+            "adi": None,
+            "sources": sources,
             "_tier": "assessed" if tier != "NOT_ASSESSED" else "recognised",
         })
     return out
@@ -555,51 +825,76 @@ def main() -> int:
         item["_tier"] = "curated"
     log(f"  curated entries: {len(curated)}")
 
+    cosing = parse_cosing(CACHE / "ingredients-cosing-obf.txt")
+    allergen_blocks = parse_taxonomy_text(CACHE / "beauty-allergens.txt")
+    allergen_names = set(allergen_blocks.keys())
+    log(f"  cosmetic (CosIng) blocks: {len(cosing)}")
+    log(f"  cosmetic contact allergens: {len(allergen_names)}")
+
     generated = (build_additives(additives, additive_text)
-                 + build_ingredients(ingredients, text_index))
+                 + build_ingredients(ingredients, text_index)
+                 + build_cosmetics(cosing, allergen_names))
     log(f"  generated entries: {len(generated)}")
 
-    # Curated wins, by id and by normalised name.
+    # Deduplication is per category, deliberately.
+    #
+    # The same substance can carry completely different risk depending on route
+    # of exposure. Titanium dioxide is banned in EU food since 2022, yet remains
+    # a permitted UV filter in cosmetics. A single global entry would show a food
+    # ban notice when someone scans sunscreen, which is worse than saying nothing.
     merged: list[dict] = list(curated)
     taken_ids = {i["id"] for i in curated}
-    taken_names = {normalize(i["name"]) for i in curated}
-    # A curated entry owns its synonyms too, so nothing generated can steal them.
-    taken_names |= {
-        normalize(s) for i in curated for s in i.get("synonyms", [])
-    }
+
+    def cat_of(item: dict) -> str:
+        return item.get("category", "food")
+
+    # (category, normalised name or synonym) -> owning id
+    taken: dict[tuple[str, str], str] = {}
+    for item in curated:
+        cat = cat_of(item)
+        taken[(cat, normalize(item["name"]))] = item["id"]
+        for syn in item.get("synonyms", []):
+            taken.setdefault((cat, normalize(syn)), item["id"])
 
     dropped = 0
     for item in generated:
-        if item["id"] in taken_ids or normalize(item["name"]) in taken_names:
+        cat = cat_of(item)
+        if item["id"] in taken_ids or (cat, normalize(item["name"])) in taken:
             dropped += 1
             continue
         taken_ids.add(item["id"])
-        taken_names.add(normalize(item["name"]))
+        taken[(cat, normalize(item["name"]))] = item["id"]
         merged.append(item)
 
-    log(f"  dropped as already curated: {dropped}")
+    log(f"  dropped as duplicate within a category: {dropped}")
 
-    # Synonyms are a primary key in Room, so a collision would throw at import.
-    # First writer wins, and curated entries are written first.
-    claimed: dict[str, str] = {}
+    # Synonyms are keyed on (normalized, category) in Room, so uniqueness only
+    # has to hold within a category. That is what lets "titanium dioxide" exist
+    # as both a food additive and a cosmetic UV filter.
+    claimed: dict[tuple[str, str], str] = {}
     for item in merged:
-        claimed.setdefault(normalize(item["name"]), item["id"])
+        claimed.setdefault((cat_of(item), normalize(item["name"])), item["id"])
+
     total_synonyms = 0
     for item in merged:
+        cat = cat_of(item)
         kept = []
         for syn in item.get("synonyms", []):
             key = normalize(syn)
             if not key or key == normalize(item["name"]):
                 continue
-            if claimed.setdefault(key, item["id"]) != item["id"]:
+            if claimed.setdefault((cat, key), item["id"]) != item["id"]:
                 continue
             kept.append(syn)
         item["synonyms"] = kept
         total_synonyms += len(kept)
 
     counts = {"curated": 0, "assessed": 0, "recognised": 0}
+    by_category: dict[str, int] = {}
     for item in merged:
         counts[item.pop("_tier")] += 1
+        cat = item.get("category", "food")
+        by_category[cat] = by_category.get(cat, 0) + 1
 
     merged.sort(key=lambda i: i["id"])
     payload = {
@@ -613,16 +908,30 @@ def main() -> int:
         "counts": {
             "total": len(merged),
             "curated": counts["curated"],
-            "assessed_from_efsa": counts["assessed"],
+            "assessed": counts["assessed"],
             "recognised_only": counts["recognised"],
             "synonyms": total_synonyms,
+            "by_category": by_category,
         },
         "ingredients": merged,
     }
 
+    # Written compactly, with anything matching the Kotlin default omitted.
+    # At this entry count the repeated key names and pretty-print whitespace
+    # cost more than the actual data, and the app reads it once at install.
+    DEFAULTS = {
+        "eNumber": None, "synonyms": [], "category": "food", "whatItIs": "",
+        "whyUsed": "", "riskReason": "", "allergens": [], "dietary": [],
+        "cautionGroups": [], "adi": None, "sources": [],
+    }
+    payload["ingredients"] = [
+        {k: v for k, v in item.items() if k not in DEFAULTS or v != DEFAULTS[k]}
+        for item in merged
+    ]
+
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT.write_text(
-        json.dumps(payload, ensure_ascii=False, indent=1, sort_keys=False) + "\n",
+        json.dumps(payload, ensure_ascii=False, separators=(",", ":")) + "\n",
         encoding="utf-8",
     )
 
@@ -630,9 +939,10 @@ def main() -> int:
     log(f"Wrote {OUTPUT.relative_to(ROOT)}")
     log(f"  total entries        {len(merged)}")
     log(f"  curated              {counts['curated']}")
-    log(f"  assessed from EFSA   {counts['assessed']}")
+    log(f"  assessed             {counts['assessed']}")
     log(f"  recognised only      {counts['recognised']}")
     log(f"  synonyms             {total_synonyms}")
+    log(f"  by category          {by_category}")
     log(f"  size                 {OUTPUT.stat().st_size // 1024} KB")
     return 0
 

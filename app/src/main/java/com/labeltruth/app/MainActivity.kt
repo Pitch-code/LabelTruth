@@ -100,6 +100,7 @@ class MainActivity : ComponentActivity() {
                             onOpenProfile = { navController.navigate(Routes.PROFILE) },
                             onOpenAbout = { navController.navigate(Routes.ABOUT) },
                             onOpenSearch = { navController.navigate(Routes.SEARCH) },
+                            onCategoryChange = viewModel::setScanCategory,
                             onDismissMessage = viewModel::dismissMessage
                         )
                     }

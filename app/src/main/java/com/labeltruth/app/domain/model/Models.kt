@@ -33,6 +33,24 @@ enum class RiskTier(val label: String, val penalty: Int) {
 
 data class SourceRef(val title: String, val url: String?)
 
+/**
+ * What kind of product is being scanned.
+ *
+ * This is not cosmetic detail, it changes the answer. Titanium dioxide is
+ * banned in EU food since 2022 but is a permitted UV filter in cosmetics, so
+ * looking a substance up without knowing the route of exposure can produce a
+ * verdict that is precisely wrong.
+ */
+enum class ProductCategory(val key: String, val label: String) {
+    FOOD("food", "Food & drink"),
+    COSMETIC("cosmetic", "Cosmetic & personal care");
+
+    companion object {
+        fun from(key: String?): ProductCategory =
+            entries.firstOrNull { it.key.equals(key, ignoreCase = true) } ?: FOOD
+    }
+}
+
 data class Ingredient(
     val id: String,
     val name: String,
@@ -96,7 +114,8 @@ data class Analysis(
     val grade: Grade,
     val ingredients: List<AnalyzedIngredient>,
     val alerts: List<PersonalAlert>,
-    val rawIngredientsText: String
+    val rawIngredientsText: String,
+    val category: ProductCategory = ProductCategory.FOOD
 ) {
     val unmatchedCount: Int get() = ingredients.count { it.matched == null }
 

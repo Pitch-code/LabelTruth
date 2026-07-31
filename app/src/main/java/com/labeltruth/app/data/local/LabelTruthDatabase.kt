@@ -7,7 +7,9 @@ import androidx.room.RoomDatabase
 
 @Database(
     entities = [IngredientEntity::class, SynonymEntity::class, ScanEntity::class],
-    version = 1,
+    // v2 added a category column to synonyms and made (name, category) the
+    // uniqueness rule, so the same substance can exist for food and cosmetics.
+    version = 2,
     exportSchema = true
 )
 abstract class LabelTruthDatabase : RoomDatabase() {
@@ -27,7 +29,13 @@ abstract class LabelTruthDatabase : RoomDatabase() {
                     context.applicationContext,
                     LabelTruthDatabase::class.java,
                     NAME
-                ).build().also { instance = it }
+                )
+                    // The dictionary is a rebuildable cache of a bundled asset,
+                    // so throwing it away and re-seeding is cheaper and safer
+                    // than hand-writing migrations for it. Scan history is the
+                    // only real loss, and the app is not published yet.
+                    .fallbackToDestructiveMigration(dropAllTables = true)
+                    .build().also { instance = it }
             }
     }
 }

@@ -4,10 +4,22 @@ Scan a food barcode or photograph an ingredient label, and find out what is
 actually in it: what each ingredient is, why it is there, whether it carries any
 recognised concern, and whether it matters for *you* specifically.
 
-**Status: Phase 2.** The scanning pipeline, offline dictionary, scoring engine
-and UI all work and build into an installable app. The dictionary holds **5,326
-ingredients and additives** with 4,958 synonyms, and recognises **98%** of tokens
-across a sample of real-world labels.
+**Status: Phase 3.** Scanning, offline dictionary, scoring and UI all work and
+build into an installable app. The dictionary holds **27,388 entries** with
+13,716 synonyms, covering **food and cosmetics**: 5,326 food ingredients and
+additives, and 22,062 cosmetic INCI ingredients.
+
+### Route of exposure changes the answer
+
+The same substance can be safe by one route and banned by another. Titanium
+dioxide has been banned in EU **food** since 2022, yet remains a permitted UV
+filter in **cosmetics**.
+
+So the dictionary holds separate entries per category, uniqueness is enforced on
+`(name, category)` rather than name alone, and every lookup prefers the category
+of the product being scanned. A barcode reveals the category by which database
+answered: Open Food Facts or Open Beauty Facts. Label scanning cannot know, so
+the app asks rather than guessing.
 
 ---
 
@@ -138,8 +150,27 @@ The distinction between the two tiers is the ethical core of the app.
 | Tier | Count | What it carries |
 |---|---|---|
 | **Curated** | 110 | Full description, risk tier, reasoning, sources. Hand-written |
-| **Assessed from EFSA** | 159 | Risk tier derived from published EFSA exposure data, EFSA opinion URL attached as the citation |
-| **Recognised only** | 5,057 | Name, synonyms, allergen and dietary flags. `riskTier = NOT_ASSESSED`, and **no risk narrative at all** |
+| **Assessed** | 1,107 | Risk tier derived from published EFSA exposure data or EU cosmetics annexes, with the citation attached |
+| **Recognised only** | 26,171 | Name, synonyms, allergen and dietary flags. `riskTier = NOT_ASSESSED`, and **no risk narrative at all** |
+
+### How cosmetics data becomes a risk tier
+
+From the CosIng annex reference, which is a statement of EU legal status:
+
+| Regulatory status | Tier |
+|---|---|
+| Annex II, prohibited in cosmetics | AVOID |
+| Classified CMR (carcinogenic, mutagenic, reprotoxic) | AVOID |
+| Annex III, restricted to stated limits and conditions | CAUTION |
+| Recognised contact allergen | CAUTION |
+| Annex IV / V / VI, permitted colourant, preservative or UV filter | **NOT_ASSESSED** |
+
+That last row matters. Being on a positive list means "authorised within
+limits", **not** "no known concern", so it is reported as factual regulatory
+status in *why it is used* and never as a safety verdict. Methylisothiazolinone
+is on Annex V and is a notorious contact allergen the EU later banned from
+leave-on products; calling it SAFE because it appears on a permitted list would
+be exactly the kind of overclaim this project exists to avoid.
 
 Curated entries always win over generated ones, by id, by name and by synonym.
 

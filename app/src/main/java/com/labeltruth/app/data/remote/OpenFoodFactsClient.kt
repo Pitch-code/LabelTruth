@@ -2,6 +2,7 @@ package com.labeltruth.app.data.remote
 
 import android.content.Context
 import com.labeltruth.app.BuildConfig
+import com.labeltruth.app.domain.model.ProductCategory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerialName
@@ -37,7 +38,13 @@ data class RemoteProduct(
     val brand: String?,
     val quantity: String?,
     val ingredientsText: String,
-    val imageUrl: String?
+    val imageUrl: String?,
+    /**
+     * Which database answered, which tells us the route of exposure. This is
+     * how the app knows to read titanium dioxide as a cosmetic UV filter rather
+     * than as an additive banned in EU food.
+     */
+    val category: ProductCategory
 )
 
 sealed interface LookupResult {
@@ -71,12 +78,37 @@ class OpenFoodFactsClient(context: Context) {
         .retryOnConnectionFailure(true)
         .build()
 
+    /**
+     * Tries the food database first, then the beauty one.
+     *
+     * Open Food Facts and Open Beauty Facts are separate servers with the same
+     * API shape, and the food server does not redirect for a cosmetic barcode.
+     * Whichever answers also tells us the product category.
+     */
     suspend fun lookup(barcode: String): LookupResult = withContext(Dispatchers.IO) {
         if (!barcode.all { it.isDigit() } || barcode.length !in 6..14) {
             return@withContext LookupResult.Error("That does not look like a product barcode.")
         }
 
-        val url = "$BASE_URL/api/v2/product/$barcode.json?fields=$FIELDS"
+        val food = lookupOn(FOOD_HOST, ProductCategory.FOOD, barcode)
+        if (food is LookupResult.Found) return@withContext food
+
+        val beauty = lookupOn(BEAUTY_HOST, ProductCategory.COSMETIC, barcode)
+        if (beauty is LookupResult.Found) return@withContext beauty
+
+        // Prefer a "product exists but has no ingredients" answer over a plain
+        // not-found, since it is more useful to the user.
+        listOf(food, beauty).firstOrNull { it is LookupResult.NoIngredients }
+            ?: listOf(food, beauty).firstOrNull { it is LookupResult.Error }
+            ?: LookupResult.NotFound
+    }
+
+    private suspend fun lookupOn(
+        host: String,
+        category: ProductCategory,
+        barcode: String
+    ): LookupResult = withContext(Dispatchers.IO) {
+        val url = "$host/api/v2/product/$barcode.json?fields=$FIELDS"
         val request = Request.Builder()
             .url(url)
             // Open Food Facts asks every client to identify itself.
@@ -112,7 +144,8 @@ class OpenFoodFactsClient(context: Context) {
                             ?.takeIf { it.isNotEmpty() },
                         quantity = product.quantity?.takeIf { it.isNotBlank() },
                         ingredientsText = ingredients,
-                        imageUrl = product.imageUrl?.takeIf { it.isNotBlank() }
+                        imageUrl = product.imageUrl?.takeIf { it.isNotBlank() },
+                        category = category
                     )
                 )
             }
@@ -124,7 +157,8 @@ class OpenFoodFactsClient(context: Context) {
     }
 
     private companion object {
-        const val BASE_URL = "https://world.openfoodfacts.org"
+        const val FOOD_HOST = "https://world.openfoodfacts.org"
+        const val BEAUTY_HOST = "https://world.openbeautyfacts.org"
         const val CACHE_BYTES = 8L * 1024 * 1024
         const val FIELDS =
             "product_name,product_name_en,brands,quantity,ingredients_text,ingredients_text_en,image_front_url"

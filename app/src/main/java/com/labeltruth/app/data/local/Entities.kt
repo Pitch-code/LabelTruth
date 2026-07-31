@@ -16,7 +16,9 @@ const val SOURCE_FIELD_DELIMITER = "@@"
 @Entity(
     tableName = "ingredients",
     indices = [
-        Index(value = ["normalizedName"], unique = true),
+        // Not unique any more: the same name can exist once per category.
+        Index(value = ["normalizedName"]),
+        Index(value = ["normalizedName", "category"], unique = true),
         Index(value = ["eNumber"])
     ]
 )
@@ -37,12 +39,21 @@ data class IngredientEntity(
     val sources: String
 )
 
+/**
+ * Keyed on (normalized, category), not on normalized alone.
+ *
+ * The same word can mean different things by route of exposure. "Titanium
+ * dioxide" is banned in EU food but permitted as a cosmetic UV filter, so both
+ * entries must be able to own that synonym within their own category.
+ */
 @Entity(
     tableName = "synonyms",
-    indices = [Index(value = ["ingredientId"])]
+    primaryKeys = ["normalized", "category"],
+    indices = [Index(value = ["ingredientId"]), Index(value = ["normalized"])]
 )
 data class SynonymEntity(
-    @PrimaryKey val normalized: String,
+    val normalized: String,
+    val category: String,
     val ingredientId: String
 )
 
@@ -58,4 +69,4 @@ data class ScanEntity(
 )
 
 /** Lightweight projection used to build the in-memory fuzzy-match index. */
-data class NameRow(val name: String, val id: String)
+data class NameRow(val name: String, val id: String, val category: String)

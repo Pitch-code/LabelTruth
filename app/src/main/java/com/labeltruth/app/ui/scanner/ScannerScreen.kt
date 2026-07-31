@@ -47,6 +47,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.labeltruth.app.R
+import com.labeltruth.app.domain.model.ProductCategory
 import com.labeltruth.app.ui.components.ScanFrame
 import com.labeltruth.app.ui.theme.BrandGreen
 import com.labeltruth.app.ui.theme.BrandGreenDeep
@@ -62,6 +63,7 @@ fun ScannerScreen(
     onOpenProfile: () -> Unit,
     onOpenAbout: () -> Unit,
     onOpenSearch: () -> Unit,
+    onCategoryChange: (ProductCategory) -> Unit,
     onDismissMessage: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -221,6 +223,26 @@ fun ScannerScreen(
             Spacer(Modifier.height(12.dp))
 
             ModeSwitch(mode = state.mode, onModeChange = onModeChange)
+
+            // A photo cannot tell us whether this is a biscuit or a shampoo, and
+            // the same substance can carry a different verdict by route of
+            // exposure, so we ask rather than guess.
+            if (state.mode == ScanMode.LABEL) {
+                Spacer(Modifier.height(10.dp))
+                Row(
+                    modifier = Modifier
+                        .background(Color.Black.copy(alpha = 0.55f), RoundedCornerShape(50))
+                        .padding(4.dp),
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    ProductCategory.entries.forEach { category ->
+                        ModeTab(
+                            label = if (category == ProductCategory.FOOD) "Food" else "Cosmetic",
+                            selected = state.scanCategory == category
+                        ) { onCategoryChange(category) }
+                    }
+                }
+            }
 
             Spacer(Modifier.height(18.dp))
 
