@@ -33,10 +33,12 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -109,12 +111,23 @@ fun ScannerScreen(
     val modeHolder = remember { mutableStateOf(state.mode) }
     LaunchedEffect(state.mode) { modeHolder.value = state.mode }
 
+    // The analyzer outlives individual recompositions, so it must not capture
+    // callback instances directly or it would keep calling stale ones.
+    val currentOnBarcode by rememberUpdatedState(onBarcode)
+    val currentOnLabelText by rememberUpdatedState(onLabelText)
+
     val analyzer = remember {
         FrameAnalyzer(
             currentMode = { modeHolder.value },
-            onBarcode = onBarcode,
-            onLabelText = onLabelText
+            onBarcode = { currentOnBarcode(it) },
+            onLabelText = { currentOnLabelText(it) }
         )
+    }
+
+    // This screen created the analyzer, so this screen closes it. CameraPreview
+    // is only lent the instance.
+    DisposableEffect(analyzer) {
+        onDispose { analyzer.close() }
     }
 
     Box(

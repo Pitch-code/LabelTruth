@@ -1,5 +1,7 @@
 package com.labeltruth.app.ui.scanner
 
+import androidx.annotation.OptIn
+import androidx.camera.core.ExperimentalGetImage
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import com.google.mlkit.vision.barcode.BarcodeScanning
@@ -60,6 +62,15 @@ class FrameAnalyzer(
         captureRequested.set(true)
     }
 
+    /**
+     * ImageProxy.getImage is an opt-in CameraX API, and this must be androidx's
+     * OptIn rather than Kotlin's. ExperimentalGetImage is a Java annotation
+     * enforced by lint, so kotlin.OptIn compiles but does not satisfy it - the
+     * compiler even warns that it "has no effect", which is easy to act on
+     * incorrectly by deleting the annotation and turning a warning into a lint
+     * error.
+     */
+    @OptIn(markerClass = [ExperimentalGetImage::class])
     override fun analyze(imageProxy: ImageProxy) {
         val mediaImage = imageProxy.image
         if (mediaImage == null) {

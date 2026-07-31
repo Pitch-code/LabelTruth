@@ -62,6 +62,31 @@ architecture they need. 14 MB is unremarkable for an app store listing.
 
 ---
 
+## Checks
+
+```bash
+./gradlew :app:testDebugUnitTest    # 42 unit tests
+./gradlew :app:lintDebug            # 0 errors
+python3 tools/check_coverage.py     # dictionary recognition on real labels
+```
+
+The unit tests cover the pure logic where this app is most likely to be quietly
+wrong: label parsing, text normalisation, scoring and personal alerts. **Almost
+every case corresponds to a defect that actually shipped and was fixed**, so they
+are regression tests rather than decoration.
+
+Two of them exist to protect honesty rather than correctness:
+
+- `NOT_ASSESSED carries no penalty` — an absence of published concern is not
+  evidence of a concern, and most of the dictionary sits in that state
+- `summary does not claim no concerns when nothing was assessed` — "no concerns
+  found" and "we hold no assessments" are very different claims
+
+Lint is configured to fail on errors, with the deliberate dependency pins
+silenced so the report stays readable.
+
+---
+
 ## Building it
 
 Requirements: JDK 17 or 21, and the Android SDK with platform 36 + build-tools 36.

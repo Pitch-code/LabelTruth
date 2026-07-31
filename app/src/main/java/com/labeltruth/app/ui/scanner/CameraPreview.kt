@@ -47,9 +47,13 @@ fun CameraPreview(
     }
     val analysisExecutor = remember { Executors.newSingleThreadExecutor() }
     var camera by remember { mutableStateOf<Camera?>(null) }
+    var provider by remember { mutableStateOf<ProcessCameraProvider?>(null) }
 
-    LaunchedEffect(lifecycleOwner) {
-        val provider = awaitCameraProvider(context)
+    // Keyed on the analyzer as well, so a replaced analyzer is actually rebound
+    // rather than silently ignored.
+    LaunchedEffect(lifecycleOwner, analyzer) {
+        val cameraProvider = awaitCameraProvider(context)
+        provider = cameraProvider
 
         val preview = Preview.Builder().build().also {
             it.setSurfaceProvider(previewView.surfaceProvider)
@@ -61,8 +65,8 @@ fun CameraPreview(
             .also { it.setAnalyzer(analysisExecutor, analyzer) }
 
         runCatching {
-            provider.unbindAll()
-            camera = provider.bindToLifecycle(
+            cameraProvider.unbindAll()
+            camera = cameraProvider.bindToLifecycle(
                 lifecycleOwner,
                 CameraSelector.DEFAULT_BACK_CAMERA,
                 preview,
@@ -80,8 +84,15 @@ fun CameraPreview(
 
     DisposableEffect(Unit) {
         onDispose {
+            // Release the camera and our analysis thread, but deliberately do
+            // NOT close the analyzer: this composable is handed one and does not
+            // own it. Closing it here was a real bug, because the caller keeps
+            // the same instance across recomposition. Revoking camera permission
+            // and re-granting it would then rebind a closed ML Kit detector,
+            // which throws on the analysis thread.
+            runCatching { provider?.unbindAll() }
+            camera = null
             analysisExecutor.shutdown()
-            analyzer.close()
         }
     }
 

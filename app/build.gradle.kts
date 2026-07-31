@@ -87,6 +87,25 @@ android {
         noCompress += listOf("tflite", "lite")
         localeFilters += listOf("en")
     }
+
+    lint {
+        // Lint should be a signal, not noise. Real problems fail the build.
+        abortOnError = true
+        checkReleaseBuilds = true
+        warningsAsErrors = false
+
+        // These dependency versions are pinned deliberately: the newer releases
+        // require compileSdk 37 and AGP 9, and AGP 9 removes the standalone
+        // Kotlin Gradle plugin. See the README. Reporting them every run buries
+        // the findings that actually matter.
+        disable += setOf(
+            "GradleDependency",
+            "NewerVersionAvailable",
+            "AndroidGradlePluginVersion",
+            // targetSdk 36 is exactly what Google Play requires for new apps.
+            "OldTargetApi",
+        )
+    }
 }
 
 ksp {
@@ -127,4 +146,6 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.coroutines.android)
+
+    testImplementation(libs.junit)
 }
