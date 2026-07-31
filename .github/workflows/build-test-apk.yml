@@ -1,0 +1,89 @@
+# Builds an installable APK on GitHub's servers and publishes it as a release,
+# so the app can be put on a phone without installing Android Studio or any
+# build tools locally.
+#
+# Runs only when started by hand, from the Actions tab. Nothing happens on push.
+
+name: Build installable APK
+
+on:
+  workflow_dispatch:
+
+permissions:
+  # Needed to attach the built APK to a release. Nothing else is granted.
+  contents: write
+
+jobs:
+  build:
+    name: Build and publish debug APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v4
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Gradle, with caching
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Install the Android SDK packages this project needs
+        run: |
+          SDKMANAGER="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          yes | "$SDKMANAGER" --licenses > /dev/null 2>&1 || true
+          "$SDKMANAGER" "platforms;android-36" "build-tools;36.0.0" > /dev/null
+
+      # Tests run before the build on purpose. If they fail, the APK is never
+      # published, so a broken build cannot quietly reach a phone.
+      - name: Run unit tests
+        run: ./gradlew :app:testDebugUnitTest
+
+      # Lint is reported but does not block. A different lint version on the
+      # runner can surface new findings, and that should not stand between a
+      # working build and a phone. Unit tests above do block, because they are
+      # pure JVM and behave identically everywhere.
+      - name: Check for lint errors
+        continue-on-error: true
+        run: ./gradlew :app:lintDebug
+
+      - name: Build the debug APK
+        run: ./gradlew :app:assembleDebug
+
+      - name: Report the APK size
+        run: |
+          APK=app/build/outputs/apk/debug/app-debug.apk
+          echo "APK size: $(du -h "$APK" | cut -f1)"
+
+      - name: Publish the APK as a release, so a phone can download it
+        env:
+          # Only this one value is referenced. The environment is never dumped.
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="test-build-$(date -u +%Y%m%d-%H%M%S)"
+
+          # Written to a file rather than inlined, because a heredoc nested
+          # inside a YAML block scalar is easy to get subtly wrong.
+          {
+            echo "Debug build for testing on a real phone."
+            echo
+            echo "**How to install**"
+            echo
+            echo "1. Open this page on your Android phone"
+            echo "2. Tap \`app-debug.apk\` under Assets below to download it"
+            echo "3. Open the downloaded file and allow installation when asked"
+            echo
+            echo "Installs as a separate app (\`com.labeltruth.app.debug\`), so it"
+            echo "will not clash with a Play Store version later. This build is"
+            echo "not signed for the Play Store and must not be uploaded there."
+          } > release-notes.md
+
+          gh release create "$TAG" \
+            app/build/outputs/apk/debug/app-debug.apk \
+            --title "LabelTruth test build ${TAG}" \
+            --prerelease \
+            --notes-file release-notes.md
