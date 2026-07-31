@@ -256,6 +256,36 @@ never what it *does to your health*.
 
 ---
 
+## Website and privacy policy
+
+Google Play will not publish an app without a live privacy policy URL, so the site
+lives in `docs/` and is served free by GitHub Pages.
+
+| File | Becomes |
+|---|---|
+| `docs/index.html` | `https://pitch-code.github.io/LabelTruth/` |
+| `docs/privacy.html` | `https://pitch-code.github.io/LabelTruth/privacy.html` |
+
+Both are single self-contained files: no build step, no dependencies, no JavaScript,
+and the logo is inlined as SVG so there are no image requests.
+
+### Switching Pages on, once
+
+1. Repo **Settings** → **Pages** in the left sidebar
+2. Under *Build and deployment*, set **Source** to `Deploy from a branch`
+3. Choose branch **`main`** and folder **`/docs`**, then **Save**
+4. Wait a minute or two, then load the URL above
+
+Pages requires a public repository on GitHub's free plan.
+
+### Store listing copy
+
+`play/store-listing.md` holds the ready-to-paste app name, short and full
+description, category, Health apps declaration, Data safety answers and content
+rating answers — all within Play's character limits, all free of health claims.
+
+---
+
 ## Google Play launch checklist
 
 This is a **personal** developer account, so the closed-testing requirement
@@ -264,7 +294,8 @@ applies and it, not the code, sets the launch date.
 - [ ] Rename the GitHub repository to `LabelTruth` (GitHub redirects the old URL)
 - [ ] Register the Play developer account (**$25 one-time**, non-refundable; verification takes hours to days)
 - [ ] Enable 2FA / passkey on the developer Google account
-- [ ] Host a privacy policy at a public URL — **Play requires this**, GitHub Pages is fine
+- [ ] Create the `labeltruth.support@gmail.com` mailbox used in the privacy policy and listing
+- [ ] Enable GitHub Pages (Settings → Pages → `main` / `/docs`) to publish the privacy policy
 - [ ] Generate an upload keystore and **back it up somewhere you cannot lose it**; enable Play App Signing
 - [ ] Set store title to `LabelTruth: Food Scanner` and category to **Food & Drink**
 - [ ] Answer the Health apps declaration honestly — this app is **not** a medical app
