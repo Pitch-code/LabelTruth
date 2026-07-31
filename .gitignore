@@ -14,3 +14,7 @@ local.properties
 app/build/
 build/
 *.log
+
+# Downloaded taxonomy snapshots for the dictionary build. Regenerate with
+# python3 tools/build_dictionary.py
+/tools/cache/

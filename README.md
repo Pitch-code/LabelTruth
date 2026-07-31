@@ -4,9 +4,10 @@ Scan a food barcode or photograph an ingredient label, and find out what is
 actually in it: what each ingredient is, why it is there, whether it carries any
 recognised concern, and whether it matters for *you* specifically.
 
-**Status: Phase 1.** The scanning pipeline, offline ingredient dictionary,
-scoring engine and UI all work and build into an installable app. The dictionary
-currently holds 110 curated entries; expanding it is the main Phase 2 work.
+**Status: Phase 2.** The scanning pipeline, offline dictionary, scoring engine
+and UI all work and build into an installable app. The dictionary holds **5,326
+ingredients and additives** with 4,958 synonyms, and recognises **98%** of tokens
+across a sample of real-world labels.
 
 ---
 
@@ -98,7 +99,7 @@ com.labeltruth.app
 Real labels are messy, so a token is resolved in descending order of certainty:
 
 1. **Exact** normalised name
-2. **Synonym** (479 mapped aliases)
+2. **Synonym** (4,958 mapped aliases)
 3. **E-number** found anywhere in the token — `Preservative (E 211)` → `E211`
 4. **Containment**, longest match wins — `skimmed MILK powder` → `Milk`
 5. **Fuzzy** (Levenshtein ≤ 2) to survive OCR errors — `SODIUM BENZQATE` → `Sodium Benzoate`
@@ -119,6 +120,57 @@ Handled specifically: percentages, nested and square brackets, functional-class
 prefixes (`Emulsifier:`), sentence-ending full stops versus decimal points,
 label boilerplate (`Gluten free`, `May contain...`), and the same additive
 appearing twice under different names.
+
+---
+
+## The dictionary, and its two tiers
+
+The shipped asset `app/src/main/assets/ingredients_seed.json` is **generated**.
+Do not hand-edit it. Edit `tools/data/curated.json` and rebuild:
+
+```bash
+python3 tools/build_dictionary.py     # regenerate the bundled dictionary
+python3 tools/check_coverage.py       # measure recognition on real labels
+```
+
+The distinction between the two tiers is the ethical core of the app.
+
+| Tier | Count | What it carries |
+|---|---|---|
+| **Curated** | 110 | Full description, risk tier, reasoning, sources. Hand-written |
+| **Assessed from EFSA** | 159 | Risk tier derived from published EFSA exposure data, EFSA opinion URL attached as the citation |
+| **Recognised only** | 5,057 | Name, synonyms, allergen and dietary flags. `riskTier = NOT_ASSESSED`, and **no risk narrative at all** |
+
+Curated entries always win over generated ones, by id, by name and by synonym.
+
+### How EFSA data becomes a risk tier
+
+Every branch below corresponds to something EFSA actually published, and the
+opinion URL is attached to the entry. None of it is our own judgement.
+
+| Published finding | Tier |
+|---|---|
+| EFSA could not establish an ADI | MODERATE |
+| Average intake exceeds the ADI for some group | MODERATE |
+| EFSA identified a high overexposure risk | MODERATE |
+| High consumers may exceed the ADI | CAUTION |
+| EFSA identified a moderate overexposure risk | CAUTION |
+| Evaluated, no overexposure identified | SAFE |
+| Nothing published we can point at | NOT_ASSESSED |
+
+Where France's ANSES lists an additive as one "of interest", that is noted in the
+reasoning but deliberately does **not** change the tier, because it is a
+monitoring priority rather than a safety verdict.
+
+### Why "recognised only" is still worth shipping
+
+It costs 0.18 MB compressed and it buys two things. Allergen flags, inherited
+down the taxonomy so "cheese" picks up milk from its parent, cover 1,042 entries.
+And the app stops saying "not in our database" for thousands of ordinary foods,
+which is what destroys trust fastest.
+
+`NOT_ASSESSED` carries **zero** score penalty. An absence of published concern is
+not evidence of a concern, and must not be scored as one.
 
 ---
 
@@ -195,10 +247,10 @@ Still to do before launch:
 
 ## Known limitations
 
-- **The dictionary is 110 entries.** Comprehensive coverage needs Phase 2, which
-  imports the Open Food Facts ingredient taxonomy, EU E-number lists and FDA
-  inventories. There is no complete list of all ingredients anywhere, so the
-  honest target is broad coverage plus an explicit "not recognised" state.
+- **Most entries are recognised but not assessed.** 5,057 of 5,326 carry no
+  published safety assessment, only identity, allergen and dietary data. That is
+  a deliberate limit, not a bug: expanding the *assessed* set means reading real
+  regulatory opinions, which does not scale automatically.
 - **Runtime behaviour is not yet verified on a physical device.** The project
   compiles and packages cleanly, and the parsing and matching logic was validated
   against real label strings, but the camera, OCR and barcode flows need testing

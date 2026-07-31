@@ -130,7 +130,8 @@ private fun ResultContent(
                     color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
-                    text = "${analysis.coveragePercent}% identified",
+                    text = "${analysis.coveragePercent}% identified · " +
+                        "${analysis.assessedCount} assessed",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )

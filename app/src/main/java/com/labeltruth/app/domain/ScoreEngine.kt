@@ -82,18 +82,31 @@ object ScoreEngine {
             .sortedBy { it.severity.ordinal }
     }
 
-    /** A short, honest headline for the result sheet. */
+    /**
+     * A short, honest headline for the result sheet.
+     *
+     * The important case is the last one: if nothing carries a published
+     * assessment, we must not imply we checked and found nothing. "No concerns
+     * found" and "we have no assessments" are very different statements.
+     */
     fun summary(ingredients: List<AnalyzedIngredient>): String {
+        if (ingredients.isEmpty()) return "No ingredients could be read."
+
         val worst = ingredients.maxByOrNull { it.riskTier.penalty }?.riskTier ?: RiskTier.UNKNOWN
         val flagged = ingredients.count {
             it.riskTier == RiskTier.MODERATE || it.riskTier == RiskTier.AVOID
         }
+        val assessed = ingredients.count {
+            it.matched != null && it.riskTier != RiskTier.NOT_ASSESSED
+        }
+
         return when {
-            ingredients.isEmpty() -> "No ingredients could be read."
             worst == RiskTier.AVOID -> "$flagged ingredient(s) here are best avoided."
             worst == RiskTier.MODERATE -> "$flagged ingredient(s) are worth a closer look."
             worst == RiskTier.CAUTION -> "Nothing serious, a few minor points to note."
-            else -> "Nothing of concern found in what we could read."
+            assessed > 0 -> "No concerns published for any of these ingredients."
+            else -> "These ingredients are recognised, but we hold no published " +
+                "assessment for them yet."
         }
     }
 }

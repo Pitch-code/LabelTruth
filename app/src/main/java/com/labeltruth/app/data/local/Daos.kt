@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -17,6 +18,17 @@ interface IngredientDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSynonyms(items: List<SynonymEntity>)
+
+    /**
+     * Seeds both tables in a single transaction. With thousands of rows this
+     * matters: two separate transactions would roughly double the write cost,
+     * and a crash between them would leave a half-populated dictionary.
+     */
+    @Transaction
+    suspend fun seed(ingredients: List<IngredientEntity>, synonyms: List<SynonymEntity>) {
+        insertIngredients(ingredients)
+        insertSynonyms(synonyms)
+    }
 
     @Query("SELECT * FROM ingredients WHERE normalizedName = :normalized LIMIT 1")
     suspend fun byNormalizedName(normalized: String): IngredientEntity?

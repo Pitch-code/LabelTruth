@@ -46,8 +46,7 @@ class SeedLoader(
             }
         }
 
-        dao.insertIngredients(ingredients)
-        dao.insertSynonyms(synonyms.values.toList())
+        dao.seed(ingredients, synonyms.values.toList())
         ingredients.size
     }
 

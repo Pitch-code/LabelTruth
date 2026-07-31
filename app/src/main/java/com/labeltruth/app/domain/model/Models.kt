@@ -11,6 +11,18 @@ enum class RiskTier(val label: String, val penalty: Int) {
     CAUTION("Minor concern", 4),
     MODERATE("Moderate concern", 12),
     AVOID("Best avoided", 28),
+
+    /**
+     * We recognise the ingredient, and may know its allergens and dietary
+     * suitability, but no published safety assessment is attached to it.
+     *
+     * Deliberately distinct from [UNKNOWN]. Saying "we have no assessment" is
+     * honest; guessing would not be. It carries no penalty, because an absence
+     * of published concern is not evidence of a concern.
+     */
+    NOT_ASSESSED("No published assessment", 0),
+
+    /** Not recognised at all. We could not identify what this ingredient is. */
     UNKNOWN("Not yet in our database", 1);
 
     companion object {
@@ -87,9 +99,17 @@ data class Analysis(
     val rawIngredientsText: String
 ) {
     val unmatchedCount: Int get() = ingredients.count { it.matched == null }
+
+    /** Recognised, whether or not we hold a safety assessment for it. */
     val coveragePercent: Int
         get() = if (ingredients.isEmpty()) 0
         else ((ingredients.size - unmatchedCount) * 100) / ingredients.size
+
+    /** Recognised *and* carrying a published assessment. */
+    val assessedCount: Int
+        get() = ingredients.count {
+            it.matched != null && it.riskTier != RiskTier.NOT_ASSESSED
+        }
 }
 
 /**
