@@ -1,4 +1,4 @@
-# LabelLens
+# LabelTruth
 
 Scan a food barcode or photograph an ingredient label, and find out what is
 actually in it: what each ingredient is, why it is there, whether it carries any
@@ -69,7 +69,7 @@ The debug APK lands at `app/build/outputs/apk/debug/app-debug.apk`.
 2. Turn on **USB debugging**, connect by cable, and run `adb install -r app-debug.apk`.
 3. Or copy the APK to the phone and open it, allowing installation from unknown sources.
 
-The debug build uses application ID `com.labellens.app.debug`, so it installs
+The debug build uses application ID `com.labeltruth.app.debug`, so it installs
 alongside a release build rather than replacing it.
 
 ---
@@ -77,7 +77,7 @@ alongside a release build rather than replacing it.
 ## Architecture
 
 ```
-com.labellens.app
+com.labeltruth.app
 ├── core/            TextNormalizer  — normalisation, E-number extraction, Levenshtein
 ├── domain/
 │   ├── IngredientListParser        — splits raw label text into ingredient tokens
@@ -160,7 +160,7 @@ scientific position.** None are invented, and none may be added without a source
 
 ## Health and safety disclaimer
 
-LabelLens is informational and **not medical advice**. Ratings are general
+LabelTruth is informational and **not medical advice**. Ratings are general
 guidance and cannot account for an individual's medical history. Users are told
 to check the physical packaging for allergen information and to consult a
 healthcare professional. A disclaimer is shown on first launch and must be
@@ -211,24 +211,95 @@ Still to do before launch:
 
 ---
 
+## Naming and positioning decisions
+
+These are load-bearing. Drifting from them creates real policy risk.
+
+| Field | Value | Why it is fixed |
+|---|---|---|
+| Brand | **LabelTruth** | "Truth" is a claim we can actually back, because every rating cites a regulator |
+| Store title | `LabelTruth: Food Scanner` | 24 of 30 characters. Brand carries identity, descriptor carries search |
+| `applicationId` | `com.labeltruth.app` | **Permanent once published.** Cannot be changed, ever |
+| Store category | **Food & Drink** | Deliberately not Health & Fitness — see below |
+| Developer name | Pitch Code | Publisher identity, independent of any single app |
+
+### Why not the earlier name
+
+The project began as "LabelLens". That was dropped because the developer name was
+already registered on Play, `com.labelens.app` is a live app doing the same thing
+with a one-letter difference, and `labellens.com` and `labellens.net` are both
+running ingredient scanners. The logo survived the rename unchanged, because it
+contains no letterforms.
+
+### Three things never to do
+
+**1. Do not put "cosmetic" in the store title until INCI data actually ships.**
+Yuka already lists as "Food & Cosmetic Scanner", so it is a losing search fight,
+and advertising functionality the app does not have is grounds for rejection. The
+store title can be changed any time, so this costs nothing to defer.
+
+**2. Do not use "Health" in the app name, or pick a health store category.**
+Google Play requires an **Organization account** — which needs a D-U-N-S number,
+which needs a registered business — for "Health apps, such as Medical apps and
+Human Subjects Research apps". This is a personal account. Staying Food & Drink
+is what keeps that requirement from applying.
+
+**3. No disease claims anywhere in the listing.** Describe what the app *shows*,
+never what it *does to your health*.
+
+| Never | Instead |
+|---|---|
+| "Prevents cancer" | "Shows what IARC and EFSA have published about this ingredient" |
+| "Cures your IBS" | "Flags ingredients commonly associated with digestive discomfort" |
+| "Diagnose your allergies" | "Flags allergens you asked us to watch for" |
+| "Doctor approved" | "Sourced from EFSA, WHO and FDA publications" |
+
+---
+
 ## Google Play launch checklist
 
-This account is a **personal** developer account, which means the closed-testing
-requirement applies and it sets the timeline.
+This is a **personal** developer account, so the closed-testing requirement
+applies and it, not the code, sets the launch date.
 
-- [ ] Register the Play developer account (**$25 one-time**; verification can take days)
-- [ ] Enable 2FA / passkey on the account
-- [ ] Host a privacy policy at a public URL — **Play requires this**, and GitHub Pages is fine
-- [ ] Generate an upload keystore, and enable Play App Signing
-- [ ] Complete the Data safety form (declare: barcode sent to a third-party API; no data collected)
+- [ ] Rename the GitHub repository to `LabelTruth` (GitHub redirects the old URL)
+- [ ] Register the Play developer account (**$25 one-time**, non-refundable; verification takes hours to days)
+- [ ] Enable 2FA / passkey on the developer Google account
+- [ ] Host a privacy policy at a public URL — **Play requires this**, GitHub Pages is fine
+- [ ] Generate an upload keystore and **back it up somewhere you cannot lose it**; enable Play App Signing
+- [ ] Set store title to `LabelTruth: Food Scanner` and category to **Food & Drink**
+- [ ] Answer the Health apps declaration honestly — this app is **not** a medical app
+- [ ] Complete the Data safety form (barcode sent to a third-party API; no personal data collected)
 - [ ] Complete the content rating questionnaire
 - [ ] Upload store assets: icon (`brand/play-store-icon-512.png`), feature graphic, screenshots
-- [ ] Upload the AAB to **internal testing** first, and check the automatic pre-launch report
-- [ ] Run **closed testing with at least 12 testers, opted in for 14 continuous days**
+- [ ] Add a real contact URL to the Open Food Facts `User-Agent` before production
+- [ ] Upload the AAB to **internal testing** first, and read the automatic pre-launch report
+- [ ] Run **closed testing with at least 12 testers, opted in for 14 continuous days** (recruit 18–25, people drop out)
 - [ ] Apply for production access
 
 The 14 days is calendar time and nothing shortens it, so start closed testing
 with a rough-but-working build rather than waiting for polish.
+
+---
+
+## Competitive position
+
+This category is crowded. Apps shipped in roughly the last year include Labelens,
+Labeless, BrandLens, ClearLabel, CheckEt, CheckWise, HonestWorld, IngrediCheck,
+FoodReveal, MavYa, Lettuce, NutriScan, SafeChoice, TruthIn, DecodeFood, Vireo and
+Processed, with **Yuka** as the incumbent.
+
+Almost all of them describe themselves as "AI-powered", meaning they ask a
+language model what an ingredient does and print the answer. That is fast to
+build and impossible to trust.
+
+The differentiation here is the opposite, and it is already implemented:
+
+- Every rating traces to a **named** EFSA, WHO/IARC, FDA or EU source, shown in-app
+- The dictionary is **offline**, so results are instant and work in a shop with no signal
+- Unrecognised ingredients say **"not in our database yet"** instead of guessing
+- On-device OCR reads **any** package, so coverage is not capped by a barcode database
+
+Protect these. They are the whole argument for the app existing.
 
 ---
 
