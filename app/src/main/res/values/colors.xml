@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="surface_dark">#FF0B1412</color>
-    <color name="brand_green_deep">#FF0E7C5A</color>
-    <color name="brand_green">#FF16B981</color>
 </resources>

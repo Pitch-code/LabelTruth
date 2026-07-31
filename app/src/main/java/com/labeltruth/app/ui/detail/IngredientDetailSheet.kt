@@ -24,6 +24,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import com.labeltruth.app.domain.model.Ingredient
+import com.labeltruth.app.domain.model.RiskTier
 import com.labeltruth.app.ui.components.clickableNoRipple
 import com.labeltruth.app.ui.components.riskColor
 import com.labeltruth.app.ui.result.DisclaimerFooter
@@ -79,6 +80,19 @@ fun IngredientDetailSheet(
 
             if (ingredient.riskReason.isNotBlank()) {
                 Section("Why this rating", ingredient.riskReason)
+            }
+
+            // Being explicit here is the point of the whole app. An absence of
+            // published concern is not the same as a clean bill of health, and
+            // pretending otherwise is what the competition does.
+            if (ingredient.riskTier == RiskTier.NOT_ASSESSED) {
+                Section(
+                    title = "Why there is no rating",
+                    body = "We recognise this ingredient, but we have not found a " +
+                        "published safety assessment we can cite for it. Rather than " +
+                        "guess, we say so. Any allergen and dietary information below " +
+                        "still applies."
+                )
             }
             ingredient.adi?.let {
                 Section("Acceptable daily intake", it)

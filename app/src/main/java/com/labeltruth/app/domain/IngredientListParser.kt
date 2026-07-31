@@ -70,6 +70,7 @@ object IngredientListParser {
      */
     private val boilerplate = Regex(
         "^(" +
+            // Food label claims and statements
             "gluten free|sans gluten|dairy free|sugar free|fat free|" +
             "contains a source of.*|contains .* in bold|" +
             "may contain.*|allergy advice.*|for allergen(s)?.*|" +
@@ -78,7 +79,21 @@ object IngredientListParser {
             "produced in.*|packed in.*|made in.*|manufactured .*|" +
             "average values.*|nutrition.*|typical values.*|" +
             "percentage(s)? .*|all percentages.*|" +
-            "e numbers|ingredients|composition" +
+            "e numbers|ingredients|composition|" +
+            // Cosmetic, hygiene and household labels put usage and safety text
+            // right next to the ingredient list. A competitor's app displayed
+            // "For external use only" and "Keep out of" as if they were
+            // ingredients, which is exactly the failure to avoid.
+            "for external use only|external use only|" +
+            "direction(s)?.*|instruction(s)?.*|how to use.*|usage.*|" +
+            "warning(s)?.*|caution.*|precaution(s)?.*|" +
+            "avoid contact.*|in case of.*|if swallowed.*|if irritation.*|" +
+            "discontinue use.*|rinse.*|wet hands.*|apply .*|" +
+            "not to be taken.*|for best results.*|" +
+            "batch no.*|mfg.*|mfd.*|exp.*|lot no.*|net (wt|weight).*|" +
+            "marketed by.*|manufactured by.*|imported by.*|customer care.*|" +
+            "consumer complaint.*|shelf life.*|" +
+            "recyclable|please recycle.*|dispose of.*" +
             ")$",
         RegexOption.IGNORE_CASE
     )

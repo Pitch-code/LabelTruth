@@ -76,9 +76,17 @@ fun ProfileScreen(
             )
 
             ToggleSection(
+                title = "Intolerances",
+                subtitle = "Not the same as an allergy: a digestive or metabolic reaction",
+                options = HealthProfile.INTOLERANCES,
+                selected = profile.conditions,
+                onToggle = onToggleCondition
+            )
+
+            ToggleSection(
                 title = "Health considerations",
                 subtitle = "Used only to show extra cautions that apply to you",
-                options = HealthProfile.ALL_CONDITIONS,
+                options = HealthProfile.CONDITIONS,
                 selected = profile.conditions,
                 onToggle = onToggleCondition
             )
@@ -108,7 +116,7 @@ private fun ToggleSection(
     FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         options.forEach { option ->
             SelectableChip(
-                label = option.replace('_', ' ').replaceFirstChar { it.uppercase() },
+                label = HealthProfile.label(option),
                 selected = option in selected,
                 onClick = { onToggle(option) }
             )

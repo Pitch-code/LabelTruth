@@ -30,6 +30,9 @@ fun riskColor(tier: RiskTier): Color = when (tier) {
     RiskTier.CAUTION -> RiskCaution
     RiskTier.MODERATE -> RiskModerate
     RiskTier.AVOID -> RiskAvoid
+    // Neutral grey for both "recognised but unassessed" and "unrecognised".
+    // Neither is a risk signal, so neither should borrow the risk palette.
+    RiskTier.NOT_ASSESSED -> RiskUnknown
     RiskTier.UNKNOWN -> RiskUnknown
 }
 

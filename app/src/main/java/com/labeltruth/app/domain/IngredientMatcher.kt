@@ -6,6 +6,7 @@ import com.labeltruth.app.data.local.NameRow
 import com.labeltruth.app.data.local.toDomain
 import com.labeltruth.app.domain.model.Ingredient
 import com.labeltruth.app.domain.model.MatchConfidence
+import com.labeltruth.app.domain.model.ProductCategory
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
@@ -28,33 +29,41 @@ class IngredientMatcher(private val dao: IngredientDao) {
     private var fuzzyIndex: List<NameRow>? = null
     private val cache = HashMap<String, MatchResult>()
 
-    suspend fun match(rawToken: String): MatchResult {
+    /** Keyed by category too, since the same token can resolve differently. */
+    suspend fun match(rawToken: String, category: ProductCategory): MatchResult {
         val normalized = TextNormalizer.normalize(rawToken)
         if (normalized.isEmpty()) return MatchResult(null, MatchConfidence.NONE)
 
-        cache[normalized]?.let { return it }
+        val key = "${category.key}|$normalized"
+        cache[key]?.let { return it }
 
-        val result = resolve(rawToken, normalized)
-        cache[normalized] = result
+        val result = resolve(rawToken, normalized, category)
+        cache[key] = result
         return result
     }
 
-    private suspend fun resolve(rawToken: String, normalized: String): MatchResult {
-        dao.byNormalizedName(normalized)?.let {
+    private suspend fun resolve(
+        rawToken: String,
+        normalized: String,
+        category: ProductCategory
+    ): MatchResult {
+        val preferred = category.key
+
+        dao.byNormalizedName(normalized, preferred)?.let {
             return MatchResult(it.toDomain(), MatchConfidence.EXACT)
         }
-        dao.bySynonym(normalized)?.let {
+        dao.bySynonym(normalized, preferred)?.let {
             return MatchResult(it.toDomain(), MatchConfidence.SYNONYM)
         }
         TextNormalizer.extractENumber(rawToken)?.let { eNumber ->
-            dao.byENumber(eNumber)?.let {
+            dao.byENumber(eNumber, preferred)?.let {
                 return MatchResult(it.toDomain(), MatchConfidence.E_NUMBER)
             }
         }
-        containedName(normalized)?.let {
+        containedName(normalized, preferred)?.let {
             return MatchResult(it, MatchConfidence.SYNONYM)
         }
-        fuzzy(normalized)?.let {
+        fuzzy(normalized, preferred)?.let {
             return MatchResult(it, MatchConfidence.FUZZY)
         }
         return MatchResult(null, MatchConfidence.NONE)
@@ -68,20 +77,26 @@ class IngredientMatcher(private val dao: IngredientDao) {
      * The longest containing name wins, so "palm oil" beats a bare "oil", and
      * matching is on whole words so "soil" never matches "oil".
      */
-    private suspend fun containedName(normalized: String): Ingredient? {
+    private suspend fun containedName(normalized: String, preferred: String): Ingredient? {
         val words = normalized.split(' ').filter { it.isNotEmpty() }
         if (words.size < 2) return null
 
         var bestId: String? = null
         var bestLength = 0
+        var bestInCategory = false
 
         for (row in index()) {
             // Single short words are too generic to match on containment alone.
             if (row.name.length < 4) continue
-            if (row.name.length <= bestLength) continue
+            val inCategory = row.category == preferred
+            // A longer match wins, but never at the cost of leaving the correct
+            // category for a substance that exists in both.
+            if (bestInCategory && !inCategory) continue
+            if (inCategory == bestInCategory && row.name.length <= bestLength) continue
             if (containsWholeWords(words, row.name)) {
                 bestLength = row.name.length
                 bestId = row.id
+                bestInCategory = inCategory
             }
         }
 
@@ -100,7 +115,7 @@ class IngredientMatcher(private val dao: IngredientDao) {
         return false
     }
 
-    private suspend fun fuzzy(normalized: String): Ingredient? {
+    private suspend fun fuzzy(normalized: String, preferred: String): Ingredient? {
         // Very short tokens fuzzy-match far too easily ("oil" -> "soil").
         if (normalized.length < 5) return null
 
@@ -109,15 +124,23 @@ class IngredientMatcher(private val dao: IngredientDao) {
 
         var bestId: String? = null
         var bestDistance = tolerance + 1
+        var bestInCategory = false
 
         for (row in index) {
             if (kotlin.math.abs(row.name.length - normalized.length) > tolerance) continue
             if (row.name.isEmpty() || row.name[0] != normalized[0]) continue
             val distance = TextNormalizer.levenshtein(normalized, row.name, tolerance)
-            if (distance < bestDistance) {
+            if (distance > tolerance) continue
+
+            val inCategory = row.category == preferred
+            val better = when {
+                inCategory != bestInCategory -> inCategory
+                else -> distance < bestDistance
+            }
+            if (better) {
                 bestDistance = distance
                 bestId = row.id
-                if (distance == 1) break
+                bestInCategory = inCategory
             }
         }
 

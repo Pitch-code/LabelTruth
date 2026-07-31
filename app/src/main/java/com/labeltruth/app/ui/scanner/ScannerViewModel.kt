@@ -9,9 +9,12 @@ import com.labeltruth.app.data.repo.BarcodeOutcome
 import com.labeltruth.app.domain.model.Analysis
 import com.labeltruth.app.domain.model.HealthProfile
 import com.labeltruth.app.domain.model.Ingredient
+import com.labeltruth.app.domain.model.ProductCategory
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -23,7 +26,15 @@ data class ScannerUiState(
     val analysis: Analysis? = null,
     val selectedIngredient: Ingredient? = null,
     val message: String? = null,
-    val profile: HealthProfile = HealthProfile()
+    val profile: HealthProfile = HealthProfile(),
+    val searchQuery: String = "",
+    val searchResults: List<Ingredient> = emptyList(),
+    /**
+     * For label scanning only. A barcode tells us the category by which
+     * database answered, but a photograph of an ingredient list does not, and
+     * guessing would risk showing a food verdict for a shampoo.
+     */
+    val scanCategory: ProductCategory = ProductCategory.FOOD
 )
 
 class ScannerViewModel(
@@ -50,6 +61,10 @@ class ScannerViewModel(
 
     fun toggleTorch() {
         _state.value = _state.value.copy(torchOn = !_state.value.torchOn)
+    }
+
+    fun setScanCategory(category: ProductCategory) {
+        _state.value = _state.value.copy(scanCategory = category)
     }
 
     fun onBarcodeDetected(barcode: String) {
@@ -88,7 +103,11 @@ class ScannerViewModel(
 
         _state.value = current.copy(isProcessing = true, message = null)
         viewModelScope.launch {
-            val analysis = repository.analyzeScannedText(text, _state.value.profile)
+            val analysis = repository.analyzeScannedText(
+                text = text,
+                profile = _state.value.profile,
+                category = _state.value.scanCategory
+            )
             if (analysis.ingredients.isEmpty()) {
                 fail("Could not read any ingredients. Hold steady and fill the frame with the ingredient list.")
             } else {
@@ -113,6 +132,70 @@ class ScannerViewModel(
 
     fun selectIngredient(ingredient: Ingredient?) {
         _state.value = _state.value.copy(selectedIngredient = ingredient)
+    }
+
+    private var searchJob: Job? = null
+
+    /**
+     * Debounced dictionary search. Each keystroke cancels the previous query so
+     * we do not run a LIKE scan over thousands of rows per character typed.
+     */
+    fun onSearchQueryChange(query: String) {
+        _state.value = _state.value.copy(searchQuery = query)
+        searchJob?.cancel()
+
+        if (query.isBlank()) {
+            _state.value = _state.value.copy(searchResults = emptyList())
+            return
+        }
+        searchJob = viewModelScope.launch {
+            delay(180)
+            val results = repository.searchIngredients(query)
+            _state.value = _state.value.copy(searchResults = results)
+        }
+    }
+
+    fun clearSearch() {
+        searchJob?.cancel()
+        _state.value = _state.value.copy(searchQuery = "", searchResults = emptyList())
+    }
+
+    /**
+     * Looks up a barcode the user typed in rather than scanned.
+     *
+     * Worth having for a scratched or badly lit barcode, and for checking a
+     * product before buying it. Unlike the camera path this has no
+     * already-handled guard, because repeating a deliberate action should work.
+     */
+    fun lookupTypedBarcode(barcode: String) {
+        if (_state.value.isProcessing) return
+        lastHandledBarcode = null
+        _state.value = _state.value.copy(isProcessing = true, message = null)
+
+        viewModelScope.launch {
+            when (val outcome = repository.analyzeBarcode(barcode, _state.value.profile)) {
+                is BarcodeOutcome.Success ->
+                    _state.value = _state.value.copy(
+                        isProcessing = false,
+                        analysis = outcome.analysis,
+                        searchQuery = "",
+                        searchResults = emptyList()
+                    )
+
+                BarcodeOutcome.NotFound -> fail(
+                    "Barcode $barcode is not in the Open Food Facts or Open Beauty " +
+                        "Facts databases yet. Try Label mode and scan the printed " +
+                        "ingredient list instead."
+                )
+
+                is BarcodeOutcome.NoIngredients -> fail(
+                    "Found \"${outcome.productName}\" but it has no ingredient list " +
+                        "on record. Try Label mode."
+                )
+
+                is BarcodeOutcome.Error -> fail(outcome.message)
+            }
+        }
     }
 
     companion object {

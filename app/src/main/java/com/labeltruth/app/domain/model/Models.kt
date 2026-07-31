@@ -11,6 +11,18 @@ enum class RiskTier(val label: String, val penalty: Int) {
     CAUTION("Minor concern", 4),
     MODERATE("Moderate concern", 12),
     AVOID("Best avoided", 28),
+
+    /**
+     * We recognise the ingredient, and may know its allergens and dietary
+     * suitability, but no published safety assessment is attached to it.
+     *
+     * Deliberately distinct from [UNKNOWN]. Saying "we have no assessment" is
+     * honest; guessing would not be. It carries no penalty, because an absence
+     * of published concern is not evidence of a concern.
+     */
+    NOT_ASSESSED("No published assessment", 0),
+
+    /** Not recognised at all. We could not identify what this ingredient is. */
     UNKNOWN("Not yet in our database", 1);
 
     companion object {
@@ -20,6 +32,24 @@ enum class RiskTier(val label: String, val penalty: Int) {
 }
 
 data class SourceRef(val title: String, val url: String?)
+
+/**
+ * What kind of product is being scanned.
+ *
+ * This is not cosmetic detail, it changes the answer. Titanium dioxide is
+ * banned in EU food since 2022 but is a permitted UV filter in cosmetics, so
+ * looking a substance up without knowing the route of exposure can produce a
+ * verdict that is precisely wrong.
+ */
+enum class ProductCategory(val key: String, val label: String) {
+    FOOD("food", "Food & drink"),
+    COSMETIC("cosmetic", "Cosmetic & personal care");
+
+    companion object {
+        fun from(key: String?): ProductCategory =
+            entries.firstOrNull { it.key.equals(key, ignoreCase = true) } ?: FOOD
+    }
+}
 
 data class Ingredient(
     val id: String,
@@ -84,12 +114,21 @@ data class Analysis(
     val grade: Grade,
     val ingredients: List<AnalyzedIngredient>,
     val alerts: List<PersonalAlert>,
-    val rawIngredientsText: String
+    val rawIngredientsText: String,
+    val category: ProductCategory = ProductCategory.FOOD
 ) {
     val unmatchedCount: Int get() = ingredients.count { it.matched == null }
+
+    /** Recognised, whether or not we hold a safety assessment for it. */
     val coveragePercent: Int
         get() = if (ingredients.isEmpty()) 0
         else ((ingredients.size - unmatchedCount) * 100) / ingredients.size
+
+    /** Recognised *and* carrying a published assessment. */
+    val assessedCount: Int
+        get() = ingredients.count {
+            it.matched != null && it.riskTier != RiskTier.NOT_ASSESSED
+        }
 }
 
 /**
@@ -109,10 +148,54 @@ data class HealthProfile(
             "gluten", "crustaceans", "eggs", "fish", "peanuts", "soybeans", "milk",
             "nuts", "celery", "mustard", "sesame", "sulphites", "lupin", "molluscs"
         )
+
         val ALL_DIETS = listOf("vegan", "vegetarian", "halal", "kosher", "gluten_free")
-        val ALL_CONDITIONS = listOf(
+
+        /**
+         * Intolerances are not allergies. An allergy is an immune response; an
+         * intolerance is a digestive or metabolic one. Users think of them
+         * separately, so they are asked separately.
+         *
+         * Only intolerances we can actually act on are listed. Histamine and
+         * amine sensitivity are deliberately omitted: the trigger foods are too
+         * poorly defined in the label data to flag without guessing.
+         *
+         * Stored in the same set as [CONDITIONS], because both are matched
+         * against an ingredient's cautionGroups. Splitting them is presentation
+         * only, which is why no database change was needed.
+         */
+        val INTOLERANCES = listOf(
+            "lactose", "fructose", "fodmap", "caffeine_sensitivity",
+            "alcohol_sensitivity", "salicylate_sensitivity"
+        )
+
+        val CONDITIONS = listOf(
             "pregnancy", "breastfeeding", "children", "hypertension", "diabetes",
             "kidney_disease", "coeliac", "ibs", "migraine", "asthma", "phenylketonuria"
         )
+
+        /** Everything persisted to the conditions set. */
+        val ALL_CONDITIONS = INTOLERANCES + CONDITIONS
+
+        /** Human-readable labels, since the raw keys are not all self-explanatory. */
+        val LABELS = mapOf(
+            "fodmap" to "FODMAPs",
+            "lactose" to "Lactose",
+            "fructose" to "Fructose",
+            "caffeine_sensitivity" to "Caffeine",
+            "alcohol_sensitivity" to "Alcohol",
+            "salicylate_sensitivity" to "Salicylates",
+            "phenylketonuria" to "PKU (phenylketonuria)",
+            "kidney_disease" to "Kidney disease",
+            "ibs" to "IBS",
+            "coeliac" to "Coeliac disease",
+            "gluten_free" to "Gluten free",
+            "soybeans" to "Soya",
+            "nuts" to "Tree nuts",
+            "sulphites" to "Sulphites"
+        )
+
+        fun label(key: String): String =
+            LABELS[key] ?: key.replace('_', ' ').replaceFirstChar { it.uppercase() }
     }
 }

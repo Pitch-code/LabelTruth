@@ -33,10 +33,12 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,6 +49,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.labeltruth.app.R
+import com.labeltruth.app.domain.model.ProductCategory
 import com.labeltruth.app.ui.components.ScanFrame
 import com.labeltruth.app.ui.theme.BrandGreen
 import com.labeltruth.app.ui.theme.BrandGreenDeep
@@ -61,6 +64,8 @@ fun ScannerScreen(
     onOpenHistory: () -> Unit,
     onOpenProfile: () -> Unit,
     onOpenAbout: () -> Unit,
+    onOpenSearch: () -> Unit,
+    onCategoryChange: (ProductCategory) -> Unit,
     onDismissMessage: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -106,12 +111,23 @@ fun ScannerScreen(
     val modeHolder = remember { mutableStateOf(state.mode) }
     LaunchedEffect(state.mode) { modeHolder.value = state.mode }
 
+    // The analyzer outlives individual recompositions, so it must not capture
+    // callback instances directly or it would keep calling stale ones.
+    val currentOnBarcode by rememberUpdatedState(onBarcode)
+    val currentOnLabelText by rememberUpdatedState(onLabelText)
+
     val analyzer = remember {
         FrameAnalyzer(
             currentMode = { modeHolder.value },
-            onBarcode = onBarcode,
-            onLabelText = onLabelText
+            onBarcode = { currentOnBarcode(it) },
+            onLabelText = { currentOnLabelText(it) }
         )
+    }
+
+    // This screen created the analyzer, so this screen closes it. CameraPreview
+    // is only lent the instance.
+    DisposableEffect(analyzer) {
+        onDispose { analyzer.close() }
     }
 
     Box(
@@ -154,6 +170,13 @@ fun ScannerScreen(
                             painter = painterResource(R.drawable.ic_flash),
                             contentDescription = "Toggle torch",
                             tint = if (state.torchOn) BrandGreen else Color.White
+                        )
+                    }
+                    IconButton(onClick = onOpenSearch) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_search),
+                            contentDescription = "Look up an ingredient",
+                            tint = Color.White
                         )
                     }
                     IconButton(onClick = onOpenProfile) {
@@ -213,6 +236,26 @@ fun ScannerScreen(
             Spacer(Modifier.height(12.dp))
 
             ModeSwitch(mode = state.mode, onModeChange = onModeChange)
+
+            // A photo cannot tell us whether this is a biscuit or a shampoo, and
+            // the same substance can carry a different verdict by route of
+            // exposure, so we ask rather than guess.
+            if (state.mode == ScanMode.LABEL) {
+                Spacer(Modifier.height(10.dp))
+                Row(
+                    modifier = Modifier
+                        .background(Color.Black.copy(alpha = 0.55f), RoundedCornerShape(50))
+                        .padding(4.dp),
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    ProductCategory.entries.forEach { category ->
+                        ModeTab(
+                            label = if (category == ProductCategory.FOOD) "Food" else "Cosmetic",
+                            selected = state.scanCategory == category
+                        ) { onCategoryChange(category) }
+                    }
+                }
+            }
 
             Spacer(Modifier.height(18.dp))
 

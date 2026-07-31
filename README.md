@@ -4,9 +4,22 @@ Scan a food barcode or photograph an ingredient label, and find out what is
 actually in it: what each ingredient is, why it is there, whether it carries any
 recognised concern, and whether it matters for *you* specifically.
 
-**Status: Phase 1.** The scanning pipeline, offline ingredient dictionary,
-scoring engine and UI all work and build into an installable app. The dictionary
-currently holds 110 curated entries; expanding it is the main Phase 2 work.
+**Status: Phase 3.** Scanning, offline dictionary, scoring and UI all work and
+build into an installable app. The dictionary holds **27,388 entries** with
+13,716 synonyms, covering **food and cosmetics**: 5,326 food ingredients and
+additives, and 22,062 cosmetic INCI ingredients.
+
+### Route of exposure changes the answer
+
+The same substance can be safe by one route and banned by another. Titanium
+dioxide has been banned in EU **food** since 2022, yet remains a permitted UV
+filter in **cosmetics**.
+
+So the dictionary holds separate entries per category, uniqueness is enforced on
+`(name, category)` rather than name alone, and every lookup prefers the category
+of the product being scanned. A barcode reveals the category by which database
+answered: Open Food Facts or Open Beauty Facts. Label scanning cannot know, so
+the app asks rather than guessing.
 
 ---
 
@@ -46,6 +59,31 @@ Measured from an actual release build:
 
 Play splits the bundle per device, so users only download the one CPU
 architecture they need. 14 MB is unremarkable for an app store listing.
+
+---
+
+## Checks
+
+```bash
+./gradlew :app:testDebugUnitTest    # 42 unit tests
+./gradlew :app:lintDebug            # 0 errors
+python3 tools/check_coverage.py     # dictionary recognition on real labels
+```
+
+The unit tests cover the pure logic where this app is most likely to be quietly
+wrong: label parsing, text normalisation, scoring and personal alerts. **Almost
+every case corresponds to a defect that actually shipped and was fixed**, so they
+are regression tests rather than decoration.
+
+Two of them exist to protect honesty rather than correctness:
+
+- `NOT_ASSESSED carries no penalty` — an absence of published concern is not
+  evidence of a concern, and most of the dictionary sits in that state
+- `summary does not claim no concerns when nothing was assessed` — "no concerns
+  found" and "we hold no assessments" are very different claims
+
+Lint is configured to fail on errors, with the deliberate dependency pins
+silenced so the report stays readable.
 
 ---
 
@@ -98,7 +136,7 @@ com.labeltruth.app
 Real labels are messy, so a token is resolved in descending order of certainty:
 
 1. **Exact** normalised name
-2. **Synonym** (479 mapped aliases)
+2. **Synonym** (4,958 mapped aliases)
 3. **E-number** found anywhere in the token — `Preservative (E 211)` → `E211`
 4. **Containment**, longest match wins — `skimmed MILK powder` → `Milk`
 5. **Fuzzy** (Levenshtein ≤ 2) to survive OCR errors — `SODIUM BENZQATE` → `Sodium Benzoate`
@@ -119,6 +157,76 @@ Handled specifically: percentages, nested and square brackets, functional-class
 prefixes (`Emulsifier:`), sentence-ending full stops versus decimal points,
 label boilerplate (`Gluten free`, `May contain...`), and the same additive
 appearing twice under different names.
+
+---
+
+## The dictionary, and its two tiers
+
+The shipped asset `app/src/main/assets/ingredients_seed.json` is **generated**.
+Do not hand-edit it. Edit `tools/data/curated.json` and rebuild:
+
+```bash
+python3 tools/build_dictionary.py     # regenerate the bundled dictionary
+python3 tools/check_coverage.py       # measure recognition on real labels
+```
+
+The distinction between the two tiers is the ethical core of the app.
+
+| Tier | Count | What it carries |
+|---|---|---|
+| **Curated** | 110 | Full description, risk tier, reasoning, sources. Hand-written |
+| **Assessed** | 1,107 | Risk tier derived from published EFSA exposure data or EU cosmetics annexes, with the citation attached |
+| **Recognised only** | 26,171 | Name, synonyms, allergen and dietary flags. `riskTier = NOT_ASSESSED`, and **no risk narrative at all** |
+
+### How cosmetics data becomes a risk tier
+
+From the CosIng annex reference, which is a statement of EU legal status:
+
+| Regulatory status | Tier |
+|---|---|
+| Annex II, prohibited in cosmetics | AVOID |
+| Classified CMR (carcinogenic, mutagenic, reprotoxic) | AVOID |
+| Annex III, restricted to stated limits and conditions | CAUTION |
+| Recognised contact allergen | CAUTION |
+| Annex IV / V / VI, permitted colourant, preservative or UV filter | **NOT_ASSESSED** |
+
+That last row matters. Being on a positive list means "authorised within
+limits", **not** "no known concern", so it is reported as factual regulatory
+status in *why it is used* and never as a safety verdict. Methylisothiazolinone
+is on Annex V and is a notorious contact allergen the EU later banned from
+leave-on products; calling it SAFE because it appears on a permitted list would
+be exactly the kind of overclaim this project exists to avoid.
+
+Curated entries always win over generated ones, by id, by name and by synonym.
+
+### How EFSA data becomes a risk tier
+
+Every branch below corresponds to something EFSA actually published, and the
+opinion URL is attached to the entry. None of it is our own judgement.
+
+| Published finding | Tier |
+|---|---|
+| EFSA could not establish an ADI | MODERATE |
+| Average intake exceeds the ADI for some group | MODERATE |
+| EFSA identified a high overexposure risk | MODERATE |
+| High consumers may exceed the ADI | CAUTION |
+| EFSA identified a moderate overexposure risk | CAUTION |
+| Evaluated, no overexposure identified | SAFE |
+| Nothing published we can point at | NOT_ASSESSED |
+
+Where France's ANSES lists an additive as one "of interest", that is noted in the
+reasoning but deliberately does **not** change the tier, because it is a
+monitoring priority rather than a safety verdict.
+
+### Why "recognised only" is still worth shipping
+
+It costs 0.18 MB compressed and it buys two things. Allergen flags, inherited
+down the taxonomy so "cheese" picks up milk from its parent, cover 1,042 entries.
+And the app stops saying "not in our database" for thousands of ordinary foods,
+which is what destroys trust fastest.
+
+`NOT_ASSESSED` carries **zero** score penalty. An absence of published concern is
+not evidence of a concern, and must not be scored as one.
 
 ---
 
@@ -195,10 +303,10 @@ Still to do before launch:
 
 ## Known limitations
 
-- **The dictionary is 110 entries.** Comprehensive coverage needs Phase 2, which
-  imports the Open Food Facts ingredient taxonomy, EU E-number lists and FDA
-  inventories. There is no complete list of all ingredients anywhere, so the
-  honest target is broad coverage plus an explicit "not recognised" state.
+- **Most entries are recognised but not assessed.** 5,057 of 5,326 carry no
+  published safety assessment, only identity, allergen and dietary data. That is
+  a deliberate limit, not a bug: expanding the *assessed* set means reading real
+  regulatory opinions, which does not scale automatically.
 - **Runtime behaviour is not yet verified on a physical device.** The project
   compiles and packages cleanly, and the parsing and matching logic was validated
   against real label strings, but the camera, OCR and barcode flows need testing
@@ -309,6 +417,28 @@ applies and it, not the code, sets the launch date.
 
 The 14 days is calendar time and nothing shortens it, so start closed testing
 with a rough-but-working build rather than waiting for polish.
+
+---
+
+## What we deliberately did not copy
+
+Two competitors were installed and worked through in detail: **KnowTox** and
+**Toxly**. Several of their ideas were adopted. These were rejected on purpose.
+
+| Their pattern | Why we are not doing it |
+|---|---|
+| **Free scan quota** (5/month, or ad-gated) | Rationing the core function of a trust app teaches users to distrust it. Ship v1 unlimited. |
+| **Daily streaks**, "4 more days to +1 ad-free scan" | Engagement farming. Nobody should scan food daily to keep a streak alive. This is a utility, not a game. |
+| **Ads on the results screen** | The verdict is the moment the user is deciding something. Selling that attention undermines the product's only real asset. |
+| **"AI" badges** on generated descriptions | Honest of them, but it advertises that the content was guessed. We inverted it: a **SOURCED** badge marks entries backed by a citation. |
+| **Health goals** onboarding (immune support, energy, sleep) | We cannot connect a food label to "brain function" with any published evidence. Asking implies we can. |
+| **Skin type** onboarding | Meaningless until cosmetics ship, and asking for data we cannot use is a dark pattern. |
+
+One thing worth recording: Toxly's ingredient list showed **"For external use only"**,
+**"Keep out of"** and **"CI 12085 Directions"** as if they were ingredients. That is
+the parser leaking label text. `IngredientListParser` now filters hygiene and
+household boilerplate specifically, and `tools/check_coverage.py` has a hand wash
+label as a regression case.
 
 ---
 

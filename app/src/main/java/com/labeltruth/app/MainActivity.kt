@@ -19,8 +19,10 @@ import com.labeltruth.app.ui.DisclaimerDialog
 import com.labeltruth.app.ui.about.AboutScreen
 import com.labeltruth.app.ui.detail.IngredientDetailSheet
 import com.labeltruth.app.ui.history.HistoryScreen
+import com.labeltruth.app.ui.onboarding.OnboardingScreen
 import com.labeltruth.app.ui.profile.ProfileScreen
 import com.labeltruth.app.ui.result.ResultSheet
+import com.labeltruth.app.ui.search.SearchScreen
 import com.labeltruth.app.ui.scanner.ScannerScreen
 import com.labeltruth.app.ui.scanner.ScannerViewModel
 import com.labeltruth.app.ui.theme.LabelTruthTheme
@@ -58,6 +60,34 @@ class MainActivity : ComponentActivity() {
                     )
                 }
 
+                // Ask for the profile up front, once the disclaimer is out of the
+                // way. Personalised alerts are the differentiator, and they need
+                // a profile that nobody would otherwise go and fill in.
+                val onboarded by container.profileStore.onboardingComplete
+                    .collectAsState(initial = true)
+
+                if (disclaimerAccepted && !onboarded) {
+                    OnboardingScreen(
+                        profile = state.profile,
+                        onToggleAllergen = { value ->
+                            scope.launch { container.profileStore.toggleAllergen(value) }
+                        },
+                        onToggleIntolerance = { value ->
+                            scope.launch { container.profileStore.toggleCondition(value) }
+                        },
+                        onToggleDiet = { value ->
+                            scope.launch { container.profileStore.toggleDiet(value) }
+                        },
+                        onToggleCondition = { value ->
+                            scope.launch { container.profileStore.toggleCondition(value) }
+                        },
+                        onFinish = {
+                            scope.launch { container.profileStore.completeOnboarding() }
+                        }
+                    )
+                    return@LabelTruthTheme
+                }
+
                 NavHost(navController = navController, startDestination = Routes.SCANNER) {
                     composable(Routes.SCANNER) {
                         ScannerScreen(
@@ -69,7 +99,25 @@ class MainActivity : ComponentActivity() {
                             onOpenHistory = { navController.navigate(Routes.HISTORY) },
                             onOpenProfile = { navController.navigate(Routes.PROFILE) },
                             onOpenAbout = { navController.navigate(Routes.ABOUT) },
+                            onOpenSearch = { navController.navigate(Routes.SEARCH) },
+                            onCategoryChange = viewModel::setScanCategory,
                             onDismissMessage = viewModel::dismissMessage
+                        )
+                    }
+                    composable(Routes.SEARCH) {
+                        SearchScreen(
+                            query = state.searchQuery,
+                            results = state.searchResults,
+                            onQueryChange = viewModel::onSearchQueryChange,
+                            onBack = {
+                                viewModel.clearSearch()
+                                navController.popBackStack()
+                            },
+                            onSelect = viewModel::selectIngredient,
+                            onLookupBarcode = { barcode ->
+                                viewModel.lookupTypedBarcode(barcode)
+                                navController.popBackStack()
+                            }
                         )
                     }
                     composable(Routes.HISTORY) {
@@ -132,6 +180,7 @@ class MainActivity : ComponentActivity() {
 
 private object Routes {
     const val SCANNER = "scanner"
+    const val SEARCH = "search"
     const val HISTORY = "history"
     const val PROFILE = "profile"
     const val ABOUT = "about"

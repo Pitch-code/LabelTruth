@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512"
+     role="img" aria-label="LabelTruth round app icon">
+  <title>LabelTruth (round)</title>
+  <defs>
+    <linearGradient id="llBgRound" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0E7C5A"/>
+      <stop offset="1" stop-color="#16B981"/>
+    </linearGradient>
+  </defs>
+
+  <!--
+    Genuinely circular, for the legacy round launcher icon on API 24-25.
+    Android 8 and later use the adaptive icon instead. The bracket corners sit
+    226px from centre, inside the 256px radius, so nothing is clipped.
+  -->
+  <circle cx="256" cy="256" r="256" fill="url(#llBgRound)"/>
+
+  <g fill="none" stroke="#FFFFFF" stroke-opacity="0.95" stroke-width="22"
+     stroke-linecap="round" stroke-linejoin="round">
+    <path d="M112 176 V132 Q112 112 132 112 H176"/>
+    <path d="M400 176 V132 Q400 112 380 112 H336"/>
+    <path d="M112 336 V380 Q112 400 132 400 H176"/>
+    <path d="M400 336 V380 Q400 400 380 400 H336"/>
+  </g>
+
+  <path d="M256 160 C336 204 342 308 256 352 C170 308 176 204 256 160 Z" fill="#FFFFFF"/>
+
+  <path d="M225 261 L247 283 L291 231" fill="none" stroke="#0E7C5A"
+        stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -15,8 +15,11 @@ import com.labeltruth.app.domain.model.Analysis
 import com.labeltruth.app.domain.model.Grade
 import com.labeltruth.app.domain.model.HealthProfile
 import com.labeltruth.app.domain.model.Ingredient
+import com.labeltruth.app.domain.model.ProductCategory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
 class AnalysisRepository(
@@ -26,7 +29,24 @@ class AnalysisRepository(
     private val remote: OpenFoodFactsClient,
     private val seedLoader: SeedLoader
 ) {
-    suspend fun ensureDictionaryReady(): Int = seedLoader.seedIfNeeded()
+    private val seedMutex = Mutex()
+    private var seeded = false
+
+    /**
+     * Importing 27,000 entries takes a moment on first launch. Without this,
+     * a scan started during that window would match nothing and the app would
+     * confidently report "not in our database" for perfectly ordinary food.
+     *
+     * Every analysis waits on the same one-time job, so the work happens once
+     * and concurrent callers simply queue behind it.
+     */
+    suspend fun ensureDictionaryReady(): Int {
+        if (seeded) return 0
+        return seedMutex.withLock {
+            if (seeded) 0
+            else seedLoader.seedIfNeeded().also { seeded = true }
+        }
+    }
 
     val history: Flow<List<ScanEntity>> = scanDao.observeRecent()
 
@@ -50,7 +70,9 @@ class AnalysisRepository(
                     brand = result.product.brand,
                     barcode = barcode,
                     ingredientsText = result.product.ingredientsText,
-                    profile = profile
+                    profile = profile,
+                    // Which database answered tells us the route of exposure.
+                    category = result.product.category
                 )
             )
             is LookupResult.NoIngredients -> BarcodeOutcome.NoIngredients(result.name)
@@ -59,25 +81,33 @@ class AnalysisRepository(
         }
 
     /** OCR path: the user photographed the printed ingredient list. */
-    suspend fun analyzeScannedText(text: String, profile: HealthProfile): Analysis =
-        analyze(
-            productName = "Scanned label",
-            brand = null,
-            barcode = null,
-            ingredientsText = text,
-            profile = profile
-        )
+    suspend fun analyzeScannedText(
+        text: String,
+        profile: HealthProfile,
+        category: ProductCategory
+    ): Analysis = analyze(
+        productName = "Scanned label",
+        brand = null,
+        barcode = null,
+        ingredientsText = text,
+        profile = profile,
+        category = category
+    )
 
     private suspend fun analyze(
         productName: String,
         brand: String?,
         barcode: String?,
         ingredientsText: String,
-        profile: HealthProfile
+        profile: HealthProfile,
+        category: ProductCategory
     ): Analysis = withContext(Dispatchers.Default) {
+        // Never analyse against a half-imported dictionary.
+        ensureDictionaryReady()
+
         val tokens = IngredientListParser.parse(ingredientsText)
         val matched = tokens.map { token ->
-            val match = matcher.match(token)
+            val match = matcher.match(token, category)
             AnalyzedIngredient(
                 rawText = token,
                 matched = match.ingredient,
@@ -111,7 +141,8 @@ class AnalysisRepository(
             grade = Grade.of(score),
             ingredients = analyzed,
             alerts = ScoreEngine.alerts(analyzed, profile),
-            rawIngredientsText = ingredientsText
+            rawIngredientsText = ingredientsText,
+            category = category
         )
 
         if (analyzed.isNotEmpty()) {

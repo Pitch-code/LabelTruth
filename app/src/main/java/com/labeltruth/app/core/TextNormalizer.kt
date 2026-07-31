@@ -24,11 +24,23 @@ object TextNormalizer {
             .trim()
     }
 
-    private val eNumberPattern = Regex("\\be\\s?-?\\s?(\\d{3}[a-z]{0,2})\\b", RegexOption.IGNORE_CASE)
+    private val eNumberPattern =
+        Regex("\\be\\s?-?\\s?(\\d{3})([a-z]{0,3})\\b", RegexOption.IGNORE_CASE)
 
-    /** Pulls "E211" out of "preservative (e 211)" and similar. Returns e.g. "E211". */
-    fun extractENumber(input: String): String? =
-        eNumberPattern.find(input)?.groupValues?.get(1)?.let { "E${it.uppercase()}" }
+    /**
+     * Pulls "E211" out of "preservative (e 211)" and similar.
+     *
+     * The canonical form is an uppercase E, the digits, then any letter suffix
+     * in lowercase, which is the EU convention: E150d, not E150D. This has to
+     * match how the dictionary stores eNumber exactly, because Room compares
+     * text with BINARY collation, so "E150D" would not find "E150d".
+     */
+    fun extractENumber(input: String): String? {
+        val match = eNumberPattern.find(input) ?: return null
+        val digits = match.groupValues[1]
+        val suffix = match.groupValues[2].lowercase()
+        return "E$digits$suffix"
+    }
 
     /** Optimised Levenshtein for short strings, with an early bail-out. */
     fun levenshtein(a: String, b: String, max: Int): Int {
