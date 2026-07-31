@@ -1,0 +1,214 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "d5615eafea27306b03f0835fbdd3e287",
+    "entities": [
+      {
+        "tableName": "ingredients",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `canonicalName` TEXT NOT NULL, `normalizedName` TEXT NOT NULL, `eNumber` TEXT, `category` TEXT NOT NULL, `whatItIs` TEXT NOT NULL, `whyUsed` TEXT NOT NULL, `riskTier` TEXT NOT NULL, `riskReason` TEXT NOT NULL, `allergens` TEXT NOT NULL, `dietaryFlags` TEXT NOT NULL, `cautionGroups` TEXT NOT NULL, `adi` TEXT, `sources` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "canonicalName",
+            "columnName": "canonicalName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "normalizedName",
+            "columnName": "normalizedName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "eNumber",
+            "columnName": "eNumber",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "category",
+            "columnName": "category",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "whatItIs",
+            "columnName": "whatItIs",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "whyUsed",
+            "columnName": "whyUsed",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "riskTier",
+            "columnName": "riskTier",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "riskReason",
+            "columnName": "riskReason",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "allergens",
+            "columnName": "allergens",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dietaryFlags",
+            "columnName": "dietaryFlags",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cautionGroups",
+            "columnName": "cautionGroups",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "adi",
+            "columnName": "adi",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "sources",
+            "columnName": "sources",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_ingredients_normalizedName",
+            "unique": true,
+            "columnNames": [
+              "normalizedName"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_ingredients_normalizedName` ON `${TABLE_NAME}` (`normalizedName`)"
+          },
+          {
+            "name": "index_ingredients_eNumber",
+            "unique": false,
+            "columnNames": [
+              "eNumber"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_ingredients_eNumber` ON `${TABLE_NAME}` (`eNumber`)"
+          }
+        ]
+      },
+      {
+        "tableName": "synonyms",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`normalized` TEXT NOT NULL, `ingredientId` TEXT NOT NULL, PRIMARY KEY(`normalized`))",
+        "fields": [
+          {
+            "fieldPath": "normalized",
+            "columnName": "normalized",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ingredientId",
+            "columnName": "ingredientId",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "normalized"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_synonyms_ingredientId",
+            "unique": false,
+            "columnNames": [
+              "ingredientId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_synonyms_ingredientId` ON `${TABLE_NAME}` (`ingredientId`)"
+          }
+        ]
+      },
+      {
+        "tableName": "scan_history",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `productName` TEXT NOT NULL, `brand` TEXT, `barcode` TEXT, `score` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL, `ingredientsRaw` TEXT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "productName",
+            "columnName": "productName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "brand",
+            "columnName": "brand",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "barcode",
+            "columnName": "barcode",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "score",
+            "columnName": "score",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timestamp",
+            "columnName": "timestamp",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ingredientsRaw",
+            "columnName": "ingredientsRaw",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd5615eafea27306b03f0835fbdd3e287')"
+    ]
+  }
+}

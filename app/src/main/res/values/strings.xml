@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LabelLens</string>
+
+    <string name="disclaimer_title">Before you start</string>
+    <string name="disclaimer_body">LabelLens gives you information about ingredients, gathered from public scientific and regulatory sources.\n\nIt is not medical advice, and it is not a diagnosis. Ratings are general guidance and cannot account for your full medical history.\n\nAlways read the physical packaging for allergen information, and talk to a doctor, dietitian or pharmacist about your own health.</string>
+    <string name="disclaimer_accept">I understand</string>
+
+    <string name="camera_permission_title">Camera access needed</string>
+    <string name="camera_permission_body">LabelLens needs your camera to scan barcodes and read ingredient labels. Images are processed on your device and are never uploaded.</string>
+    <string name="camera_permission_grant">Allow camera</string>
+    <string name="camera_permission_settings">Open settings</string>
+
+    <string name="attribution">Product data from Open Food Facts, used under the Open Database License. Ingredient safety information from EFSA, FDA and other public sources.</string>
+</resources>

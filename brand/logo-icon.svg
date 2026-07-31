@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="LabelLens app icon">
+  <title>LabelLens</title>
+  <defs>
+    <linearGradient id="llBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0E7C5A"/>
+      <stop offset="1" stop-color="#16B981"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Trust-green gradient badge. Rounded corners read as safe and approachable. -->
+  <rect width="512" height="512" rx="114" fill="url(#llBg)"/>
+
+  <!-- Viewfinder brackets: communicate "scanner" instantly, with no text. -->
+  <g fill="none" stroke="#FFFFFF" stroke-opacity="0.95" stroke-width="22"
+     stroke-linecap="round" stroke-linejoin="round">
+    <path d="M96 168 V120 Q96 96 120 96 H168"/>
+    <path d="M416 168 V120 Q416 96 392 96 H344"/>
+    <path d="M96 344 V392 Q96 416 120 416 H168"/>
+    <path d="M416 344 V392 Q416 416 392 416 H344"/>
+  </g>
+
+  <!-- Leaf / lens hybrid: natural food meaning plus a "look closer" cue. -->
+  <path d="M256 160 C336 204 342 308 256 352 C170 308 176 204 256 160 Z" fill="#FFFFFF"/>
+
+  <!-- Checkmark: the reassurance payoff, the emotion the user is actually buying. -->
+  <path d="M225 261 L247 283 L291 231" fill="none" stroke="#0E7C5A"
+        stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

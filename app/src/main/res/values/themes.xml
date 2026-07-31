@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      Minimal host theme. All real styling lives in Compose (ui/theme).
+      Edge-to-edge is enabled from MainActivity.
+    -->
+    <style name="Theme.LabelLens" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/surface_dark</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+</resources>

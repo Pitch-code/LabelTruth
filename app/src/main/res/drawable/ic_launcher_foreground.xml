@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Adaptive icon foreground. The source mark is authored on a 512x512 grid
+  (see brand/logo-icon.svg). The mark's visual bounds are 96..416, so it is
+  scaled by 0.2125 and nudged to land inside the 66dp adaptive-icon safe zone.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <group
+        android:scaleX="0.2125"
+        android:scaleY="0.2125"
+        android:translateX="-0.4"
+        android:translateY="-0.4">
+
+        <!-- Viewfinder brackets -->
+        <path
+            android:pathData="M96,168 V120 Q96,96 120,96 H168"
+            android:strokeColor="#FFFFFF"
+            android:strokeAlpha="0.95"
+            android:strokeWidth="22"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round" />
+        <path
+            android:pathData="M416,168 V120 Q416,96 392,96 H344"
+            android:strokeColor="#FFFFFF"
+            android:strokeAlpha="0.95"
+            android:strokeWidth="22"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round" />
+        <path
+            android:pathData="M96,344 V392 Q96,416 120,416 H168"
+            android:strokeColor="#FFFFFF"
+            android:strokeAlpha="0.95"
+            android:strokeWidth="22"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round" />
+        <path
+            android:pathData="M416,344 V392 Q416,416 392,416 H344"
+            android:strokeColor="#FFFFFF"
+            android:strokeAlpha="0.95"
+            android:strokeWidth="22"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round" />
+
+        <!-- Leaf / lens -->
+        <path
+            android:pathData="M256,160 C336,204 342,308 256,352 C170,308 176,204 256,160 Z"
+            android:fillColor="#FFFFFF" />
+
+        <!-- Checkmark -->
+        <path
+            android:pathData="M225,261 L247,283 L291,231"
+            android:strokeColor="#0E7C5A"
+            android:strokeWidth="24"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round" />
+    </group>
+</vector>
