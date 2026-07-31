@@ -207,7 +207,7 @@ in this repository.
 | Asset | Spec | Status |
 |---|---|---|
 | App icon | 512 × 512 PNG, 32-bit | ✅ `brand/play-store-icon-512.png` |
-| Feature graphic | 1024 × 500 PNG or JPEG | ❌ to do |
+| Feature graphic | 1024 × 500 PNG or JPEG | ✅ `brand/feature-graphic-1024x500.png` |
 | Phone screenshots | 2–8 images, min 320px shortest side | ❌ needs a real device |
 
 Screenshots must come from the app actually running, which is blocked until it has
