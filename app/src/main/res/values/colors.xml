@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--
+      These exist only for the host window background, which is drawn before
+      Compose starts. They must track the Compose `background` colours in
+      ui/theme/Theme.kt, or the app flashes the wrong colour at cold start.
+    -->
     <color name="surface_dark">#FF0B1412</color>
+    <color name="surface_light">#FFF7FAF8</color>
 </resources>

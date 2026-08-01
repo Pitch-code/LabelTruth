@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -41,7 +42,8 @@ import java.util.Locale
 @Composable
 fun HistoryScreen(
     scans: List<ScanEntity>,
-    onBack: () -> Unit,
+    /** Null when shown as a bottom-bar tab. */
+    onBack: (() -> Unit)?,
     onOpen: (Long) -> Unit,
     onDelete: (Long) -> Unit,
     onClearAll: () -> Unit
@@ -70,7 +72,11 @@ fun HistoryScreen(
             return@Column
         }
 
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            // Clears the floating bottom bar, so the last row is reachable.
+            contentPadding = PaddingValues(bottom = 110.dp)
+        ) {
             items(scans, key = { it.id }) { scan ->
                 HistoryRow(
                     scan = scan,
@@ -154,7 +160,11 @@ private fun HistoryRow(scan: ScanEntity, onOpen: () -> Unit, onDelete: () -> Uni
 @Composable
 fun TopBar(
     title: String,
-    onBack: () -> Unit,
+    /**
+     * Null on screens reached from the bottom bar. A back arrow on a tab is
+     * misleading: there is nothing behind it to go back to.
+     */
+    onBack: (() -> Unit)?,
     trailing: @Composable () -> Unit = {}
 ) {
     Row(
@@ -165,12 +175,16 @@ fun TopBar(
             .height(64.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        IconButton(onClick = onBack) {
-            Icon(
-                painter = painterResource(R.drawable.ic_arrow_back),
-                contentDescription = "Back",
-                tint = MaterialTheme.colorScheme.onSurface
-            )
+        if (onBack != null) {
+            IconButton(onClick = onBack) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_arrow_back),
+                    contentDescription = "Back",
+                    tint = MaterialTheme.colorScheme.onSurface
+                )
+            }
+        } else {
+            Spacer(Modifier.size(12.dp))
         }
         Text(
             text = title,

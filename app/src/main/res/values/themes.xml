@@ -3,9 +3,13 @@
     <!--
       Minimal host theme. All real styling lives in Compose (ui/theme).
       Edge-to-edge is enabled from MainActivity.
+
+      The window background is light here and dark in values-night. It used to
+      be dark unconditionally, which meant a phone in light mode flashed a
+      near-black screen before Compose drew its first frame.
     -->
     <style name="Theme.LabelTruth" parent="android:Theme.Material.NoActionBar">
-        <item name="android:windowBackground">@color/surface_dark</item>
+        <item name="android:windowBackground">@color/surface_light</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
     </style>

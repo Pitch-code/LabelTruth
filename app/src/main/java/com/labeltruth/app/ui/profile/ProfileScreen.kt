@@ -31,7 +31,8 @@ import com.labeltruth.app.ui.history.TopBar
 @Composable
 fun ProfileScreen(
     profile: HealthProfile,
-    onBack: () -> Unit,
+    /** Null when shown as a bottom-bar tab. */
+    onBack: (() -> Unit)?,
     onToggleAllergen: (String) -> Unit,
     onToggleDiet: (String) -> Unit,
     onToggleCondition: (String) -> Unit
@@ -47,7 +48,8 @@ fun ProfileScreen(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = 20.dp)
-                .padding(bottom = 40.dp)
+                // Clears the floating bottom bar.
+                .padding(bottom = 110.dp)
         ) {
             Text(
                 text = "Tell LabelTruth what matters to you and every scan gets " +

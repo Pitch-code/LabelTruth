@@ -1,5 +1,7 @@
 package com.labeltruth.app.data.repo
 
+import com.labeltruth.app.data.local.BookmarkDao
+import com.labeltruth.app.data.local.BookmarkEntity
 import com.labeltruth.app.data.local.ScanDao
 import com.labeltruth.app.data.local.ScanEntity
 import com.labeltruth.app.data.local.toDomain
@@ -18,6 +20,7 @@ import com.labeltruth.app.domain.model.Ingredient
 import com.labeltruth.app.domain.model.ProductCategory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -25,6 +28,7 @@ import kotlinx.coroutines.withContext
 class AnalysisRepository(
     private val ingredientDao: IngredientDao,
     private val scanDao: ScanDao,
+    private val bookmarkDao: BookmarkDao,
     private val matcher: IngredientMatcher,
     private val remote: OpenFoodFactsClient,
     private val seedLoader: SeedLoader
@@ -52,6 +56,43 @@ class AnalysisRepository(
 
     suspend fun deleteScan(id: Long) = scanDao.delete(id)
     suspend fun clearHistory() = scanDao.clearAll()
+
+    /** Saved ingredients, re-read from the dictionary so they stay current. */
+    val bookmarks: Flow<List<Ingredient>> =
+        bookmarkDao.observeBookmarked().map { rows -> rows.map { it.toDomain() } }
+
+    /** Ids only, for deciding whether the bookmark button reads as saved. */
+    val bookmarkedIds: Flow<Set<String>> =
+        bookmarkDao.observeIds().map { it.toSet() }
+
+    suspend fun toggleBookmark(ingredientId: String) = withContext(Dispatchers.IO) {
+        if (bookmarkDao.exists(ingredientId)) {
+            bookmarkDao.delete(ingredientId)
+        } else {
+            bookmarkDao.insert(
+                BookmarkEntity(ingredientId = ingredientId, savedAt = System.currentTimeMillis())
+            )
+        }
+    }
+
+    /** Every stored score, for the home screen's grade breakdown. */
+    val scanScores: Flow<List<Int>> = scanDao.observeScores()
+
+    /**
+     * One assessed, cited ingredient to feature on the home screen.
+     *
+     * [seed] is expected to be a day number, so the choice is stable for a whole
+     * day rather than changing on every launch. A card that reshuffles each time
+     * the user opens the app is noise, not a reading suggestion.
+     *
+     * Returns null before the dictionary has been imported.
+     */
+    suspend fun spotlightIngredient(seed: Int): Ingredient? = withContext(Dispatchers.IO) {
+        val total = ingredientDao.assessedWithSourcesCount()
+        if (total == 0) return@withContext null
+        val offset = ((seed % total) + total) % total
+        ingredientDao.assessedWithSourcesAt(offset)?.toDomain()
+    }
 
     suspend fun ingredientById(id: String): Ingredient? =
         withContext(Dispatchers.IO) { ingredientDao.byId(id)?.toDomain() }

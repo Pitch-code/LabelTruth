@@ -53,12 +53,38 @@ Measured from an actual release build:
 
 | Artifact | Size |
 |---|---|
-| Debug APK (all ABIs, unminified) | 80 MB |
-| Release AAB (uploaded to Play) | 34 MB |
-| **Actual download on a modern 64-bit phone** | **~14 MB** |
+| Debug APK (all ABIs, unminified) | 77.9 MB |
+| Release AAB (uploaded to Play) | 33.9 MB |
+| **Actual download, measured across every device config** | **10.0 – 11.8 MB** |
 
-Play splits the bundle per device, so users only download the one CPU
-architecture they need. 14 MB is unremarkable for an app store listing.
+Play splits the bundle per device, so a user downloads one CPU architecture and
+one screen density, not all of them. The debug APK is large because it contains
+every variant and is not minified; it is not what anyone installs from the store.
+
+The download figure is measured, not estimated:
+
+```bash
+CP=$(find /root/.gradle/caches/modules-2 -name "*.jar" | tr '\n' ':')
+AAPT2=$(find "$ANDROID_HOME/build-tools" -name aapt2 -type f | sort -r | head -1)
+
+java -cp "$CP" com.android.tools.build.bundletool.BundleToolMain build-apks \
+  --bundle=app/build/outputs/bundle/release/app-release.aab \
+  --output=tools/cache/apks/labeltruth.apks --overwrite --aapt2="$AAPT2"
+
+java -cp "$CP" com.android.tools.build.bundletool.BundleToolMain get-size total \
+  --apks=tools/cache/apks/labeltruth.apks
+```
+
+The bundletool jar in the Gradle cache has no `Main-Class`, hence `-cp` and the
+explicit main class rather than `java -jar`.
+
+The 7.5 MB bundled dictionary is the single largest asset. It is worth confirming
+it is actually in the artifact when checking sizes, because a missing asset also
+makes the download smaller:
+
+```bash
+unzip -l app/build/outputs/bundle/release/app-release.aab | grep ingredients_seed
+```
 
 ---
 
@@ -433,6 +459,30 @@ Two competitors were installed and worked through in detail: **KnowTox** and
 | **"AI" badges** on generated descriptions | Honest of them, but it advertises that the content was guessed. We inverted it: a **SOURCED** badge marks entries backed by a citation. |
 | **Health goals** onboarding (immune support, energy, sleep) | We cannot connect a food label to "brain function" with any published evidence. Asking implies we can. |
 | **Skin type** onboarding | Meaningless until cosmetics ship, and asking for data we cannot use is a dark pattern. |
+
+### The monetisation model, decided
+
+Settled deliberately, because it constrains the UI:
+
+> **Scanning is unlimited and free, permanently. Revenue comes from extras.**
+
+| Free | Premium (v1.1) |
+|---|---|
+| Unlimited scanning | Unlimited scanning |
+| Full results, with sources | Full results, with sources |
+| Unlimited bookmarks | Unlimited bookmarks |
+| Recent scan history | Full history + export |
+| Small ads on Home only, never on a result | No ads |
+
+The reference design that prompted the redesign showed a **"5 analyses remaining"**
+counter and a **FREE** plan badge. Both were left out. Metering the one thing the
+app exists to do is the fastest way to lose a user, and a trust app that rations
+trust is contradictory.
+
+There is also a narrower reason nothing on the home screen advertises an
+upgrade: **no purchase exists yet.** Showing a plan badge or an upsell before
+there is anything to buy is misleading, and Play's policies expect promoted
+purchases to be real.
 
 One thing worth recording: Toxly's ingredient list showed **"For external use only"**,
 **"Keep out of"** and **"CI 12085 Directions"** as if they were ingredients. That is

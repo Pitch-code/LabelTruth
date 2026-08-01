@@ -42,8 +42,11 @@ fun CameraPreview(
      * analysed and the battery kept draining while the user read a result. A
      * scanner app holding the camera open when it has nothing to scan is also
      * hard to defend on privacy grounds.
+     *
+     * Deliberately has no default: forgetting to pass it would silently
+     * reintroduce the always-on camera.
      */
-    active: Boolean = true,
+    active: Boolean,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
