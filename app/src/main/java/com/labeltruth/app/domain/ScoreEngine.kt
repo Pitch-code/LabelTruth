@@ -23,8 +23,29 @@ object ScoreEngine {
         else -> 0.6
     }
 
-    fun score(ingredients: List<AnalyzedIngredient>): Int {
-        if (ingredients.isEmpty()) return 0
+    /**
+     * Below this share of recognised ingredients we decline to score.
+     *
+     * A number derived from under half a list describes our dictionary more
+     * than it describes the product. The threshold is a judgement call, but
+     * having no threshold was not: a photo of the *front* of a bottle scored
+     * 97 out of 100 with nothing recognised at all, because unrecognised text
+     * cost almost nothing. Saying "we cannot score this" is the honest answer,
+     * and it also tells the user to retake the photo.
+     */
+    const val MIN_RECOGNISED_PERCENT = 50
+
+    /** True when enough of the list was recognised for a score to mean anything. */
+    fun isScoreable(ingredients: List<AnalyzedIngredient>): Boolean {
+        if (ingredients.isEmpty()) return false
+        val recognised = ingredients.count { it.matched != null }
+        if (recognised == 0) return false
+        return recognised * 100 / ingredients.size >= MIN_RECOGNISED_PERCENT
+    }
+
+    /** Returns null when [isScoreable] is false. Callers must handle that. */
+    fun score(ingredients: List<AnalyzedIngredient>): Int? {
+        if (!isScoreable(ingredients)) return null
         var penalty = 0.0
         ingredients.forEachIndexed { index, item ->
             penalty += item.riskTier.penalty * positionWeight(index, ingredients.size)
@@ -92,6 +113,16 @@ object ScoreEngine {
     fun summary(ingredients: List<AnalyzedIngredient>): String {
         if (ingredients.isEmpty()) return "No ingredients could be read."
 
+        val recognised = ingredients.count { it.matched != null }
+
+        // Said before anything else, because with nothing recognised we have no
+        // basis for any statement about the product at all. The old code fell
+        // through to a sentence claiming these ingredients *were* recognised.
+        if (recognised == 0) {
+            return "We could not match any of this text to an ingredient we know. " +
+                "It may not be an ingredient list."
+        }
+
         val worst = ingredients.maxByOrNull { it.riskTier.penalty }?.riskTier ?: RiskTier.UNKNOWN
         val flagged = ingredients.count {
             it.riskTier == RiskTier.MODERATE || it.riskTier == RiskTier.AVOID
@@ -99,14 +130,30 @@ object ScoreEngine {
         val assessed = ingredients.count {
             it.matched != null && it.riskTier != RiskTier.NOT_ASSESSED
         }
+        val unrecognised = ingredients.size - recognised
+
+        // Partial reads get their own sentence. Reporting on half a list as
+        // though it were the whole list is the same overclaim in a quieter form.
+        if (!isScoreable(ingredients)) {
+            return "We only recognised $recognised of ${ingredients.size} items here, " +
+                "so we are not scoring this. Try photographing just the ingredient list."
+        }
+
+        val tail = if (unrecognised > 0) {
+            " $unrecognised item(s) were not recognised."
+        } else {
+            ""
+        }
 
         return when {
-            worst == RiskTier.AVOID -> "$flagged ingredient(s) here are best avoided."
-            worst == RiskTier.MODERATE -> "$flagged ingredient(s) are worth a closer look."
-            worst == RiskTier.CAUTION -> "Nothing serious, a few minor points to note."
-            assessed > 0 -> "No concerns published for any of these ingredients."
-            else -> "These ingredients are recognised, but we hold no published " +
-                "assessment for them yet."
+            worst == RiskTier.AVOID -> "$flagged ingredient(s) here are best avoided.$tail"
+            worst == RiskTier.MODERATE -> "$flagged ingredient(s) are worth a closer look.$tail"
+            worst == RiskTier.CAUTION -> "Nothing serious, a few minor points to note.$tail"
+            assessed > 0 -> "No concerns published for any of these ingredients.$tail"
+            // Recognised, but we hold no assessment for any of them. Distinct
+            // from "no concerns found", which would imply we looked and cleared it.
+            else -> "We recognised these ingredients but hold no published " +
+                "assessment for any of them yet.$tail"
         }
     }
 }

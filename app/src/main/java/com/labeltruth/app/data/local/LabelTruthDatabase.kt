@@ -9,7 +9,9 @@ import androidx.room.RoomDatabase
     entities = [IngredientEntity::class, SynonymEntity::class, ScanEntity::class],
     // v2 added a category column to synonyms and made (name, category) the
     // uniqueness rule, so the same substance can exist for food and cosmetics.
-    version = 2,
+    // v3 added a category column to scan_history, needed to reopen a saved scan
+    // against the right route of exposure.
+    version = 3,
     exportSchema = true
 )
 abstract class LabelTruthDatabase : RoomDatabase() {

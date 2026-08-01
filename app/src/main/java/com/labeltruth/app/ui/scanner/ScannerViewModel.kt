@@ -130,6 +130,26 @@ class ScannerViewModel(
         _state.value = _state.value.copy(message = null)
     }
 
+    /**
+     * Reopens a saved scan from history.
+     *
+     * Recomputed rather than replayed from storage, so the result reflects the
+     * current dictionary and the user's current profile.
+     */
+    fun reopenScan(id: Long) {
+        if (_state.value.isProcessing) return
+        _state.value = _state.value.copy(isProcessing = true, message = null)
+
+        viewModelScope.launch {
+            val analysis = repository.replayScan(id, _state.value.profile)
+            if (analysis == null) {
+                fail("That scan could not be opened. It may have been deleted.")
+            } else {
+                _state.value = _state.value.copy(isProcessing = false, analysis = analysis)
+            }
+        }
+    }
+
     fun selectIngredient(ingredient: Ingredient?) {
         _state.value = _state.value.copy(selectedIngredient = ingredient)
     }

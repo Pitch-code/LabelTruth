@@ -34,6 +34,16 @@ import kotlin.coroutines.resumeWithException
 fun CameraPreview(
     analyzer: FrameAnalyzer,
     torchOn: Boolean,
+    /**
+     * When false the camera is released entirely.
+     *
+     * The result sheet is a separate window layered over this screen, so the
+     * preview kept streaming behind it: the torch stayed lit, frames kept being
+     * analysed and the battery kept draining while the user read a result. A
+     * scanner app holding the camera open when it has nothing to scan is also
+     * hard to defend on privacy grounds.
+     */
+    active: Boolean = true,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -50,10 +60,19 @@ fun CameraPreview(
     var provider by remember { mutableStateOf<ProcessCameraProvider?>(null) }
 
     // Keyed on the analyzer as well, so a replaced analyzer is actually rebound
-    // rather than silently ignored.
-    LaunchedEffect(lifecycleOwner, analyzer) {
+    // rather than silently ignored, and on `active` so releasing and reacquiring
+    // the camera is just a state change.
+    LaunchedEffect(lifecycleOwner, analyzer, active) {
         val cameraProvider = awaitCameraProvider(context)
         provider = cameraProvider
+
+        if (!active) {
+            // Unbind rather than merely stopping the analyzer, so the camera
+            // indicator goes out and the hardware is genuinely released.
+            runCatching { cameraProvider.unbindAll() }
+            camera = null
+            return@LaunchedEffect
+        }
 
         val preview = Preview.Builder().build().also {
             it.setSurfaceProvider(previewView.surfaceProvider)

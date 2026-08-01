@@ -170,4 +170,92 @@ class IngredientListParserTest {
         assertContains(tokens, "Rapeseed")
         assertContains(tokens, "Salt")
     }
+
+    // ------------------------------------------- real OCR captured on a phone
+
+    /**
+     * The verbatim output of photographing a Dettol hand wash bottle on a real
+     * device. The camera caught the front of the pack, the pack size and a batch
+     * code, and all three were reported to the user as ingredients.
+     *
+     * The header pattern used to be anchored to the start of the string, so it
+     * only stripped "Ingredients:" when the OCR happened to begin with it.
+     */
+    @Test
+    fun `rejects front-of-pack marketing text, pack size and batch codes`() {
+        val ocr = """
+            ORIGINAL LIQUID HANDWASH GERM OEFENcE Dettol sa e g ¥11/24
+            #11/26 ^200 ml Net R09/
+            0.50/ml 02: 08 ESSZ452
+        """.trimIndent()
+
+        val tokens = parse(ocr)
+        assertTrue("expected nothing usable, got $tokens", tokens.isEmpty())
+    }
+
+    /**
+     * The same capture with the ingredient panel actually in frame. Everything
+     * before the header and everything after the "Directions" section must go.
+     */
+    @Test
+    fun `reads only the ingredient section when a header is present`() {
+        val ocr = """
+            DETTOL ORIGINAL LIQUID HANDWASH
+            GERM DEFENCE 200 ml
+            Ingredients: Aqua, Sodium Laureth Sulfate, Cocamidopropyl Betaine,
+            Glycerin, Parfum, Salicylic Acid, Triclosan
+            Directions: Wet hands, apply and rinse thoroughly.
+            Net Wt 200 ml  Batch No R09  MFG 11/24
+        """.trimIndent()
+
+        val tokens = parse(ocr)
+        assertContains(tokens, "Aqua")
+        assertContains(tokens, "Sodium Laureth Sulfate")
+        assertContains(tokens, "Triclosan")
+        assertTrue(
+            "front-of-pack text leaked in: $tokens",
+            tokens.none { it.contains("DETTOL", ignoreCase = true) }
+        )
+        assertTrue(
+            "post-list sections leaked in: $tokens",
+            tokens.none { it.contains("Batch", ignoreCase = true) }
+        )
+        assertTrue(
+            "pack size leaked in: $tokens",
+            tokens.none { it.contains("200", ignoreCase = true) }
+        )
+    }
+
+    @Test
+    fun `an ingredient list with no header is still parsed in full`() {
+        // Text from a barcode lookup arrives without a header.
+        val tokens = parse("Sugar, Cocoa Butter, Skimmed Milk Powder")
+        assertEquals(3, tokens.size)
+    }
+
+    /**
+     * The digit-heavy filter must not eat the tokens that are legitimately
+     * mostly numbers. E numbers are the whole point of the additive database,
+     * and CI numbers are how cosmetic colourants are declared.
+     */
+    @Test
+    fun `keeps E numbers and colour index numbers despite being mostly digits`() {
+        assertContains(parse("Ingredients: Sugar, E330, E150d"), "E330")
+        assertContains(parse("Ingredients: Sugar, E330, E150d"), "E150d")
+        assertContains(parse("Ingredients: Aqua, CI 77491"), "CI 77491")
+    }
+
+    @Test
+    fun `rejects addresses and other long non-ingredient lines`() {
+        val tokens = parse(
+            "Ingredients: Aqua, Glycerin. Marketed by Example Consumer Products " +
+                "Limited, Plot 42 Industrial Estate, Mumbai 400001"
+        )
+        assertContains(tokens, "Aqua")
+        assertContains(tokens, "Glycerin")
+        assertTrue(
+            "an address is not an ingredient: $tokens",
+            tokens.none { it.contains("Mumbai", ignoreCase = true) }
+        )
+    }
 }

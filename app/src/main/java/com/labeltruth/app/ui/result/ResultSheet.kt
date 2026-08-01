@@ -76,7 +76,14 @@ private fun ResultContent(
     ) {
         item {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                ScoreRing(score = analysis.score, grade = analysis.grade)
+                // No score rather than a misleading one. A photo that caught the
+                // front of a pack instead of the ingredient panel used to show
+                // "97, Excellent" here.
+                if (analysis.score != null && analysis.grade != null) {
+                    ScoreRing(score = analysis.score, grade = analysis.grade)
+                } else {
+                    NoScoreRing()
+                }
                 Spacer(Modifier.size(20.dp))
                 Column {
                     Text(
@@ -175,6 +182,39 @@ private fun ResultContent(
             SourceNote(hasBarcode = analysis.barcode != null)
             Spacer(Modifier.height(16.dp))
             DisclaimerFooter()
+        }
+    }
+}
+
+/**
+ * Stands in for the score ring when we recognised too little to score.
+ *
+ * Kept the same size and shape as the real ring so the layout does not jump,
+ * but visibly empty and neutrally coloured, because it must not read as a
+ * verdict of any kind.
+ */
+@Composable
+private fun NoScoreRing() {
+    Box(
+        modifier = Modifier
+            .size(132.dp)
+            .background(
+                MaterialTheme.colorScheme.surfaceVariant,
+                RoundedCornerShape(percent = 50)
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(
+                text = "–",
+                style = MaterialTheme.typography.displaySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Text(
+                text = "No score",
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 }

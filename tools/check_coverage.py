@@ -128,6 +128,41 @@ def split_top(text: str) -> list[str]:
 BRACKET = re.compile(r"[(\[][^()\[\]]*[)\]]")
 
 
+# Mirrors IngredientListParser.sectionHeader / sectionEnd / the packaging-noise
+# filters. Kept in step deliberately: a measuring tool that is more permissive
+# than the shipped parser reports coverage the app cannot actually deliver.
+SECTION_HEADER = re.compile(
+    r"\b(ingredients?|ingr[ée]dients?|composition|inci)\b\s*[:\-]?\s*", re.IGNORECASE)
+SECTION_END = re.compile(
+    r"\b(directions?|how to use|instructions?|warnings?|cautions?|precautions?|"
+    r"storage|store in|shelf life|best before|use by|expiry|"
+    r"net (wt|weight|content|contents|vol|volume)|"
+    r"mfg|mfd|manufactured|marketed by|packed by|imported by|"
+    r"batch no|lot no|customer care|consumer (care|complaint)|"
+    r"nutrition|allergy advice|for external use|keep out of|"
+    r"not to be taken|dosage|maximum retail price|m\.?r\.?p\b)\b", re.IGNORECASE)
+ODD_SYMBOLS = re.compile(r"[¥€£₹#^~|<>{}\\]")
+MEASUREMENT = re.compile(
+    r"\b\d+([.,]\d+)?\s*/?\s*"
+    r"(ml|mls|l|cl|dl|g|gm|gms|kg|mg|mcg|oz|lb|litre|liter|litres|liters)\b",
+    re.IGNORECASE)
+DATE_CODE = re.compile(r"\b\d{1,2}\s*/\s*\d{2,4}\b")
+CLOCK_CODE = re.compile(r"\b\d{1,2}\s*:\s*\d{2}\b")
+NUMERIC_OK = re.compile(r"^(e\s?\d{3,4}[a-z]?|ci\s?\d{5}|fd&c.*|d&c.*)$", re.IGNORECASE)
+
+
+def ingredient_section(raw: str) -> str:
+    m = SECTION_HEADER.search(raw)
+    if not m:
+        return raw
+    after = raw[m.end():]
+    end = SECTION_END.search(after)
+    if not end:
+        return after
+    body = after[:end.start()]
+    return after if not body.strip() else body
+
+
 def tidy(tok: str) -> str:
     s = _spaces.sub(" ", PCT.sub(" ", tok)).strip()
     s = PREFIX.sub("", s).strip().strip(",.;:- ")
@@ -137,11 +172,20 @@ def tidy(tok: str) -> str:
         return ""
     if BOILER.match(s) or CLASS_ONLY.match(s):
         return ""
+    if ODD_SYMBOLS.search(s) or MEASUREMENT.search(s):
+        return ""
+    if DATE_CODE.search(s) or CLOCK_CODE.search(s):
+        return ""
+    if len(s.split(" ")) > 8:
+        return ""
+    if not NUMERIC_OK.match(s) and \
+            sum(c.isdigit() for c in s) > sum(c.isalpha() for c in s):
+        return ""
     return s
 
 
 def parse(raw: str) -> list[str]:
-    cleaned = LEAD.sub("", raw.replace("\n", " "))
+    cleaned = LEAD.sub("", ingredient_section(raw).replace("\n", " "))
     cleaned = re.sub(r"[*†‡•·]", " ", cleaned)
     tokens: list[str] = []
     for seg in split_top(cleaned):
