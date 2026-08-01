@@ -76,5 +76,19 @@ data class ScanEntity(
     val category: String = "food"
 )
 
+/**
+ * An ingredient the user chose to keep.
+ *
+ * Stores only the id, so the saved entry is re-read from the dictionary every
+ * time it is shown. That way a bookmark improves as the dictionary does: an
+ * ingredient saved today as "no published assessment" will show a real
+ * assessment once we add one, instead of preserving a stale answer.
+ */
+@Entity(tableName = "bookmarks")
+data class BookmarkEntity(
+    @PrimaryKey val ingredientId: String,
+    val savedAt: Long
+)
+
 /** Lightweight projection used to build the in-memory fuzzy-match index. */
 data class NameRow(val name: String, val id: String, val category: String)

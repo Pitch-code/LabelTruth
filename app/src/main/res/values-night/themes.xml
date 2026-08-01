@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+      Dark-mode host window background. Matches SurfaceDark in ui/theme/Theme.kt.
+      Keep the two in step: this is the colour shown before Compose draws.
+    -->
+    <style name="Theme.LabelTruth" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/surface_dark</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+</resources>

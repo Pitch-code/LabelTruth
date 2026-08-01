@@ -69,10 +69,15 @@ fun ScannerScreen(
     onOpenSearch: () -> Unit,
     onCategoryChange: (ProductCategory) -> Unit,
     onDismissMessage: () -> Unit,
-    /** Greeting for the top bar. Falls back to the app name when unset. */
-    greeting: String? = null,
-    /** False while a result or detail sheet is covering this screen. */
-    cameraActive: Boolean = true,
+    /** Greeting for the top bar. Falls back to the app name when null. */
+    greeting: String?,
+    /**
+     * False while a result or detail sheet is covering this screen.
+     *
+     * No default, for the same reason as [CameraPreview]: a missing argument
+     * here would leave the camera streaming behind a result sheet again.
+     */
+    cameraActive: Boolean,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current

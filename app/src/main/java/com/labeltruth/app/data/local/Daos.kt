@@ -86,6 +86,32 @@ interface IngredientDao {
         """
     )
     suspend fun search(query: String): List<IngredientEntity>
+
+    /**
+     * Counts entries eligible for the home screen's spotlight.
+     *
+     * Only entries that carry a real assessment *and* a citation qualify. A
+     * spotlight is a recommendation to read something, so putting an
+     * unassessed entry there would be showcasing an empty page.
+     */
+    @Query(
+        """
+        SELECT COUNT(*) FROM ingredients
+        WHERE riskTier NOT IN ('NOT_ASSESSED', 'UNKNOWN') AND sources != ''
+        """
+    )
+    suspend fun assessedWithSourcesCount(): Int
+
+    /** Ordered by id so the same offset always yields the same ingredient. */
+    @Query(
+        """
+        SELECT * FROM ingredients
+        WHERE riskTier NOT IN ('NOT_ASSESSED', 'UNKNOWN') AND sources != ''
+        ORDER BY id ASC
+        LIMIT 1 OFFSET :offset
+        """
+    )
+    suspend fun assessedWithSourcesAt(offset: Int): IngredientEntity?
 }
 
 @Dao
@@ -105,4 +131,45 @@ interface ScanDao {
 
     @Query("DELETE FROM scan_history")
     suspend fun clearAll()
+
+    /**
+     * Scan counts grouped by score band, for the home screen.
+     *
+     * Computed in SQL rather than by loading every row, and derived only from
+     * scores we actually stored. Nothing here is inferred.
+     */
+    @Query("SELECT COUNT(*) FROM scan_history")
+    fun observeCount(): Flow<Int>
+
+    @Query("SELECT score FROM scan_history")
+    fun observeScores(): Flow<List<Int>>
+}
+
+@Dao
+interface BookmarkDao {
+
+    /**
+     * Joins to the dictionary, so a bookmark whose ingredient no longer exists
+     * simply stops appearing rather than showing an empty row.
+     */
+    @Query(
+        """
+        SELECT i.* FROM ingredients i
+        INNER JOIN bookmarks b ON b.ingredientId = i.id
+        ORDER BY b.savedAt DESC
+        """
+    )
+    fun observeBookmarked(): Flow<List<IngredientEntity>>
+
+    @Query("SELECT ingredientId FROM bookmarks")
+    fun observeIds(): Flow<List<String>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(bookmark: BookmarkEntity)
+
+    @Query("DELETE FROM bookmarks WHERE ingredientId = :id")
+    suspend fun delete(id: String)
+
+    @Query("SELECT EXISTS(SELECT 1 FROM bookmarks WHERE ingredientId = :id)")
+    suspend fun exists(id: String): Boolean
 }

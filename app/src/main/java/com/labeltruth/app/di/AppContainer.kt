@@ -19,12 +19,14 @@ class AppContainer(context: Context) {
     private val database = LabelTruthDatabase.get(context)
     private val ingredientDao = database.ingredientDao()
     private val scanDao = database.scanDao()
+    private val bookmarkDao = database.bookmarkDao()
 
     val profileStore = ProfileStore(context)
 
     val repository = AnalysisRepository(
         ingredientDao = ingredientDao,
         scanDao = scanDao,
+        bookmarkDao = bookmarkDao,
         matcher = IngredientMatcher(ingredientDao),
         remote = OpenFoodFactsClient(context),
         seedLoader = SeedLoader(context, ingredientDao)

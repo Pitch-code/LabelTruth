@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Filled form, for the saved state. The shape matches ic_bookmark so the
+         icon does not appear to move when it is toggled. -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M6.5,3.5 L17.5,3.5 L17.5,19.8 L12,15.7 L6.5,19.8 Z" />
+</vector>
