@@ -9,6 +9,7 @@ import com.labeltruth.app.domain.model.MatchConfidence
 import com.labeltruth.app.domain.model.RiskTier
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
@@ -60,8 +61,60 @@ class ScoreEngineTest {
     }
 
     @Test
-    fun `an empty list scores zero rather than a misleading hundred`() {
-        assertEquals(0, ScoreEngine.score(emptyList()))
+    fun `an empty list has no score at all`() {
+        assertNull(ScoreEngine.score(emptyList()))
+    }
+
+    /**
+     * The exact defect found on a real phone: a photo that caught the front of a
+     * hand wash bottle instead of the ingredient panel produced three
+     * unrecognised tokens and displayed "97, Excellent".
+     *
+     * Unrecognised text used to cost one point each, so 100 - 3 = 97, and 97
+     * sits in the top band. Refusing to score is the only honest answer when we
+     * recognised nothing.
+     */
+    @Test
+    fun `nothing recognised means no score, not a near perfect one`() {
+        val score = ScoreEngine.score(
+            listOf(
+                unmatched("ORIGINAL LIQUID HANDWASH GERM OEFENcE Dettol sa e g"),
+                unmatched("200 ml Net R09"),
+                unmatched("0.50 ml 02 08 ESSZ452")
+            )
+        )
+        assertNull("a score here would be fabricated, got $score", score)
+    }
+
+    @Test
+    fun `a mostly unrecognised list is not scored either`() {
+        // 1 of 5 recognised, well under the threshold.
+        val score = ScoreEngine.score(
+            listOf(analyzed("water", RiskTier.SAFE)) + List(4) { unmatched("mystery$it") }
+        )
+        assertNull("scoring from 20 percent of a list is not defensible, got $score", score)
+    }
+
+    @Test
+    fun `exactly half recognised is enough to score`() {
+        val score = ScoreEngine.score(
+            List(2) { analyzed("water$it", RiskTier.SAFE) } + List(2) { unmatched("mystery$it") }
+        )
+        assertEquals(100, score)
+    }
+
+    /**
+     * Our own gaps must not look like a product's faults. An unrecognised
+     * ingredient is an absence of data, and there is no published finding behind
+     * it to justify deducting anything.
+     */
+    @Test
+    fun `unrecognised ingredients do not deduct points`() {
+        val clean = ScoreEngine.score(List(4) { analyzed("water$it", RiskTier.SAFE) })
+        val withGaps = ScoreEngine.score(
+            List(4) { analyzed("water$it", RiskTier.SAFE) } + List(4) { unmatched("mystery$it") }
+        )
+        assertEquals(clean, withGaps)
     }
 
     /**
@@ -79,17 +132,11 @@ class ScoreEngineTest {
     }
 
     @Test
-    fun `an unrecognised ingredient costs only a token amount`() {
-        val score = ScoreEngine.score(List(5) { unmatched("mystery$it") })
-        assertTrue("expected a small deduction, got $score", score in 95..99)
-    }
-
-    @Test
     fun `worse tiers deduct more`() {
-        val safe = ScoreEngine.score(listOf(analyzed("a", RiskTier.SAFE)))
-        val caution = ScoreEngine.score(listOf(analyzed("a", RiskTier.CAUTION)))
-        val moderate = ScoreEngine.score(listOf(analyzed("a", RiskTier.MODERATE)))
-        val avoid = ScoreEngine.score(listOf(analyzed("a", RiskTier.AVOID)))
+        val safe = ScoreEngine.score(listOf(analyzed("a", RiskTier.SAFE)))!!
+        val caution = ScoreEngine.score(listOf(analyzed("a", RiskTier.CAUTION)))!!
+        val moderate = ScoreEngine.score(listOf(analyzed("a", RiskTier.MODERATE)))!!
+        val avoid = ScoreEngine.score(listOf(analyzed("a", RiskTier.AVOID)))!!
         assertTrue("$safe > $caution > $moderate > $avoid",
             safe > caution && caution > moderate && moderate > avoid)
     }
@@ -108,7 +155,7 @@ class ScoreEngineTest {
         val last = ScoreEngine.score(
             List(8) { analyzed("ok$it", RiskTier.SAFE) } + listOf(analyzed("bad", RiskTier.AVOID))
         )
-        assertTrue("leading position should cost more: first=$first last=$last", first < last)
+        assertTrue("leading position should cost more: first=$first last=$last", first!! < last!!)
     }
 
     // ------------------------------------------------------------------- grade
@@ -167,6 +214,57 @@ class ScoreEngineTest {
     @Test
     fun `summary says so plainly when nothing could be read`() {
         assertTrue(ScoreEngine.summary(emptyList()).contains("No ingredients", ignoreCase = true))
+    }
+
+    /**
+     * Observed on a real phone: three unrecognised tokens produced
+     * "These ingredients are recognised, but we hold no published assessment
+     * for them yet" while every row underneath read "Not in our database yet".
+     *
+     * The old code fell through to the NOT_ASSESSED sentence because it did not
+     * separate "recognised, unassessed" from "not recognised at all", even
+     * though those are deliberately different tiers.
+     */
+    @Test
+    fun `summary must not claim ingredients were recognised when none were`() {
+        val summary = ScoreEngine.summary(List(3) { unmatched("gibberish$it") })
+        assertFalse(
+            "claims recognition that did not happen: \"$summary\"",
+            summary.contains("are recognised", ignoreCase = true) ||
+                summary.contains("we recognised these", ignoreCase = true)
+        )
+        assertTrue(
+            "should say we could not match it: \"$summary\"",
+            summary.contains("could not match", ignoreCase = true)
+        )
+    }
+
+    @Test
+    fun `summary admits when only part of the list was recognised`() {
+        val summary = ScoreEngine.summary(
+            listOf(analyzed("water", RiskTier.SAFE)) + List(4) { unmatched("mystery$it") }
+        )
+        assertTrue(
+            "should report the shortfall: \"$summary\"",
+            summary.contains("1 of 5", ignoreCase = true)
+        )
+    }
+
+    @Test
+    fun `summary counts unrecognised items alongside a real finding`() {
+        val summary = ScoreEngine.summary(
+            listOf(
+                analyzed("bad", RiskTier.AVOID),
+                analyzed("water", RiskTier.SAFE),
+                analyzed("salt", RiskTier.SAFE),
+                unmatched("mystery")
+            )
+        )
+        assertTrue(summary, summary.contains("best avoided", ignoreCase = true))
+        assertTrue(
+            "should not silently drop the unrecognised item: \"$summary\"",
+            summary.contains("not recognised", ignoreCase = true)
+        )
     }
 
     // ------------------------------------------------------------------ alerts

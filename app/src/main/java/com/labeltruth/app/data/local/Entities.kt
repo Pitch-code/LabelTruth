@@ -65,7 +65,15 @@ data class ScanEntity(
     val barcode: String?,
     val score: Int,
     val timestamp: Long,
-    val ingredientsRaw: String
+    val ingredientsRaw: String,
+    /**
+     * Which route of exposure this scan was analysed as.
+     *
+     * Required to reopen a saved scan correctly. Re-running a stored hand wash
+     * as food would resurrect exactly the bug that per-category lookups exist
+     * to prevent: an EFSA food ban shown against a cosmetic ingredient.
+     */
+    val category: String = "food"
 )
 
 /** Lightweight projection used to build the in-memory fuzzy-match index. */

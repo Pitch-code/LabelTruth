@@ -66,9 +66,16 @@ class MainActivity : ComponentActivity() {
                 val onboarded by container.profileStore.onboardingComplete
                     .collectAsState(initial = true)
 
+                val firstName by container.profileStore.firstName
+                    .collectAsState(initial = "")
+
                 if (disclaimerAccepted && !onboarded) {
                     OnboardingScreen(
                         profile = state.profile,
+                        firstName = firstName,
+                        onFirstNameChange = { value ->
+                            scope.launch { container.profileStore.setFirstName(value) }
+                        },
                         onToggleAllergen = { value ->
                             scope.launch { container.profileStore.toggleAllergen(value) }
                         },
@@ -101,7 +108,12 @@ class MainActivity : ComponentActivity() {
                             onOpenAbout = { navController.navigate(Routes.ABOUT) },
                             onOpenSearch = { navController.navigate(Routes.SEARCH) },
                             onCategoryChange = viewModel::setScanCategory,
-                            onDismissMessage = viewModel::dismissMessage
+                            onDismissMessage = viewModel::dismissMessage,
+                            greeting = firstName.takeIf { it.isNotBlank() }?.let { "Hi, $it" },
+                            // A sheet is covering the screen, so there is
+                            // nothing to scan. Release the camera.
+                            cameraActive = state.analysis == null &&
+                                state.selectedIngredient == null
                         )
                     }
                     composable(Routes.SEARCH) {
@@ -124,6 +136,7 @@ class MainActivity : ComponentActivity() {
                         HistoryScreen(
                             scans = history,
                             onBack = { navController.popBackStack() },
+                            onOpen = viewModel::reopenScan,
                             onDelete = { id ->
                                 scope.launch { container.repository.deleteScan(id) }
                             },

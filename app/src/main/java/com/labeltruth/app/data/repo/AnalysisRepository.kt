@@ -94,13 +94,38 @@ class AnalysisRepository(
         category = category
     )
 
+    /**
+     * Re-runs a saved scan so it can be reopened from history.
+     *
+     * Only the raw ingredient text is stored, not the per-ingredient verdicts,
+     * so the analysis is recomputed. That is the right way round: the dictionary
+     * improves over time, and a saved scan should be re-read against what we
+     * know now rather than replaying a stale answer. It also means the alerts
+     * reflect the user's *current* profile.
+     *
+     * Does not write a new history row.
+     */
+    suspend fun replayScan(id: Long, profile: HealthProfile): Analysis? {
+        val scan = withContext(Dispatchers.IO) { scanDao.byId(id) } ?: return null
+        return analyze(
+            productName = scan.productName,
+            brand = scan.brand,
+            barcode = scan.barcode,
+            ingredientsText = scan.ingredientsRaw,
+            profile = profile,
+            category = ProductCategory.from(scan.category),
+            persist = false
+        )
+    }
+
     private suspend fun analyze(
         productName: String,
         brand: String?,
         barcode: String?,
         ingredientsText: String,
         profile: HealthProfile,
-        category: ProductCategory
+        category: ProductCategory,
+        persist: Boolean = true
     ): Analysis = withContext(Dispatchers.Default) {
         // Never analyse against a half-imported dictionary.
         ensureDictionaryReady()
@@ -138,14 +163,17 @@ class AnalysisRepository(
             brand = brand,
             barcode = barcode,
             score = score,
-            grade = Grade.of(score),
+            grade = score?.let(Grade::of),
             ingredients = analyzed,
             alerts = ScoreEngine.alerts(analyzed, profile),
             rawIngredientsText = ingredientsText,
             category = category
         )
 
-        if (analyzed.isNotEmpty()) {
+        // Only scans we could actually score are worth keeping. A failed read
+        // has nothing to revisit, and storing one would put a fabricated score
+        // in the history list where it cannot even be explained.
+        if (persist && score != null) {
             scanDao.insert(
                 ScanEntity(
                     productName = productName,
@@ -153,7 +181,8 @@ class AnalysisRepository(
                     barcode = barcode,
                     score = score,
                     timestamp = System.currentTimeMillis(),
-                    ingredientsRaw = ingredientsText
+                    ingredientsRaw = ingredientsText,
+                    category = category.key
                 )
             )
         }

@@ -25,10 +25,15 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -43,9 +48,11 @@ import com.labeltruth.app.domain.model.HealthProfile
 private data class Step(
     val title: String,
     val subtitle: String,
-    val options: List<String>,
-    val selected: Set<String>,
-    val onToggle: (String) -> Unit
+    val options: List<String> = emptyList(),
+    val selected: Set<String> = emptySet(),
+    val onToggle: (String) -> Unit = {},
+    /** The name step has a text field instead of a row of chips. */
+    val isNameStep: Boolean = false
 )
 
 /**
@@ -59,6 +66,8 @@ private data class Step(
 @Composable
 fun OnboardingScreen(
     profile: HealthProfile,
+    firstName: String,
+    onFirstNameChange: (String) -> Unit,
     onToggleAllergen: (String) -> Unit,
     onToggleIntolerance: (String) -> Unit,
     onToggleDiet: (String) -> Unit,
@@ -66,6 +75,11 @@ fun OnboardingScreen(
     onFinish: () -> Unit
 ) {
     val steps = listOf(
+        Step(
+            title = "What should we call you?",
+            subtitle = "Optional. Only used to greet you inside the app.",
+            isNameStep = true
+        ),
         Step(
             title = "Any allergies?",
             subtitle = "These are the 14 allergens that must be declared on food " +
@@ -108,6 +122,9 @@ fun OnboardingScreen(
             .background(MaterialTheme.colorScheme.background)
             .statusBarsPadding()
             .navigationBarsPadding()
+            // The name step opens the keyboard, which would otherwise sit on top
+            // of the Continue button.
+            .imePadding()
             .padding(horizontal = 24.dp)
     ) {
         Row(
@@ -158,13 +175,28 @@ fun OnboardingScreen(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 Spacer(Modifier.height(24.dp))
-                FlowRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    current.options.forEach { option ->
-                        SelectableChip(
-                            label = HealthProfile.label(option),
-                            selected = option in current.selected,
-                            onClick = { current.onToggle(option) }
-                        )
+                if (current.isNameStep) {
+                    OutlinedTextField(
+                        value = firstName,
+                        onValueChange = onFirstNameChange,
+                        singleLine = true,
+                        placeholder = { Text("First name") },
+                        shape = RoundedCornerShape(16.dp),
+                        keyboardOptions = KeyboardOptions(
+                            capitalization = KeyboardCapitalization.Words,
+                            imeAction = ImeAction.Done
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                } else {
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                        current.options.forEach { option ->
+                            SelectableChip(
+                                label = HealthProfile.label(option),
+                                selected = option in current.selected,
+                                onClick = { current.onToggle(option) }
+                            )
+                        }
                     }
                 }
                 Spacer(Modifier.height(24.dp))
@@ -173,9 +205,13 @@ fun OnboardingScreen(
 
         Spacer(Modifier.weight(1f))
 
+        // Deliberately does not say "we do not save your name". We do save it —
+        // on this phone. Claiming otherwise would be the same kind of
+        // technically-true overclaim this app exists to argue against.
         Text(
-            text = "Everything you choose stays on this phone. There is no " +
-                "account, and we never upload it.",
+            text = "Your name and your answers stay on this phone. There is no " +
+                "account and no server to send them to, and every question here " +
+                "is optional.",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,

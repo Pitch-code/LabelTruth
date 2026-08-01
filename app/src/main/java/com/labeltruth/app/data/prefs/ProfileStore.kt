@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.labeltruth.app.domain.model.HealthProfile
@@ -27,6 +28,25 @@ class ProfileStore(private val context: Context) {
     private val conditionsKey = stringSetPreferencesKey("conditions")
     private val disclaimerKey = booleanPreferencesKey("disclaimer_accepted")
     private val onboardedKey = booleanPreferencesKey("onboarding_complete")
+    private val firstNameKey = stringPreferencesKey("first_name")
+
+    /**
+     * A first name, used only to address the user in the app.
+     *
+     * Optional, and never required to use anything. It is written to this
+     * device's own preferences and read back by this app alone; there is no
+     * account and no server for it to go to.
+     */
+    val firstName: Flow<String> = context.dataStore.data.map { prefs ->
+        prefs[firstNameKey].orEmpty()
+    }
+
+    suspend fun setFirstName(value: String) {
+        val trimmed = value.trim().take(24)
+        context.dataStore.edit { prefs ->
+            if (trimmed.isEmpty()) prefs.remove(firstNameKey) else prefs[firstNameKey] = trimmed
+        }
+    }
 
     val profile: Flow<HealthProfile> = context.dataStore.data.map { prefs ->
         HealthProfile(

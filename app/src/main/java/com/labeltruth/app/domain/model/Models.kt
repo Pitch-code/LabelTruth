@@ -22,8 +22,19 @@ enum class RiskTier(val label: String, val penalty: Int) {
      */
     NOT_ASSESSED("No published assessment", 0),
 
-    /** Not recognised at all. We could not identify what this ingredient is. */
-    UNKNOWN("Not yet in our database", 1);
+    /**
+     * Not recognised at all. We could not identify what this ingredient is.
+     *
+     * Carries no penalty, and that is a deliberate correction. It used to cost
+     * a point, which meant a product's score was partly a measure of how
+     * incomplete *our* dictionary is. Every point deducted has to trace to a
+     * published finding, and "we have never heard of this" is not a finding.
+     *
+     * Unrecognised text cannot quietly inflate a score either, because
+     * [ScoreEngine] refuses to produce a score at all when too little of the
+     * list was recognised.
+     */
+    UNKNOWN("Not yet in our database", 0);
 
     companion object {
         fun from(raw: String?): RiskTier =
@@ -110,14 +121,23 @@ data class Analysis(
     val productName: String,
     val brand: String?,
     val barcode: String?,
-    val score: Int,
-    val grade: Grade,
+    /**
+     * Null when we recognised too little of the list to score it honestly.
+     *
+     * A photograph that caught the front of the pack instead of the ingredient
+     * panel used to come back as "97, Excellent" purely because unrecognised
+     * text was cheap. Refusing to answer is the correct response.
+     */
+    val score: Int?,
+    val grade: Grade?,
     val ingredients: List<AnalyzedIngredient>,
     val alerts: List<PersonalAlert>,
     val rawIngredientsText: String,
     val category: ProductCategory = ProductCategory.FOOD
 ) {
     val unmatchedCount: Int get() = ingredients.count { it.matched == null }
+
+    val recognisedCount: Int get() = ingredients.size - unmatchedCount
 
     /** Recognised, whether or not we hold a safety assessment for it. */
     val coveragePercent: Int

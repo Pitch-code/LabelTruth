@@ -1,6 +1,7 @@
 package com.labeltruth.app.ui.history
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,8 +10,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -39,6 +42,7 @@ import java.util.Locale
 fun HistoryScreen(
     scans: List<ScanEntity>,
     onBack: () -> Unit,
+    onOpen: (Long) -> Unit,
     onDelete: (Long) -> Unit,
     onClearAll: () -> Unit
 ) {
@@ -46,6 +50,7 @@ fun HistoryScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
+            .navigationBarsPadding()
     ) {
         TopBar(
             title = "Scan history",
@@ -67,7 +72,11 @@ fun HistoryScreen(
 
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             items(scans, key = { it.id }) { scan ->
-                HistoryRow(scan = scan, onDelete = { onDelete(scan.id) })
+                HistoryRow(
+                    scan = scan,
+                    onOpen = { onOpen(scan.id) },
+                    onDelete = { onDelete(scan.id) }
+                )
                 HorizontalDivider(
                     color = MaterialTheme.colorScheme.outline.copy(alpha = 0.4f)
                 )
@@ -77,13 +86,16 @@ fun HistoryScreen(
 }
 
 @Composable
-private fun HistoryRow(scan: ScanEntity, onDelete: () -> Unit) {
+private fun HistoryRow(scan: ScanEntity, onOpen: () -> Unit, onDelete: () -> Unit) {
     val grade = Grade.of(scan.score)
     val formatter = remember { SimpleDateFormat("d MMM yyyy, HH:mm", Locale.getDefault()) }
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            // The rows looked tappable and were not. A saved scan that cannot be
+            // reopened is a list of scores with the reasoning thrown away.
+            .clickable(onClick = onOpen)
             .padding(horizontal = 20.dp, vertical = 14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -129,6 +141,16 @@ private fun HistoryRow(scan: ScanEntity, onDelete: () -> Unit) {
     }
 }
 
+/**
+ * Shared top bar for History, Profile, About and Search.
+ *
+ * The status-bar inset is applied here rather than in each caller. The app draws
+ * edge to edge, and without this the title sat on top of the system clock and
+ * the trailing action sat on top of the battery icon. Fixing it in one place
+ * fixes all four screens, and uses the inset the system reports rather than a
+ * guessed height, so it holds on notched phones, tablets and every Android
+ * version the app supports.
+ */
 @Composable
 fun TopBar(
     title: String,
@@ -138,6 +160,7 @@ fun TopBar(
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .statusBarsPadding()
             .padding(horizontal = 8.dp)
             .height(64.dp),
         verticalAlignment = Alignment.CenterVertically

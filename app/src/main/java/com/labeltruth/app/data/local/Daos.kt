@@ -97,6 +97,9 @@ interface ScanDao {
     @Query("SELECT * FROM scan_history ORDER BY timestamp DESC LIMIT 200")
     fun observeRecent(): Flow<List<ScanEntity>>
 
+    @Query("SELECT * FROM scan_history WHERE id = :id LIMIT 1")
+    suspend fun byId(id: Long): ScanEntity?
+
     @Query("DELETE FROM scan_history WHERE id = :id")
     suspend fun delete(id: Long)
 

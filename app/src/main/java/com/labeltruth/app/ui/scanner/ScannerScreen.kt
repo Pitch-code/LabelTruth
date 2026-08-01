@@ -20,8 +20,10 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -67,6 +69,10 @@ fun ScannerScreen(
     onOpenSearch: () -> Unit,
     onCategoryChange: (ProductCategory) -> Unit,
     onDismissMessage: () -> Unit,
+    /** Greeting for the top bar. Falls back to the app name when unset. */
+    greeting: String? = null,
+    /** False while a result or detail sheet is covering this screen. */
+    cameraActive: Boolean = true,
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
@@ -137,7 +143,9 @@ fun ScannerScreen(
     ) {
         CameraPreview(
             analyzer = analyzer,
-            torchOn = state.torchOn,
+            // Never leave the torch burning behind a sheet the user is reading.
+            torchOn = state.torchOn && cameraActive,
+            active = cameraActive,
             modifier = Modifier.fillMaxSize()
         )
 
@@ -151,7 +159,13 @@ fun ScannerScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 20.dp, vertical = 32.dp),
+                // Measured insets rather than a hard-coded 32.dp. The old value
+                // happened to clear the status bar on one phone; it is not a
+                // number that holds across notches, punch holes, tablets or
+                // gesture navigation.
+                .statusBarsPadding()
+                .navigationBarsPadding()
+                .padding(horizontal = 20.dp, vertical = 12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(
@@ -160,7 +174,8 @@ fun ScannerScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = stringResource(R.string.app_name),
+                    text = greeting?.takeIf { it.isNotBlank() }
+                        ?: stringResource(R.string.app_name),
                     style = MaterialTheme.typography.titleMedium,
                     color = Color.White
                 )

@@ -60,6 +60,72 @@ object IngredientListParser {
     private val classOnly = Regex("^($FUNCTIONAL_CLASSES)$", RegexOption.IGNORE_CASE)
     private val noiseChars = Regex("[*†‡•·]")
 
+    /**
+     * Locates the start of the ingredient declaration anywhere in the text.
+     *
+     * Photographing a bottle catches the whole front of the pack, not a tidy
+     * ingredient list. A real capture of a hand wash produced
+     * "ORIGINAL LIQUID HANDWASH GERM DEFENCE Dettol ... 200 ml Net ..." and all
+     * of it was treated as ingredients, because the old header pattern was
+     * anchored to the very start of the string. Finding the header wherever it
+     * appears is what actually fixes that.
+     *
+     * "inci" is included because cosmetic packs often label the list that way.
+     */
+    private val sectionHeader = Regex(
+        "\\b(ingredients?|ingr[ée]dients?|composition|inci)\\b\\s*[:\\-]?\\s*",
+        RegexOption.IGNORE_CASE
+    )
+
+    /**
+     * The start of whatever section follows the ingredient list.
+     *
+     * "Contains" is deliberately absent: on many labels the list itself starts
+     * "Contains: Aqua, ...", so treating it as a terminator would discard
+     * everything.
+     */
+    private val sectionEnd = Regex(
+        "\\b(" +
+            "directions?|how to use|instructions?|" +
+            "warnings?|cautions?|precautions?|" +
+            "storage|store in|shelf life|best before|use by|expiry|" +
+            "net (wt|weight|content|contents|vol|volume)|" +
+            "mfg|mfd|manufactured|marketed by|packed by|imported by|" +
+            "batch no|lot no|customer care|consumer (care|complaint)|" +
+            "nutrition|allergy advice|for external use|keep out of|" +
+            "not to be taken|dosage|maximum retail price|m\\.?r\\.?p\\b" +
+            ")\\b",
+        RegexOption.IGNORE_CASE
+    )
+
+    /**
+     * Symbols that do not occur in ingredient names but are everywhere in OCR
+     * of prices, batch codes and packaging artwork.
+     */
+    private val oddSymbols = Regex("[¥€£₹#^~|<>{}\\\\]")
+
+    /** "200 ml", "0.50/ml", "50 g" — pack size, never an ingredient. */
+    private val measurement = Regex(
+        "\\b\\d+([.,]\\d+)?\\s*/?\\s*" +
+            "(ml|mls|l|cl|dl|g|gm|gms|kg|mg|mcg|oz|lb|litre|liter|litres|liters)\\b",
+        RegexOption.IGNORE_CASE
+    )
+
+    /** "11/24", "11 / 2026" — manufacture and expiry codes. */
+    private val dateCode = Regex("\\b\\d{1,2}\\s*/\\s*\\d{2,4}\\b")
+
+    /** "02: 08" — batch and time stamps. */
+    private val clockCode = Regex("\\b\\d{1,2}\\s*:\\s*\\d{2}\\b")
+
+    /**
+     * Tokens that are legitimately mostly digits, so they must survive the
+     * digit-heavy filter below: E numbers and Colour Index numbers.
+     */
+    private val numericAllowed = Regex(
+        "^(e\\s?\\d{3,4}[a-z]?|ci\\s?\\d{5}|fd&c.*|d&c.*)$",
+        RegexOption.IGNORE_CASE
+    )
+
     /** Matches an innermost bracket group, round or square. */
     private val innerBracketGroup = Regex("[(\\[][^()\\[\\]]*[)\\]]")
 
@@ -98,10 +164,27 @@ object IngredientListParser {
         RegexOption.IGNORE_CASE
     )
 
+    /**
+     * Narrows raw label text down to the ingredient declaration.
+     *
+     * If no header is found the whole string is returned unchanged, because
+     * ingredient text that arrives from a barcode lookup has no header and is
+     * already just the list.
+     */
+    internal fun ingredientSection(raw: String): String {
+        val header = sectionHeader.find(raw) ?: return raw
+        val afterHeader = raw.substring(header.range.last + 1)
+        val end = sectionEnd.find(afterHeader) ?: return afterHeader
+        val body = afterHeader.substring(0, end.range.first)
+        // A header immediately followed by a terminator means we cut too much;
+        // fall back rather than return nothing.
+        return if (body.isBlank()) afterHeader else body
+    }
+
     fun parse(raw: String): List<String> {
         if (raw.isBlank()) return emptyList()
 
-        val cleaned = raw
+        val cleaned = ingredientSection(raw)
             .replace('\n', ' ')
             .replace(leadingLabel, "")
             .replace(noiseChars, " ")
@@ -148,6 +231,27 @@ object IngredientListParser {
         if (!s.any { it.isLetter() }) return ""
         if (boilerplate.containsMatchIn(s)) return ""
         if (classOnly.matches(s)) return ""
+
+        // Packaging noise. These run after the section narrowing above as a
+        // second line of defence, because OCR of a curved bottle can drop the
+        // "Ingredients" header entirely, and then the header logic cannot help.
+        if (oddSymbols.containsMatchIn(s)) return ""
+        if (measurement.containsMatchIn(s)) return ""
+        if (dateCode.containsMatchIn(s)) return ""
+        if (clockCode.containsMatchIn(s)) return ""
+
+        // Marketing lines and addresses run long. Genuine ingredient names do
+        // not: the longest real ones are around six words.
+        if (s.split(' ').size > 8) return ""
+
+        // Mostly digits means a code, with the deliberate exception of the
+        // things that genuinely are numbers, such as E330 and CI 77491.
+        if (!numericAllowed.matches(s) &&
+            s.count { it.isDigit() } > s.count { it.isLetter() }
+        ) {
+            return ""
+        }
+
         return s
     }
 
