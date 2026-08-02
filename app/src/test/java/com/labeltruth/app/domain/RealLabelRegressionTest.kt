@@ -115,3 +115,50 @@ class RealLabelRegressionTest {
         assertEquals(null, TextNormalizer.extractENumber("Insoluble Fibre"))
     }
 }
+
+
+/**
+ * The Dettol hand wash that has been driving this round of testing.
+ *
+ * The declaration below is the real `ingredients_text` Open Beauty Facts holds
+ * for barcode 8901396324584, kept verbatim including the trailing "Directions:"
+ * block that the printed label runs straight into.
+ */
+class DettolHandWashTest {
+
+    private val declaration =
+        "No TCC & Triclosan Plant derived cleansers Ingredients: Aqua, " +
+            "Ammonium Lauryl Sulfate, Sodium Laureth Sulfate, Glycerin, Parfum, " +
+            "Glycol Distearate, Cocamide MEA, Glycol Stearate, Propylene Glycol, " +
+            "Sodium Chloride, Citric acid, Tetrasodium EDTA, Salicylic Acid, " +
+            "Sodium Citrate, Citral, Magnesium Nitrate, " +
+            "Methylchloroisothiazolinone, Methylisothiazolinone, CI 11710, " +
+            "CI 12085 Directions: Press nozzle nently to net Dettol"
+
+    @Test
+    fun `starts at the marketing-prefixed Ingredients header and stops at Directions`() {
+        val parsed = IngredientListParser.parse(declaration)
+
+        // The claim before the header is not an ingredient.
+        assertTrue(
+            "marketing text leaked in: $parsed",
+            parsed.none { it.contains("Triclosan") || it.contains("cleansers") }
+        )
+        // Neither is the usage block after it, OCR typos included.
+        assertTrue(
+            "usage text leaked in: $parsed",
+            parsed.none { it.contains("nozzle") || it.contains("Press") }
+        )
+        assertEquals("Aqua", parsed.first())
+    }
+
+    /** Both preservatives must survive parsing, since they carry EU restrictions. */
+    @Test
+    fun `keeps the isothiazolinone preservatives`() {
+        val parsed = IngredientListParser.parse(declaration)
+
+        listOf("Methylchloroisothiazolinone", "Methylisothiazolinone").forEach { name ->
+            assertTrue("$name missing from $parsed", parsed.any { it.equals(name, true) })
+        }
+    }
+}
