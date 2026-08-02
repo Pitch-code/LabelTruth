@@ -4,6 +4,7 @@ import android.content.Context
 import com.labeltruth.app.BuildConfig
 import com.labeltruth.app.domain.model.ProductCategory
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -53,7 +54,14 @@ sealed interface LookupResult {
     data object NotFound : LookupResult
     /** Product exists but has no ingredient list, so there is nothing to analyse. */
     data class NoIngredients(val name: String) : LookupResult
-    data class Error(val message: String) : LookupResult
+    /**
+     * @param retryable true when the failure was about the connection or the
+     *   server rather than the product, so asking again may well succeed. A
+     *   scanned Dettol barcode returned 500 once and reported "not in the
+     *   database yet", when in fact the product was there with a full
+     *   ingredient list.
+     */
+    data class Error(val message: String, val retryable: Boolean = false) : LookupResult
 }
 
 /**
@@ -124,10 +132,28 @@ class OpenFoodFactsClient(context: Context) {
         category: ProductCategory,
         barcode: String
     ): LookupResult = withContext(Dispatchers.IO) {
+        // A server error or a dropped connection says nothing about the product,
+        // so it is worth asking again once before giving up. 429 is deliberately
+        // excluded: being told to slow down and immediately retrying is the
+        // behaviour that got us rate-limited in the first place.
+        var result = attemptLookup(host, category, barcode)
+        var attempts = 1
+        while (attempts < MAX_ATTEMPTS && result is LookupResult.Error && result.retryable) {
+            delay(RETRY_DELAY_MS)
+            result = attemptLookup(host, category, barcode)
+            attempts++
+        }
+        result
+    }
+
+    private suspend fun attemptLookup(
+        host: String,
+        category: ProductCategory,
+        barcode: String
+    ): LookupResult = withContext(Dispatchers.IO) {
         val url = "$host/api/v2/product/$barcode.json?fields=$FIELDS"
         val request = Request.Builder()
             .url(url)
-            // Open Food Facts asks every client to identify itself.
             .header("User-Agent", USER_AGENT)
             .build()
 
@@ -146,7 +172,20 @@ class OpenFoodFactsClient(context: Context) {
                     return@withContext LookupResult.Error(RATE_LIMIT_MESSAGE)
                 }
                 if (!response.isSuccessful) {
-                    return@withContext LookupResult.Error("Lookup failed (${response.code}).")
+                    // Say whose fault it is. A 5xx is the server having a bad
+                    // moment and says nothing about the product, so blaming the
+                    // product or the user's photo would be wrong.
+                    val serverSide = response.code >= 500
+                    return@withContext LookupResult.Error(
+                        message = if (serverSide) {
+                            "The product database had a server error " +
+                                "(${response.code}). It is not your scan. Try again in " +
+                                "a moment, or use Label mode, which works offline."
+                        } else {
+                            "Lookup failed (${response.code})."
+                        },
+                        retryable = serverSide
+                    )
                 }
                 val body = response.body?.string()
                     ?: return@withContext LookupResult.Error("Empty response from server.")
@@ -177,7 +216,10 @@ class OpenFoodFactsClient(context: Context) {
                 )
             }
         } catch (e: java.io.IOException) {
-            LookupResult.Error("No connection. Barcode lookup needs internet.")
+            LookupResult.Error(
+                "No connection. Barcode lookup needs internet.",
+                retryable = true
+            )
         } catch (e: Exception) {
             LookupResult.Error("Could not read the product data.")
         }
@@ -189,6 +231,10 @@ class OpenFoodFactsClient(context: Context) {
         const val CACHE_BYTES = 8L * 1024 * 1024
         const val FIELDS =
             "product_name,product_name_en,brands,quantity,ingredients_text,ingredients_text_en,image_front_url"
+        /** One retry. Enough for a blip, few enough to stay polite. */
+        const val MAX_ATTEMPTS = 2
+        const val RETRY_DELAY_MS = 700L
+
         const val DEFAULT_BACKOFF_SECONDS = 60L
         const val MAX_BACKOFF_SECONDS = 600L
 
