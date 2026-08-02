@@ -227,7 +227,11 @@ fun ScannerScreen(
                 ScanFrame(
                     modifier = Modifier.fillMaxSize(),
                     accent = BrandGreen,
-                    active = !state.isProcessing
+                    // Stops the reticle animating once the camera has been
+                    // released. The preview keeps showing its last frame, so an
+                    // animated scan line over it read as "still scanning" when
+                    // scanning had in fact already stopped.
+                    active = cameraActive && !state.isProcessing
                 )
                 if (state.isProcessing) {
                     CircularProgressIndicator(color = BrandGreen)

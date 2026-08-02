@@ -249,7 +249,12 @@ class MainActivity : ComponentActivity() {
 
                 // Result and detail are sheets layered over whatever screen is showing,
                 // so a scan never loses the camera behind it.
-                val resultSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = false)
+                // Opens at full height rather than half, so a result never has to
+                // be dragged up to be read. A scan result is the whole point of
+                // the screen, not a preview of it, and leaving the scanner
+                // visible behind a half sheet also made the app look like it was
+                // still scanning after it had finished.
+                val resultSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
                 val detailSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
                 state.analysis?.let { analysis ->
