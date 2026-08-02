@@ -93,7 +93,18 @@ object IngredientListParser {
             "mfg|mfd|manufactured|marketed by|packed by|imported by|" +
             "batch no|lot no|customer care|consumer (care|complaint)|" +
             "nutrition|allergy advice|for external use|keep out of|" +
-            "not to be taken|dosage|maximum retail price|m\\.?r\\.?p\\b" +
+            "not to be taken|dosage|maximum retail price|m\\.?r\\.?p\\b|" +
+            // Marketing sections. A groundnut oil bottle photographed in India
+            // read "INGREDIENTS: Groundnut Oil. FEATURES: Unrefined and
+            // nutrients intact..." and the FEATURES block was shredded into
+            // four fake ingredients, which stopped the product being scored.
+            "features?|benefits?|highlights?|" +
+            // "nutrition" alone does not match "NUTRITIONAL INFORMATION",
+            // because the word boundary fails on the trailing "al".
+            "nutritional|nutritive value|typical values|average values|" +
+            // Indian labels carry the licence number beside the declaration.
+            "fssai|lic(ence|ense) no|" +
+            "country of origin|produce of" +
             ")\\b",
         RegexOption.IGNORE_CASE
     )

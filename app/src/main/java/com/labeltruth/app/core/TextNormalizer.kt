@@ -24,11 +24,25 @@ object TextNormalizer {
             .trim()
     }
 
-    private val eNumberPattern =
-        Regex("\\be\\s?-?\\s?(\\d{3})([a-z]{0,3})\\b", RegexOption.IGNORE_CASE)
+    /**
+     * Matches both EU "E numbers" and Indian "INS numbers".
+     *
+     * Indian labels are required by FSSAI to declare additives by INS number,
+     * as in "Acidity Regulator (INS 330)". INS and E numbers share the Codex
+     * International Numbering System, so INS 330 and E330 are the same
+     * additive, and mapping one onto the other is a renaming rather than an
+     * assumption about safety. Without this the app cannot read the additives
+     * on most Indian packaged food.
+     *
+     * Four digits are accepted as well as three: the modified starches and
+     * enzymes live in the E1000s, so E1442 previously failed to match at all.
+     */
+    private val additiveNumberPattern =
+        Regex("\\b(?:e|ins)\\s?-?\\s?(\\d{3,4})([a-z]{0,3})\\b", RegexOption.IGNORE_CASE)
 
     /**
-     * Pulls "E211" out of "preservative (e 211)" and similar.
+     * Pulls "E211" out of "preservative (e 211)", and "E330" out of
+     * "acidity regulator (INS 330)".
      *
      * The canonical form is an uppercase E, the digits, then any letter suffix
      * in lowercase, which is the EU convention: E150d, not E150D. This has to
@@ -36,7 +50,7 @@ object TextNormalizer {
      * text with BINARY collation, so "E150D" would not find "E150d".
      */
     fun extractENumber(input: String): String? {
-        val match = eNumberPattern.find(input) ?: return null
+        val match = additiveNumberPattern.find(input) ?: return null
         val digits = match.groupValues[1]
         val suffix = match.groupValues[2].lowercase()
         return "E$digits$suffix"
