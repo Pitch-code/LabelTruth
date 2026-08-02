@@ -116,6 +116,8 @@ class MainActivity : ComponentActivity() {
                     .collectAsStateWithLifecycle(initialValue = emptySet())
                 val scanScores by container.repository.scanScores
                     .collectAsStateWithLifecycle(initialValue = emptyList())
+                val scanCount by container.repository.scanCount
+                    .collectAsStateWithLifecycle(initialValue = 0)
 
                 // Imports the dictionary at launch instead of on the first scan,
                 // then picks the spotlight entry. Doing it here means the first
@@ -140,7 +142,7 @@ class MainActivity : ComponentActivity() {
                     composable(Routes.HOME) {
                         HomeScreen(
                             greetingName = firstName,
-                            scanCount = scanScores.size,
+                            scanCount = scanCount,
                             distribution = ScanStats.distribution(scanScores),
                             recent = history.take(3),
                             spotlight = spotlight,

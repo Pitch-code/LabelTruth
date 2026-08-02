@@ -339,7 +339,9 @@ private fun SpotlightCard(ingredient: Ingredient, onClick: () -> Unit) {
 
 @Composable
 private fun RecentRow(scan: ScanEntity, onClick: () -> Unit) {
-    val grade = Grade.of(scan.score)
+    // Unscored scans appear here too. See HistoryRow for why.
+    val tint = scan.score?.let { gradeColor(Grade.of(it)) }
+        ?: MaterialTheme.colorScheme.onSurfaceVariant
     val formatter = remember { SimpleDateFormat("d MMM, HH:mm", Locale.getDefault()) }
 
     Row(
@@ -352,13 +354,13 @@ private fun RecentRow(scan: ScanEntity, onClick: () -> Unit) {
         Box(
             modifier = Modifier
                 .size(42.dp)
-                .background(gradeColor(grade).copy(alpha = 0.16f), RoundedCornerShape(12.dp)),
+                .background(tint.copy(alpha = 0.16f), RoundedCornerShape(12.dp)),
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = scan.score.toString(),
+                text = scan.score?.toString() ?: "–",
                 style = MaterialTheme.typography.labelLarge,
-                color = gradeColor(grade)
+                color = tint
             )
         }
         Spacer(Modifier.size(12.dp))

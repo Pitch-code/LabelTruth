@@ -141,7 +141,13 @@ interface ScanDao {
     @Query("SELECT COUNT(*) FROM scan_history")
     fun observeCount(): Flow<Int>
 
-    @Query("SELECT score FROM scan_history")
+    /**
+     * Scores only from scans that could be scored.
+     *
+     * Unscored scans are stored with a null score and must be excluded here, or
+     * the grade breakdown would have to invent a band for them.
+     */
+    @Query("SELECT score FROM scan_history WHERE score IS NOT NULL")
     fun observeScores(): Flow<List<Int>>
 }
 

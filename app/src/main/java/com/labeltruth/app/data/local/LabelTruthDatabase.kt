@@ -20,7 +20,9 @@ import androidx.sqlite.execSQL
     // v3 added a category column to scan_history, needed to reopen a saved scan
     // against the right route of exposure.
     // v4 added the bookmarks table.
-    version = 4,
+    // v5 made scan_history.score nullable, so a label that was read but could
+    // not be scored honestly is still kept rather than silently discarded.
+    version = 5,
     exportSchema = true
 )
 abstract class LabelTruthDatabase : RoomDatabase() {
@@ -49,6 +51,37 @@ abstract class LabelTruthDatabase : RoomDatabase() {
             }
         }
 
+        /**
+         * Makes scan_history.score nullable, preserving every stored scan.
+         *
+         * SQLite cannot relax a NOT NULL constraint in place, so this is the
+         * standard recreate-copy-swap. The CREATE statement is copied verbatim
+         * from Room's own exported schema at app/schemas/.../5.json, because
+         * Room compares the resulting schema against what it expects and
+         * refuses to open the database on any mismatch. scan_history has no
+         * indices or foreign keys, so there is nothing else to rebuild.
+         */
+        private val MIGRATION_4_5 = object : Migration(4, 5) {
+            override fun migrate(connection: SQLiteConnection) {
+                connection.execSQL(
+                    "CREATE TABLE IF NOT EXISTS `scan_history_new` " +
+                        "(`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                        "`productName` TEXT NOT NULL, `brand` TEXT, `barcode` TEXT, " +
+                        "`score` INTEGER, `timestamp` INTEGER NOT NULL, " +
+                        "`ingredientsRaw` TEXT NOT NULL, `category` TEXT NOT NULL)"
+                )
+                connection.execSQL(
+                    "INSERT INTO `scan_history_new` " +
+                        "(`id`, `productName`, `brand`, `barcode`, `score`, " +
+                        "`timestamp`, `ingredientsRaw`, `category`) " +
+                        "SELECT `id`, `productName`, `brand`, `barcode`, `score`, " +
+                        "`timestamp`, `ingredientsRaw`, `category` FROM `scan_history`"
+                )
+                connection.execSQL("DROP TABLE `scan_history`")
+                connection.execSQL("ALTER TABLE `scan_history_new` RENAME TO `scan_history`")
+            }
+        }
+
         @Volatile
         private var instance: LabelTruthDatabase? = null
 
@@ -65,7 +98,7 @@ abstract class LabelTruthDatabase : RoomDatabase() {
                     // dictionary, which is a rebuildable cache of a bundled
                     // asset. Every future version that touches user data needs
                     // a migration like this one.
-                    .addMigrations(MIGRATION_3_4)
+                    .addMigrations(MIGRATION_3_4, MIGRATION_4_5)
                     .fallbackToDestructiveMigration(dropAllTables = true)
                     .build().also { instance = it }
             }
