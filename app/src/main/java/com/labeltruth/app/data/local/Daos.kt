@@ -126,6 +126,18 @@ interface ScanDao {
     @Query("SELECT * FROM scan_history WHERE id = :id LIMIT 1")
     suspend fun byId(id: Long): ScanEntity?
 
+    @Query("SELECT * FROM scan_history WHERE saved = 1 ORDER BY timestamp DESC")
+    fun observeSaved(): Flow<List<ScanEntity>>
+
+    /**
+     * Flips the flag in SQL rather than reading it first.
+     *
+     * A read-then-write from the UI would race two quick taps against each
+     * other and could end up with the flag opposite to the icon.
+     */
+    @Query("UPDATE scan_history SET saved = NOT saved WHERE id = :id")
+    suspend fun toggleSaved(id: Long)
+
     @Query("DELETE FROM scan_history WHERE id = :id")
     suspend fun delete(id: Long)
 

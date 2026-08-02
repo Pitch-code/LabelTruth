@@ -22,7 +22,9 @@ import androidx.sqlite.execSQL
     // v4 added the bookmarks table.
     // v5 made scan_history.score nullable, so a label that was read but could
     // not be scored honestly is still kept rather than silently discarded.
-    version = 5,
+    // v6 added scan_history.saved, so a scanned product can be pinned to the
+    // Saved tab and not just an individual ingredient.
+    version = 6,
     exportSchema = true
 )
 abstract class LabelTruthDatabase : RoomDatabase() {
@@ -82,6 +84,23 @@ abstract class LabelTruthDatabase : RoomDatabase() {
             }
         }
 
+        /**
+         * Adds scan_history.saved.
+         *
+         * Adding a column with a default is a single statement in SQLite, unlike
+         * the recreate-copy-swap that MIGRATION_4_5 needed to relax a NOT NULL
+         * constraint. Existing scans default to not saved, which is correct:
+         * nobody has pinned them.
+         */
+        private val MIGRATION_5_6 = object : Migration(5, 6) {
+            override fun migrate(connection: SQLiteConnection) {
+                connection.execSQL(
+                    "ALTER TABLE `scan_history` ADD COLUMN `saved` " +
+                        "INTEGER NOT NULL DEFAULT 0"
+                )
+            }
+        }
+
         @Volatile
         private var instance: LabelTruthDatabase? = null
 
@@ -98,7 +117,7 @@ abstract class LabelTruthDatabase : RoomDatabase() {
                     // dictionary, which is a rebuildable cache of a bundled
                     // asset. Every future version that touches user data needs
                     // a migration like this one.
-                    .addMigrations(MIGRATION_3_4, MIGRATION_4_5)
+                    .addMigrations(MIGRATION_3_4, MIGRATION_4_5, MIGRATION_5_6)
                     .fallbackToDestructiveMigration(dropAllTables = true)
                     .build().also { instance = it }
             }

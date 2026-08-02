@@ -118,6 +118,8 @@ class MainActivity : ComponentActivity() {
                     .collectAsStateWithLifecycle(initialValue = emptyList())
                 val scanCount by container.repository.scanCount
                     .collectAsStateWithLifecycle(initialValue = 0)
+                val savedScans by container.repository.savedScans
+                    .collectAsStateWithLifecycle(initialValue = emptyList())
 
                 // Imports the dictionary at launch instead of on the first scan,
                 // then picks the spotlight entry. Doing it here means the first
@@ -155,7 +157,9 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(Routes.BOOKMARKS) {
                         BookmarksScreen(
+                            savedScans = savedScans,
                             bookmarks = bookmarks,
+                            onOpenScan = viewModel::reopenScan,
                             onOpenIngredient = viewModel::selectIngredient
                         )
                     }
@@ -201,6 +205,9 @@ class MainActivity : ComponentActivity() {
                             // Reached from the bottom bar, so no back arrow.
                             onBack = null,
                             onOpen = viewModel::reopenScan,
+                            onToggleSaved = { id ->
+                                scope.launch { container.repository.toggleScanSaved(id) }
+                            },
                             onDelete = { id ->
                                 scope.launch { container.repository.deleteScan(id) }
                             },

@@ -1,5 +1,6 @@
 package com.labeltruth.app.data.local
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
@@ -75,6 +76,22 @@ data class ScanEntity(
      */
     val score: Int?,
     val timestamp: Long,
+    /**
+     * Pinned by the user to the Saved tab.
+     *
+     * Bookmarks already existed but keyed on an ingredient id, so a single
+     * ingredient could be saved and a scanned product could not. History is
+     * chronological and gets long, so "keep this one" needs somewhere to live
+     * that is not just further up a list.
+     *
+     * The default is declared here as well as in the migration so both paths
+     * agree. Without it Room's expected schema carries no default while the
+     * migrated table does, and the two only pass validation because Room
+     * happens to skip that comparison when it expects none. Stating it in both
+     * places means a fresh install and an upgraded one produce the same table.
+     */
+    @ColumnInfo(defaultValue = "0")
+    val saved: Boolean = false,
     val ingredientsRaw: String,
     /**
      * Which route of exposure this scan was analysed as.
