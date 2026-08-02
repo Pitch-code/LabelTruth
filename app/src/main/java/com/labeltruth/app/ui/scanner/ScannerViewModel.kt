@@ -48,6 +48,22 @@ class ScannerViewModel(
     /** Stops the same barcode being looked up over and over as frames stream in. */
     private var lastHandledBarcode: String? = null
 
+    /**
+     * Earliest time each barcode may be looked up again.
+     *
+     * The camera reports the same barcode many times a second, so suppressing
+     * repeats by identity alone is not enough: any state reset re-opens the
+     * floodgates. On a real phone this went wrong exactly that way. A product
+     * missing from Open Food Facts cleared the guard, the next frame re-ran the
+     * lookup, and each attempt made two HTTP requests (food, then beauty).
+     * Within a minute Open Food Facts returned 429 Too Many Requests.
+     *
+     * A failure is remembered for much longer than a success, because a barcode
+     * absent from the database will still be absent a second later, whereas
+     * re-scanning a product you just looked at is a reasonable thing to do.
+     */
+    private val barcodeCooldown = mutableMapOf<String, Long>()
+
     init {
         profileStore.profile
             .onEach { profile -> _state.value = _state.value.copy(profile = profile) }
@@ -69,13 +85,22 @@ class ScannerViewModel(
 
     fun onBarcodeDetected(barcode: String) {
         val current = _state.value
-        if (current.isProcessing || current.analysis != null) return
+        // An unread message means the previous attempt failed. Carrying on
+        // scanning would repeat that failure at the camera frame rate, which is
+        // precisely how this ended up rate-limited by Open Food Facts.
+        if (current.isProcessing || current.analysis != null || current.message != null) return
         if (barcode == lastHandledBarcode) return
+        if (isCoolingDown(barcode)) return
         lastHandledBarcode = barcode
 
         _state.value = current.copy(isProcessing = true, message = null)
         viewModelScope.launch {
-            when (val outcome = repository.analyzeBarcode(barcode, _state.value.profile)) {
+            val outcome = repository.analyzeBarcode(barcode, _state.value.profile)
+            holdOff(
+                barcode,
+                if (outcome is BarcodeOutcome.Success) SUCCESS_COOLDOWN_MS else FAILURE_COOLDOWN_MS
+            )
+            when (outcome) {
                 is BarcodeOutcome.Success ->
                     _state.value = _state.value.copy(
                         isProcessing = false,
@@ -116,9 +141,34 @@ class ScannerViewModel(
         }
     }
 
+    /**
+     * Reports a failure without re-arming the scanner.
+     *
+     * [lastHandledBarcode] is deliberately left set. Clearing it here was the
+     * bug that caused runaway lookups: it made every failure immediately
+     * retryable, and the camera obliges several times a second.
+     */
     private fun fail(message: String) {
-        lastHandledBarcode = null
         _state.value = _state.value.copy(isProcessing = false, message = message)
+    }
+
+    private fun isCoolingDown(barcode: String): Boolean {
+        val readyAt = barcodeCooldown[barcode] ?: return false
+        if (System.currentTimeMillis() >= readyAt) {
+            barcodeCooldown.remove(barcode)
+            return false
+        }
+        return true
+    }
+
+    private fun holdOff(barcode: String, forMillis: Long) {
+        // Bounded so a long shopping trip cannot grow this without limit.
+        if (barcodeCooldown.size > MAX_REMEMBERED_BARCODES) {
+            val now = System.currentTimeMillis()
+            barcodeCooldown.entries.removeAll { it.value <= now }
+            if (barcodeCooldown.size > MAX_REMEMBERED_BARCODES) barcodeCooldown.clear()
+        }
+        barcodeCooldown[barcode] = System.currentTimeMillis() + forMillis
     }
 
     fun dismissResult() {
@@ -219,6 +269,17 @@ class ScannerViewModel(
     }
 
     companion object {
+        /** Re-scanning a product you just looked at is reasonable, so this is short. */
+        private const val SUCCESS_COOLDOWN_MS = 10_000L
+
+        /**
+         * A barcode that is not in the database will still not be in it a moment
+         * later, so there is nothing to gain from asking again quickly.
+         */
+        private const val FAILURE_COOLDOWN_MS = 5 * 60_000L
+
+        private const val MAX_REMEMBERED_BARCODES = 256
+
         fun factory(
             repository: AnalysisRepository,
             profileStore: ProfileStore
