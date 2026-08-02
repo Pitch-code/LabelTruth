@@ -99,12 +99,25 @@ data class PersonalAlert(
     val severity: AlertSeverity
 )
 
+/**
+ * What the score says, phrased as a finding rather than a verdict.
+ *
+ * The labels used to be "Excellent", "Good", "Fair", "Poor" and "Avoid", which
+ * are judgements about the product as a whole. The score cannot support that:
+ * it starts at 100 and deducts for published concerns, so a high score means
+ * "we found little to flag among the ingredients we hold assessments for", not
+ * "this product is excellent".
+ *
+ * A hand wash containing two EU-restricted contact sensitisers was graded
+ * "Excellent" on 88 points, which is precisely the overclaim this app exists to
+ * argue against. Describing the finding instead makes the same number honest.
+ */
 enum class Grade(val label: String) {
-    EXCELLENT("Excellent"),
-    GOOD("Good"),
-    FAIR("Fair"),
-    POOR("Poor"),
-    BAD("Avoid");
+    EXCELLENT("Minor concerns only"),
+    GOOD("Some concerns"),
+    FAIR("Several concerns"),
+    POOR("Many concerns"),
+    BAD("Best avoided");
 
     companion object {
         fun of(score: Int): Grade = when {

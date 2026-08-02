@@ -35,11 +35,30 @@ object ScoreEngine {
      */
     const val MIN_RECOGNISED_PERCENT = 50
 
-    /** True when enough of the list was recognised for a score to mean anything. */
+    /** Ingredients we recognised *and* hold a published assessment for. */
+    fun assessedCount(ingredients: List<AnalyzedIngredient>): Int =
+        ingredients.count {
+            it.matched != null &&
+                it.riskTier != RiskTier.NOT_ASSESSED &&
+                it.riskTier != RiskTier.UNKNOWN
+        }
+
+    /**
+     * True when enough of the list was recognised, and enough of it assessed,
+     * for a score to mean anything.
+     *
+     * Recognition alone was not enough. Because the score deducts only for
+     * published concerns, a list of twenty recognised ingredients that we hold
+     * no assessment for scored a full 100 while the summary underneath it said
+     * we held no assessments - a number and a sentence contradicting each other
+     * on the same screen. At least one assessment is now required, so "we have
+     * nothing to go on" is reported as no score rather than as a perfect one.
+     */
     fun isScoreable(ingredients: List<AnalyzedIngredient>): Boolean {
         if (ingredients.isEmpty()) return false
         val recognised = ingredients.count { it.matched != null }
         if (recognised == 0) return false
+        if (assessedCount(ingredients) == 0) return false
         return recognised * 100 / ingredients.size >= MIN_RECOGNISED_PERCENT
     }
 
@@ -127,16 +146,24 @@ object ScoreEngine {
         val flagged = ingredients.count {
             it.riskTier == RiskTier.MODERATE || it.riskTier == RiskTier.AVOID
         }
-        val assessed = ingredients.count {
-            it.matched != null && it.riskTier != RiskTier.NOT_ASSESSED
-        }
+        val assessed = assessedCount(ingredients)
         val unrecognised = ingredients.size - recognised
 
         // Partial reads get their own sentence. Reporting on half a list as
         // though it were the whole list is the same overclaim in a quieter form.
         if (!isScoreable(ingredients)) {
-            return "We only recognised $recognised of ${ingredients.size} items here, " +
-                "so we are not scoring this. Try photographing just the ingredient list."
+            // Two different reasons, and giving the wrong one wastes the user's
+            // time: retaking the photo fixes a partial read, but it cannot
+            // conjure an assessment we do not hold.
+            return if (recognised * 100 / ingredients.size < MIN_RECOGNISED_PERCENT) {
+                "We only recognised $recognised of ${ingredients.size} items here, " +
+                    "so we are not scoring this. Try photographing just the " +
+                    "ingredient list."
+            } else {
+                "We recognised $recognised of ${ingredients.size} items, but hold no " +
+                    "published assessment for any of them, so there is nothing to " +
+                    "score yet."
+            }
         }
 
         val tail = if (unrecognised > 0) {
