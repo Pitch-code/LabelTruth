@@ -56,6 +56,31 @@ android {
                 signingConfig = signingConfigs.getByName("release")
             }
         }
+
+        /**
+         * The release build, R8 and all, signed with the debug key so it can be
+         * installed for testing without the upload keystore.
+         *
+         * Every test build so far has been a debug build, which is not the app
+         * that reaches users. Release passes through R8: shrinking, obfuscation
+         * and resource removal. The 7.3 MB dictionary is parsed by
+         * kotlinx.serialization, so a missing keep rule would leave an app that
+         * installs, opens, and reports "not in our database" for everything -
+         * invisible in debug testing and broken in production.
+         *
+         * A separate application id so it can sit alongside the debug build
+         * rather than replacing it.
+         */
+        create("releaseCheck") {
+            initWith(getByName("release"))
+            applicationIdSuffix = ".rc"
+            signingConfig = signingConfigs.getByName("debug")
+            isMinifyEnabled = true
+            isShrinkResources = true
+            // Dependencies publish debug and release variants only, so this one
+            // has to say which of those it should resolve against.
+            matchingFallbacks += listOf("release")
+        }
     }
 
     compileOptions {
