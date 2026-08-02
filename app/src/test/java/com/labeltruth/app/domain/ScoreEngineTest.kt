@@ -125,10 +125,60 @@ class ScoreEngineTest {
      */
     @Test
     fun `NOT_ASSESSED carries no penalty`() {
+        // One assessed ingredient, so a score exists at all, plus nine we hold
+        // nothing for. A full 100 proves the nine cost nothing.
         val score = ScoreEngine.score(
-            List(10) { analyzed("unknown$it", RiskTier.NOT_ASSESSED) }
+            listOf(analyzed("known", RiskTier.SAFE)) +
+                List(9) { analyzed("unknown$it", RiskTier.NOT_ASSESSED) }
         )
         assertEquals(100, score)
+    }
+
+    /**
+     * A number and the sentence under it must not contradict each other.
+     *
+     * Because the score only ever deducts for published concerns, a list of
+     * recognised ingredients we hold no assessment for used to score a full
+     * 100 and grade "Excellent", directly underneath a summary saying we held
+     * no assessments. A hand wash with two EU-restricted sensitisers reached
+     * 88 the same way.
+     */
+    @Test
+    fun `a list we hold no assessments for is not scored at all`() {
+        val ingredients = List(10) { analyzed("unknown$it", RiskTier.NOT_ASSESSED) }
+
+        assertEquals(null, ScoreEngine.score(ingredients))
+        assertFalse(ScoreEngine.isScoreable(ingredients))
+        assertEquals(0, ScoreEngine.assessedCount(ingredients))
+    }
+
+    /** Telling someone to retake a photo that was read perfectly is useless. */
+    @Test
+    fun `having no assessments is explained differently from a partial read`() {
+        val readFine = List(10) { analyzed("unknown$it", RiskTier.NOT_ASSESSED) }
+        val summary = ScoreEngine.summary(readFine)
+
+        assertTrue(summary, summary.contains("hold no published assessment"))
+        assertFalse(
+            "should not blame the photo when the photo was read fine: $summary",
+            summary.contains("photograph")
+        )
+    }
+
+    /**
+     * The score deducts for published concerns; it does not measure how good a
+     * product is. Labels that read as verdicts invited exactly the complaint
+     * that started this change.
+     */
+    @Test
+    fun `grade labels describe findings rather than judging the product`() {
+        val verdicts = setOf("excellent", "good", "fair", "poor")
+        Grade.entries.forEach { grade ->
+            assertFalse(
+                "\"${grade.label}\" reads as a verdict on the product",
+                grade.label.lowercase() in verdicts
+            )
+        }
     }
 
     @Test
