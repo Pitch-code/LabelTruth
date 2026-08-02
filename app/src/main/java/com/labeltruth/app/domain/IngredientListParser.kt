@@ -20,6 +20,54 @@ object IngredientListParser {
         "^\\s*(ingredients?|ingrédients?|composition|contains)\\s*[:\\-]\\s*",
         RegexOption.IGNORE_CASE
     )
+
+    /**
+     * Where the ingredient declaration starts, anywhere in the text.
+     *
+     * OCR of a real package captures far more than the ingredient list, so
+     * anchoring to the start of the string is not enough.
+     */
+    private val ingredientsMarker = Regex(
+        "\\b(ingredients?|ingrédients?|composition)\\b\\s*[:\\-]",
+        RegexOption.IGNORE_CASE
+    )
+
+    /**
+     * Where the ingredient declaration *ends*.
+     *
+     * This is the single most important rule for photographed labels. Without
+     * it the parser runs straight past the end of the list and shreds the
+     * surrounding marketing and usage copy into fake ingredients. A real
+     * groundnut oil bottle reading
+     *
+     *   "INGREDIENTS: Groundnut Oil. FEATURES: Unrefined and nutrients intact
+     *    without additives or blending. Suitable for daily cooking, deep
+     *    frying, substitute for refined oils."
+     *
+     * yielded five ingredients including "substitute for refined oils", and
+     * scored nothing, when the correct answer is one ingredient.
+     *
+     * A trailing separator is required so that an ingredient which merely
+     * contains one of these words cannot truncate the list.
+     */
+    private val sectionHeading = Regex(
+        "\\b(" +
+            "features?|benefits?|highlights?|why choose.*?|about (us|the .*?)|" +
+            "nutrition(al)?(\\s+(information|facts|value))?|nutritive value|" +
+            "typical values|average values|energy|" +
+            "direction(s)?( for use)?|instruction(s)?|how to use|usage|method|" +
+            "storage( instruction(s)?)?|store|shelf life|" +
+            "warning(s)?|caution|precaution(s)?|disclaimer|" +
+            "allerg(y|en) (advice|information|declaration)|" +
+            "net (weight|wt|content(s)?|quantity)|gross weight|" +
+            "mfg( date| by)?|mfd|manufactured (by|on)|packed (by|on)|marketed by|" +
+            "imported by|distributed by|customer care|consumer (care|complaint)|" +
+            "best before|use by|expiry|exp( date)?|batch( no)?|lot no|" +
+            "fssai( lic(ence|ense)? no)?|licence no|license no|" +
+            "country of origin|produce of|made in|price|mrp" +
+            ")\\s*[:\\-]",
+        RegexOption.IGNORE_CASE
+    )
     private val percentage = Regex("\\d+([.,]\\d+)?\\s*%")
     /**
      * Functional-class prefixes, as in "Emulsifier: Soy Lecithin".
@@ -101,8 +149,7 @@ object IngredientListParser {
     fun parse(raw: String): List<String> {
         if (raw.isBlank()) return emptyList()
 
-        val cleaned = raw
-            .replace('\n', ' ')
+        val cleaned = isolateDeclaration(raw.replace('\n', ' '))
             .replace(leadingLabel, "")
             .replace(noiseChars, " ")
 
@@ -121,6 +168,37 @@ object IngredientListParser {
         }
 
         return tokens.distinctBy { it.lowercase() }
+    }
+
+    /**
+     * Narrows photographed label text down to the ingredient declaration.
+     *
+     * Starts at an "Ingredients:" marker if one is present anywhere, then stops
+     * at the next section heading. Both steps are conservative: with no marker
+     * the whole string is kept, because a barcode lookup returns only the
+     * declaration and must not be truncated by a stray word.
+     */
+    private fun isolateDeclaration(input: String): String {
+        val start = ingredientsMarker.find(input)
+        // Keep the marker itself so leadingLabel can strip it, which also keeps
+        // the existing behaviour for text that has no marker at all.
+        val fromDeclaration = if (start != null) input.substring(start.range.first) else input
+
+        // Skip past the marker before looking for the end, otherwise
+        // "Composition:" style markers could match as headings themselves.
+        val searchFrom = if (start != null) {
+            ingredientsMarker.find(fromDeclaration)?.range?.last?.plus(1) ?: 0
+        } else {
+            0
+        }
+        if (searchFrom >= fromDeclaration.length) return fromDeclaration
+
+        val end = sectionHeading.find(fromDeclaration, searchFrom) ?: return fromDeclaration
+        val truncated = fromDeclaration.substring(0, end.range.first)
+
+        // If cutting leaves nothing usable the heading was probably a false
+        // positive, so fall back rather than returning an empty list.
+        return if (truncated.any { it.isLetter() }) truncated else fromDeclaration
     }
 
     private fun addToken(sink: MutableList<String>, candidate: String) {
