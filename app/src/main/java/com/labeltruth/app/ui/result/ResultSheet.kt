@@ -5,9 +5,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -260,13 +263,20 @@ private fun IngredientRow(item: AnalyzedIngredient, onClick: () -> Unit) {
             .then(
                 if (item.matched != null) Modifier.clickableNoRipple(onClick) else Modifier
             )
-            .padding(vertical = 14.dp),
+            .padding(vertical = 14.dp)
+            // Lets the risk bar match the row's own height, so it still lines up
+            // when a long INCI name wraps onto a second line.
+            .height(IntrinsicSize.Min),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        // A full-height bar rather than a small dot. The tier is the single most
+        // useful thing in the row, and a 10dp dot was easy to miss while
+        // scanning a list of twenty ingredients in a shop.
         Box(
             modifier = Modifier
-                .size(10.dp)
-                .background(color, RoundedCornerShape(50))
+                .width(4.dp)
+                .fillMaxHeight()
+                .background(color, RoundedCornerShape(2.dp))
         )
         Spacer(Modifier.size(14.dp))
         Column(modifier = Modifier.weight(1f)) {
