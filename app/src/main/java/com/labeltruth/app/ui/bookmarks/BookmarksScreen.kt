@@ -29,7 +29,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.labeltruth.app.R
+import com.labeltruth.app.data.local.ScanEntity
+import com.labeltruth.app.domain.model.Grade
 import com.labeltruth.app.domain.model.Ingredient
+import com.labeltruth.app.ui.components.gradeColor
 import com.labeltruth.app.ui.components.riskColor
 
 /**
@@ -40,7 +43,9 @@ import com.labeltruth.app.ui.components.riskColor
  */
 @Composable
 fun BookmarksScreen(
+    savedScans: List<ScanEntity>,
     bookmarks: List<Ingredient>,
+    onOpenScan: (Long) -> Unit,
     onOpenIngredient: (Ingredient) -> Unit
 ) {
     Column(
@@ -50,31 +55,109 @@ fun BookmarksScreen(
             .statusBarsPadding()
     ) {
         Text(
-            text = "Saved ingredients",
+            text = "Saved",
             style = MaterialTheme.typography.headlineSmall,
             color = MaterialTheme.colorScheme.onBackground,
             modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 16.dp, bottom = 4.dp)
         )
         Text(
-            text = if (bookmarks.size == 1) "1 ingredient" else "${bookmarks.size} ingredients",
+            text = listOf(
+                savedScans.size to "product",
+                bookmarks.size to "ingredient"
+            ).filter { it.first > 0 }
+                .joinToString(" · ") { (count, noun) ->
+                    if (count == 1) "1 $noun" else "$count ${noun}s"
+                }
+                .ifEmpty { "Nothing saved yet" },
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 12.dp)
         )
 
-        if (bookmarks.isEmpty()) {
+        if (bookmarks.isEmpty() && savedScans.isEmpty()) {
             EmptyState()
             return@Column
         }
 
         LazyColumn(modifier = Modifier.fillMaxSize()) {
-            items(bookmarks, key = { it.id }) { ingredient ->
-                BookmarkRow(ingredient, onClick = { onOpenIngredient(ingredient) })
-                HorizontalDivider(
-                    color = MaterialTheme.colorScheme.outline.copy(alpha = 0.4f)
-                )
+            // Products first: a saved product is a whole scan the user chose to
+            // keep, which is a bigger thing than one ingredient.
+            if (savedScans.isNotEmpty()) {
+                item { SectionHeader("Products") }
+                items(savedScans, key = { "scan-${it.id}" }) { scan ->
+                    SavedScanRow(scan, onClick = { onOpenScan(scan.id) })
+                    HorizontalDivider(
+                        color = MaterialTheme.colorScheme.outline.copy(alpha = 0.4f)
+                    )
+                }
+            }
+            if (bookmarks.isNotEmpty()) {
+                item { SectionHeader("Ingredients") }
+                items(bookmarks, key = { "ingredient-${it.id}" }) { ingredient ->
+                    BookmarkRow(ingredient, onClick = { onOpenIngredient(ingredient) })
+                    HorizontalDivider(
+                        color = MaterialTheme.colorScheme.outline.copy(alpha = 0.4f)
+                    )
+                }
             }
             item { Spacer(Modifier.height(110.dp)) }
+        }
+    }
+}
+
+@Composable
+private fun SectionHeader(title: String) {
+    Text(
+        text = title.uppercase(),
+        style = MaterialTheme.typography.labelMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 16.dp, bottom = 6.dp)
+    )
+}
+
+@Composable
+private fun SavedScanRow(scan: ScanEntity, onClick: () -> Unit) {
+    // Mirrors the history row, including the dash for a scan we could not score
+    // honestly, so the same product looks the same in both places.
+    val tint = scan.score?.let { gradeColor(Grade.of(it)) }
+        ?: MaterialTheme.colorScheme.onSurfaceVariant
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(horizontal = 20.dp, vertical = 14.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .background(tint.copy(alpha = 0.18f), RoundedCornerShape(12.dp)),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = scan.score?.toString() ?: "–",
+                style = MaterialTheme.typography.labelLarge,
+                color = tint
+            )
+        }
+        Spacer(Modifier.size(14.dp))
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = scan.productName,
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            if (!scan.brand.isNullOrBlank()) {
+                Text(
+                    text = scan.brand,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1
+                )
+            }
         }
     }
 }

@@ -54,6 +54,11 @@ class AnalysisRepository(
 
     val history: Flow<List<ScanEntity>> = scanDao.observeRecent()
 
+    /** Scans the user pinned, newest first. */
+    val savedScans: Flow<List<ScanEntity>> = scanDao.observeSaved()
+
+    suspend fun toggleScanSaved(id: Long) = scanDao.toggleSaved(id)
+
     suspend fun deleteScan(id: Long) = scanDao.delete(id)
     suspend fun clearHistory() = scanDao.clearAll()
 

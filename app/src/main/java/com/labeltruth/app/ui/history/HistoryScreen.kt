@@ -45,6 +45,7 @@ fun HistoryScreen(
     /** Null when shown as a bottom-bar tab. */
     onBack: (() -> Unit)?,
     onOpen: (Long) -> Unit,
+    onToggleSaved: (Long) -> Unit,
     onDelete: (Long) -> Unit,
     onClearAll: () -> Unit
 ) {
@@ -81,6 +82,7 @@ fun HistoryScreen(
                 HistoryRow(
                     scan = scan,
                     onOpen = { onOpen(scan.id) },
+                    onToggleSaved = { onToggleSaved(scan.id) },
                     onDelete = { onDelete(scan.id) }
                 )
                 HorizontalDivider(
@@ -92,7 +94,12 @@ fun HistoryScreen(
 }
 
 @Composable
-private fun HistoryRow(scan: ScanEntity, onOpen: () -> Unit, onDelete: () -> Unit) {
+private fun HistoryRow(
+    scan: ScanEntity,
+    onOpen: () -> Unit,
+    onToggleSaved: () -> Unit,
+    onDelete: () -> Unit
+) {
     // A scan is stored without a score when too little of the label could be
     // recognised to rate it honestly. It still belongs in the list, shown as a
     // dash rather than dressed up with a number we do not have.
@@ -140,10 +147,27 @@ private fun HistoryRow(scan: ScanEntity, onOpen: () -> Unit, onDelete: () -> Uni
                 maxLines = 1
             )
         }
+        // Filled and tinted when saved, so the state is readable at a glance
+        // rather than only on tap.
+        IconButton(onClick = onToggleSaved) {
+            Icon(
+                painter = painterResource(
+                    if (scan.saved) R.drawable.ic_bookmark_filled else R.drawable.ic_bookmark
+                ),
+                contentDescription = if (scan.saved) {
+                    "Remove ${scan.productName} from saved"
+                } else {
+                    "Save ${scan.productName}"
+                },
+                tint = if (scan.saved) MaterialTheme.colorScheme.primary
+                else MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.size(18.dp)
+            )
+        }
         IconButton(onClick = onDelete) {
             Icon(
                 painter = painterResource(R.drawable.ic_delete),
-                contentDescription = "Delete scan",
+                contentDescription = "Delete ${scan.productName}",
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.size(18.dp)
             )
