@@ -59,10 +59,46 @@ jobs:
       - name: Build the debug APK
         run: ./gradlew :app:assembleDebug
 
-      - name: Report the APK size
+      # The build that matters. Everything above is a debug build, which is not
+      # what reaches users: the release build passes through R8, which shrinks,
+      # obfuscates and strips resources. A missing keep rule there would leave an
+      # app that installs, opens, and finds nothing in its own dictionary -
+      # invisible in debug testing and broken in production. This variant is the
+      # release build signed with the debug key so it can actually be installed.
+      - name: Build the release-shaped APK (R8 applied, debug-signed)
+        run: ./gradlew :app:assembleReleaseCheck
+
+      - name: Report both APK sizes
         run: |
-          APK=app/build/outputs/apk/debug/app-debug.apk
-          echo "APK size: $(du -h "$APK" | cut -f1)"
+          DEBUG=app/build/outputs/apk/debug/app-debug.apk
+          CHECK=app/build/outputs/apk/releaseCheck/app-releaseCheck.apk
+          echo "debug:        $(du -h "$DEBUG" | cut -f1)"
+          echo "releaseCheck: $(du -h "$CHECK" | cut -f1)"
+
+      # Fails the build if R8 stripped the field names kotlinx.serialization
+      # matches the bundled dictionary on. Cheap, and it catches the exact
+      # failure this variant exists to guard against.
+      - name: Check R8 did not break the dictionary
+        run: |
+          CHECK=app/build/outputs/apk/releaseCheck/app-releaseCheck.apk
+          unzip -p "$CHECK" 'classes*.dex' > /tmp/all.dex
+          missing=0
+          for name in riskTier cautionGroups whatItIs whyUsed eNumber riskReason; do
+            if grep -aq "$name" /tmp/all.dex; then
+              echo "ok      $name"
+            else
+              echo "MISSING $name"
+              missing=1
+            fi
+          done
+          if ! unzip -l "$CHECK" | grep -q ingredients_seed.json; then
+            echo "MISSING the ingredients_seed.json asset"
+            missing=1
+          fi
+          if [ "$missing" -ne 0 ]; then
+            echo "R8 removed something the dictionary needs. Do not ship this."
+            exit 1
+          fi
 
       - name: Publish the APK as a release, so a phone can download it
         env:
@@ -74,20 +110,30 @@ jobs:
           # Written to a file rather than inlined, because a heredoc nested
           # inside a YAML block scalar is easy to get subtly wrong.
           {
-            echo "Debug build for testing on a real phone."
+            echo "Two builds for testing on a real phone."
             echo
-            echo "**How to install**"
+            echo "**Install \`app-releaseCheck.apk\` — this is the one that matters.**"
             echo
             echo "1. Open this page on your Android phone"
-            echo "2. Tap \`app-debug.apk\` under Assets below to download it"
+            echo "2. Tap \`app-releaseCheck.apk\` under Assets below"
             echo "3. Open the downloaded file and allow installation when asked"
             echo
-            echo "Installs as a separate app (\`com.labeltruth.app.debug\`), so it"
-            echo "will not clash with a Play Store version later. This build is"
-            echo "not signed for the Play Store and must not be uploaded there."
+            echo "### Why two"
+            echo
+            echo "| File | What it is |"
+            echo "| --- | --- |"
+            echo "| \`app-releaseCheck.apk\` | The **release** build, shrunk and obfuscated by R8 exactly as the Play Store version will be. Testing this is the only way to know the shipped app works. Installs as \`com.labeltruth.app.rc\`. |"
+            echo "| \`app-debug.apk\` | The debug build. Not minified, so crashes are easier to read. Installs as \`com.labeltruth.app.debug\`. |"
+            echo
+            echo "Both use separate application ids, so they sit alongside each"
+            echo "other and alongside a future Play Store install."
+            echo
+            echo "Neither is signed with the upload key, so neither can be"
+            echo "uploaded to Google Play."
           } > release-notes.md
 
           gh release create "$TAG" \
+            app/build/outputs/apk/releaseCheck/app-releaseCheck.apk \
             app/build/outputs/apk/debug/app-debug.apk \
             --title "LabelTruth test build ${TAG}" \
             --prerelease \
