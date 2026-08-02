@@ -63,7 +63,17 @@ data class ScanEntity(
     val productName: String,
     val brand: String?,
     val barcode: String?,
-    val score: Int,
+    /**
+     * Null when the label was read but too little of it was recognised to score
+     * honestly.
+     *
+     * Nullable rather than absent, because a scan that could not be scored still
+     * happened and the person who made it expects to find it again. Previously
+     * such scans were silently dropped, so the app could show a result and then
+     * present an empty history a moment later - which for an app about
+     * trustworthiness is the worst possible bug to have.
+     */
+    val score: Int?,
     val timestamp: Long,
     val ingredientsRaw: String,
     /**

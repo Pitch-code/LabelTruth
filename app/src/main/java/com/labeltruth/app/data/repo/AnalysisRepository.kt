@@ -75,8 +75,17 @@ class AnalysisRepository(
         }
     }
 
-    /** Every stored score, for the home screen's grade breakdown. */
+    /** Scores of the scans that could be scored, for the grade breakdown. */
     val scanScores: Flow<List<Int>> = scanDao.observeScores()
+
+    /**
+     * How many scans have been made, including ones that could not be scored.
+     *
+     * Counted separately from [scanScores] on purpose: a scan the user made is a
+     * scan, and telling them "0 products scanned" straight after they scanned
+     * something is the kind of small dishonesty this app cannot afford.
+     */
+    val scanCount: Flow<Int> = scanDao.observeCount()
 
     /**
      * One assessed, cited ingredient to feature on the home screen.
@@ -211,10 +220,11 @@ class AnalysisRepository(
             category = category
         )
 
-        // Only scans we could actually score are worth keeping. A failed read
-        // has nothing to revisit, and storing one would put a fabricated score
-        // in the history list where it cannot even be explained.
-        if (persist && score != null) {
+        // Unscored scans are kept too, with a null score rather than a made-up
+        // one. Dropping them meant the app could show a result and then show an
+        // empty history seconds later, which is indistinguishable from being
+        // broken. Anything we managed to read is worth being able to return to.
+        if (persist) {
             scanDao.insert(
                 ScanEntity(
                     productName = productName,

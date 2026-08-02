@@ -93,7 +93,11 @@ fun HistoryScreen(
 
 @Composable
 private fun HistoryRow(scan: ScanEntity, onOpen: () -> Unit, onDelete: () -> Unit) {
-    val grade = Grade.of(scan.score)
+    // A scan is stored without a score when too little of the label could be
+    // recognised to rate it honestly. It still belongs in the list, shown as a
+    // dash rather than dressed up with a number we do not have.
+    val tint = scan.score?.let { gradeColor(Grade.of(it)) }
+        ?: MaterialTheme.colorScheme.onSurfaceVariant
     val formatter = remember { SimpleDateFormat("d MMM yyyy, HH:mm", Locale.getDefault()) }
 
     Row(
@@ -108,14 +112,14 @@ private fun HistoryRow(scan: ScanEntity, onOpen: () -> Unit, onDelete: () -> Uni
         Box(
             modifier = Modifier
                 .size(44.dp)
-                .background(gradeColor(grade).copy(alpha = 0.18f), RoundedCornerShape(12.dp)),
+                .background(tint.copy(alpha = 0.18f), RoundedCornerShape(12.dp)),
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "${scan.score}",
+                text = scan.score?.toString() ?: "–",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color = gradeColor(grade)
+                color = tint
             )
         }
         Spacer(Modifier.size(14.dp))
