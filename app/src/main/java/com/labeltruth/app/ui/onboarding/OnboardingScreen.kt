@@ -37,7 +37,9 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -113,6 +115,25 @@ fun OnboardingScreen(
     )
 
     var index by remember { mutableIntStateOf(0) }
+
+    /**
+     * The name being typed, held locally and saved only when the step is left.
+     *
+     * It used to be bound straight to the stored value, with every keystroke
+     * launching its own coroutine to write to DataStore. Separate coroutines
+     * have no ordering guarantee, so typing "Veera" fired five concurrent
+     * writes and the flow emitted them back in whatever order they landed -
+     * on a real phone that produced "ErV". Persisting also trimmed the value
+     * and fed it back into the field, so a space vanished as it was typed.
+     *
+     * A text field must be driven by local state for exactly this reason.
+     * Seeded once on first composition, which is safe here because onboarding
+     * runs once and the stored name is empty at that point.
+     */
+    var nameDraft by rememberSaveable { mutableStateOf(firstName) }
+
+    // One write per step change instead of one per keystroke.
+    val commitName = { onFirstNameChange(nameDraft) }
     val step = steps[index]
     val isLast = index == steps.lastIndex
 
@@ -151,7 +172,9 @@ fun OnboardingScreen(
                     )
                 }
             }
-            TextButton(onClick = onFinish) { Text("Skip") }
+            // Skipping the rest of onboarding should not throw away a name
+            // that has already been typed.
+            TextButton(onClick = { commitName(); onFinish() }) { Text("Skip") }
         }
 
         Spacer(Modifier.height(28.dp))
@@ -177,8 +200,8 @@ fun OnboardingScreen(
                 Spacer(Modifier.height(24.dp))
                 if (current.isNameStep) {
                     OutlinedTextField(
-                        value = firstName,
-                        onValueChange = onFirstNameChange,
+                        value = nameDraft,
+                        onValueChange = { nameDraft = it },
                         singleLine = true,
                         placeholder = { Text("First name") },
                         shape = RoundedCornerShape(16.dp),
@@ -223,7 +246,10 @@ fun OnboardingScreen(
         Spacer(Modifier.height(14.dp))
 
         Button(
-            onClick = { if (isLast) onFinish() else index++ },
+            onClick = {
+                commitName()
+                if (isLast) onFinish() else index++
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(54.dp),
