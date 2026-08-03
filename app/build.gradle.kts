@@ -161,6 +161,11 @@ dependencies {
 
     implementation(libs.mlkit.barcode.scanning)
     implementation(libs.mlkit.text.recognition)
+    // Flattens a photographed label before it reaches text recognition. A curved
+    // ghee bottle read as warped, interleaved text that no parser could rescue,
+    // and an independent study of this exact problem concluded that on-device OCR
+    // alone is not good enough without that correction step.
+    implementation(libs.mlkit.document.scanner)
 
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
