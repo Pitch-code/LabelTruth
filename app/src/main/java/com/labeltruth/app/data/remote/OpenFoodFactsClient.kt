@@ -2,6 +2,8 @@ package com.labeltruth.app.data.remote
 
 import android.content.Context
 import com.labeltruth.app.BuildConfig
+import com.labeltruth.app.domain.model.NovaGroup
+import com.labeltruth.app.domain.model.Nutrition
 import com.labeltruth.app.domain.model.ProductCategory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -9,6 +11,12 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.contentOrNull
+import kotlinx.serialization.json.doubleOrNull
+import kotlinx.serialization.json.intOrNull
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -29,7 +37,50 @@ private data class OffProduct(
     val quantity: String? = null,
     @SerialName("ingredients_text") val ingredientsText: String? = null,
     @SerialName("ingredients_text_en") val ingredientsTextEn: String? = null,
-    @SerialName("image_front_url") val imageUrl: String? = null
+    @SerialName("image_front_url") val imageUrl: String? = null,
+    val categories: String? = null,
+    @SerialName("nutriscore_grade") val nutriscoreGrade: String? = null,
+    /**
+     * Read as raw JSON rather than typed fields. Open Food Facts is
+     * contributor-entered and the same key comes back as a number for one
+     * product and a string for another, so a strict Double here would throw and
+     * fail the entire lookup over one odd value.
+     */
+    val nutriments: JsonObject? = null,
+    @SerialName("nova_group") val novaGroup: JsonElement? = null,
+    @SerialName("allergens_tags") val allergensTags: List<String> = emptyList()
+)
+
+/** Tolerant number read: accepts 12.5, "12.5" and absence. */
+private fun JsonObject?.number(key: String): Double? {
+    val primitive = this?.get(key) as? JsonPrimitive ?: return null
+    return primitive.doubleOrNull ?: primitive.contentOrNull?.trim()?.toDoubleOrNull()
+}
+
+private fun JsonElement?.asInt(): Int? {
+    val primitive = this as? JsonPrimitive ?: return null
+    return primitive.intOrNull ?: primitive.contentOrNull?.trim()?.toDoubleOrNull()?.toInt()
+}
+
+/**
+ * Maps the nutriments block onto our own model.
+ *
+ * Open Food Facts uses hyphenated keys with a _100g suffix, and spells fibre the
+ * American way. A missing key stays null rather than becoming zero: "not
+ * declared" and "contains none" are different statements, and only one of them
+ * is safe to show someone avoiding an ingredient.
+ */
+private fun JsonObject?.toNutrition(): Nutrition = Nutrition(
+    energyKcal100g = number("energy-kcal_100g"),
+    fat100g = number("fat_100g"),
+    saturatedFat100g = number("saturated-fat_100g"),
+    transFat100g = number("trans-fat_100g"),
+    carbohydrates100g = number("carbohydrates_100g"),
+    sugars100g = number("sugars_100g"),
+    fibre100g = number("fiber_100g"),
+    proteins100g = number("proteins_100g"),
+    salt100g = number("salt_100g"),
+    sodium100g = number("sodium_100g")
 )
 
 /** What the app actually needs out of a barcode lookup. */
@@ -40,6 +91,18 @@ data class RemoteProduct(
     val quantity: String?,
     val ingredientsText: String,
     val imageUrl: String?,
+    /** Per 100 g or 100 ml. Empty when the panel was never entered. */
+    val nutrition: Nutrition = Nutrition(),
+    /** Published NOVA processing classification, when Open Food Facts computed one. */
+    val novaGroup: NovaGroup? = null,
+    /**
+     * Allergens Open Food Facts recorded for the product, as a second and
+     * independent source from our own ingredient matching. A name our dictionary
+     * misses should not mean a missed peanut warning.
+     */
+    val allergenTags: List<String> = emptyList(),
+    /** The product's own category text, for display: "Cooking Oils". */
+    val categoryText: String? = null,
     /**
      * Which database answered, which tells us the route of exposure. This is
      * how the app knows to read titanium dioxide as a cosmetic UV filter rather
@@ -211,6 +274,14 @@ class OpenFoodFactsClient(context: Context) {
                         quantity = product.quantity?.takeIf { it.isNotBlank() },
                         ingredientsText = ingredients,
                         imageUrl = product.imageUrl?.takeIf { it.isNotBlank() },
+                        nutrition = product.nutriments.toNutrition(),
+                        novaGroup = NovaGroup.of(product.novaGroup.asInt()),
+                        allergenTags = product.allergensTags,
+                        categoryText = product.categories
+                            ?.split(",")
+                            ?.firstOrNull()
+                            ?.trim()
+                            ?.takeIf { it.isNotEmpty() },
                         category = category
                     )
                 )
@@ -229,8 +300,17 @@ class OpenFoodFactsClient(context: Context) {
         const val FOOD_HOST = "https://world.openfoodfacts.org"
         const val BEAUTY_HOST = "https://world.openbeautyfacts.org"
         const val CACHE_BYTES = 8L * 1024 * 1024
-        const val FIELDS =
-            "product_name,product_name_en,brands,quantity,ingredients_text,ingredients_text_en,image_front_url"
+        /**
+         * We asked for seven fields and ignored most of what was on offer.
+         *
+         * A single-ingredient product such as ghee has nothing to say through
+         * ingredient analysis, while its nutrition panel says everything: 99.8 g
+         * fat and 68 g saturated fat per 100 g. All of it comes from the same
+         * request at no extra cost.
+         */
+        const val FIELDS = "product_name,product_name_en,brands,quantity," +
+            "ingredients_text,ingredients_text_en,image_front_url," +
+            "categories,nutriscore_grade,nutriments,nova_group,allergens_tags"
         /** One retry. Enough for a blip, few enough to stay polite. */
         const val MAX_ATTEMPTS = 2
         const val RETRY_DELAY_MS = 700L

@@ -45,6 +45,74 @@ enum class RiskTier(val label: String, val penalty: Int) {
 data class SourceRef(val title: String, val url: String?)
 
 /**
+ * A nutrition panel, per 100 g or 100 ml.
+ *
+ * Every field is nullable because labels declare different subsets and Open Food
+ * Facts records whatever a contributor entered. A missing value must read as
+ * "not declared", never as zero: claiming a product contains no trans fat
+ * because nobody typed the number in would be exactly the kind of confident
+ * wrongness this app exists to avoid.
+ */
+data class Nutrition(
+    val energyKcal100g: Double? = null,
+    val fat100g: Double? = null,
+    val saturatedFat100g: Double? = null,
+    val transFat100g: Double? = null,
+    val carbohydrates100g: Double? = null,
+    val sugars100g: Double? = null,
+    val fibre100g: Double? = null,
+    val proteins100g: Double? = null,
+    val salt100g: Double? = null,
+    val sodium100g: Double? = null
+) {
+    /** True when there is nothing worth showing a panel for. */
+    val isEmpty: Boolean
+        get() = listOf(
+            energyKcal100g, fat100g, saturatedFat100g, transFat100g,
+            carbohydrates100g, sugars100g, fibre100g, proteins100g,
+            salt100g, sodium100g
+        ).all { it == null }
+}
+
+/**
+ * Something notable in the nutrition panel, with the published limit it was
+ * measured against.
+ *
+ * Reports the amount and the guidance, never a prediction about the reader.
+ * "68 g of saturated fat per 100 g, and WHO suggests about 22 g a day" is
+ * checkable. "This will raise your cholesterol" is not ours to say.
+ */
+data class NutritionFinding(
+    val title: String,
+    val detail: String,
+    val tier: RiskTier,
+    val source: SourceRef
+)
+
+/**
+ * How heavily a food has been industrially processed, on the NOVA scale.
+ *
+ * Computed by Open Food Facts from the ingredient list using the published NOVA
+ * classification, so it is a citable derivation rather than an opinion.
+ */
+enum class NovaGroup(val label: String, val summary: String) {
+    UNPROCESSED("Unprocessed or minimally processed", "Group 1 on the NOVA scale"),
+    CULINARY_INGREDIENT("Processed culinary ingredient", "Group 2 on the NOVA scale"),
+    PROCESSED("Processed food", "Group 3 on the NOVA scale"),
+    ULTRA_PROCESSED("Ultra-processed food", "Group 4 on the NOVA scale");
+
+    companion object {
+        fun of(group: Int?): NovaGroup? = when (group) {
+            1 -> UNPROCESSED
+            2 -> CULINARY_INGREDIENT
+            3 -> PROCESSED
+            4 -> ULTRA_PROCESSED
+            else -> null
+        }
+    }
+}
+
+/**
  * What kind of product is being scanned.
  *
  * This is not cosmetic detail, it changes the answer. Titanium dioxide is
