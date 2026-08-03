@@ -17,6 +17,9 @@ import com.labeltruth.app.domain.model.Analysis
 import com.labeltruth.app.domain.model.Grade
 import com.labeltruth.app.domain.model.HealthProfile
 import com.labeltruth.app.domain.model.Ingredient
+import com.labeltruth.app.domain.model.NovaGroup
+import com.labeltruth.app.domain.model.Nutrition
+import com.labeltruth.app.domain.NutritionAssessor
 import com.labeltruth.app.domain.model.ProductCategory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -127,7 +130,11 @@ class AnalysisRepository(
                     ingredientsText = result.product.ingredientsText,
                     profile = profile,
                     // Which database answered tells us the route of exposure.
-                    category = result.product.category
+                    category = result.product.category,
+                    quantity = result.product.quantity,
+                    categoryText = result.product.categoryText,
+                    nutrition = result.product.nutrition,
+                    novaGroup = result.product.novaGroup
                 )
             )
             is LookupResult.NoIngredients -> BarcodeOutcome.NoIngredients(result.name)
@@ -180,7 +187,11 @@ class AnalysisRepository(
         ingredientsText: String,
         profile: HealthProfile,
         category: ProductCategory,
-        persist: Boolean = true
+        persist: Boolean = true,
+        quantity: String? = null,
+        categoryText: String? = null,
+        nutrition: Nutrition = Nutrition(),
+        novaGroup: NovaGroup? = null
     ): Analysis = withContext(Dispatchers.Default) {
         // Never analyse against a half-imported dictionary.
         ensureDictionaryReady()
@@ -222,7 +233,15 @@ class AnalysisRepository(
             ingredients = analyzed,
             alerts = ScoreEngine.alerts(analyzed, profile),
             rawIngredientsText = ingredientsText,
-            category = category
+            category = category,
+            quantity = quantity,
+            categoryText = categoryText,
+            nutrition = nutrition,
+            // For a one-ingredient product this is the entire useful answer, so
+            // it is computed for every scan that carries a panel.
+            nutritionFindings = if (nutrition.isEmpty) emptyList()
+            else NutritionAssessor.assess(nutrition),
+            novaGroup = novaGroup
         )
 
         // Unscored scans are kept too, with a null score rather than a made-up
