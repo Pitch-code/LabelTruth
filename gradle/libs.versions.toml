@@ -21,6 +21,9 @@ navigationCompose = "2.9.5"
 camerax = "1.5.2"
 mlkitBarcode = "17.3.0"
 mlkitText = "16.0.1"
+# Document scanner. Delivered through Google Play services rather than bundled,
+# so it adds almost nothing to the download.
+mlkitDocScanner = "16.0.0"
 room = "2.8.2"
 datastore = "1.1.7"
 okhttp = "4.12.0"
@@ -51,6 +54,7 @@ androidx-camera-view = { group = "androidx.camera", name = "camera-view", versio
 
 mlkit-barcode-scanning = { group = "com.google.mlkit", name = "barcode-scanning", version.ref = "mlkitBarcode" }
 mlkit-text-recognition = { group = "com.google.mlkit", name = "text-recognition", version.ref = "mlkitText" }
+mlkit-document-scanner = { group = "com.google.android.gms", name = "play-services-mlkit-document-scanner", version.ref = "mlkitDocScanner" }
 
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }

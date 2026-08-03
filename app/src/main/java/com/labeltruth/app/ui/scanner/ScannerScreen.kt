@@ -295,6 +295,45 @@ fun ScannerScreen(
                 }
             }
 
+            // Offered alongside the normal capture rather than replacing it. The
+            // live frame is quicker on a flat packet, and this path exists for the
+            // case it cannot handle: text curving away from the lens on a jar or
+            // bottle, which no parser can straighten afterwards.
+            if (state.mode == ScanMode.LABEL) {
+                var scannerError by remember { mutableStateOf<String?>(null) }
+                val scanFlattened = rememberLabelDocumentScanner(
+                    onText = { text ->
+                        scannerError = null
+                        onLabelText(text)
+                    },
+                    onError = { scannerError = it }
+                )
+
+                TextButton(
+                    onClick = {
+                        scannerError = null
+                        scanFlattened()
+                    },
+                    enabled = !state.isProcessing
+                ) {
+                    Text(
+                        text = "Curved or shiny label? Flatten it first",
+                        style = MaterialTheme.typography.labelLarge,
+                        color = BrandGreen
+                    )
+                }
+
+                scannerError?.let { message ->
+                    Text(
+                        text = message,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color.White.copy(alpha = 0.9f),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(horizontal = 16.dp)
+                    )
+                }
+            }
+
             TextButton(onClick = onOpenAbout) {
                 Text(
                     text = "Sources and disclaimer",
