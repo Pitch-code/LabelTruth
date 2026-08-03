@@ -75,6 +75,14 @@ private fun ResultContent(
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
+            // Fills the height as well, so the sheet is always full screen.
+            //
+            // skipPartiallyExpanded removed the half-way stop, but a bottom sheet
+            // still sizes itself to its content: a 20-ingredient result filled
+            // the screen while a one-ingredient result left the camera preview
+            // showing above it. That frozen frame reads as "still scanning" even
+            // though the camera has already been released.
+            .fillMaxHeight()
             .navigationBarsPadding(),
         contentPadding = androidx.compose.foundation.layout.PaddingValues(
             start = 20.dp, end = 20.dp, bottom = 32.dp
@@ -164,6 +172,28 @@ private fun ResultContent(
         if (!analysis.nutrition.isEmpty) {
             item {
                 NutritionPanel(analysis.nutrition)
+                Spacer(Modifier.height(20.dp))
+            }
+        } else if (analysis.barcode != null) {
+            // Silence here looks identical to a broken app. Open Food Facts is
+            // contributor-maintained and many Indian records carry only a name
+            // and an ingredient line, so saying the panel is missing - and that
+            // the packaging still has it - is more useful than showing nothing.
+            item {
+                Text(
+                    text = "No nutrition panel on record",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    text = "Nobody has added the nutrition figures for this product " +
+                        "to Open Food Facts yet, so there is nothing for us to check " +
+                        "them against. The panel printed on the pack is still there, " +
+                        "and for a product like ghee or oil it is the part worth reading.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
                 Spacer(Modifier.height(20.dp))
             }
         }
