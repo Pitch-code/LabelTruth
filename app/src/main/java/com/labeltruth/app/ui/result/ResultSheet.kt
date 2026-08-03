@@ -36,6 +36,9 @@ import com.labeltruth.app.domain.model.AlertSeverity
 import com.labeltruth.app.domain.model.Analysis
 import com.labeltruth.app.domain.model.AnalyzedIngredient
 import com.labeltruth.app.domain.model.Ingredient
+import com.labeltruth.app.domain.model.NovaGroup
+import com.labeltruth.app.domain.model.Nutrition
+import com.labeltruth.app.domain.model.NutritionFinding
 import com.labeltruth.app.domain.model.PersonalAlert
 import com.labeltruth.app.domain.model.RiskTier
 import com.labeltruth.app.ui.components.ScoreRing
@@ -72,6 +75,14 @@ private fun ResultContent(
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
+            // Fills the height as well, so the sheet is always full screen.
+            //
+            // skipPartiallyExpanded removed the half-way stop, but a bottom sheet
+            // still sizes itself to its content: a 20-ingredient result filled
+            // the screen while a one-ingredient result left the camera preview
+            // showing above it. That frozen frame reads as "still scanning" even
+            // though the camera has already been released.
+            .fillMaxHeight()
             .navigationBarsPadding(),
         contentPadding = androidx.compose.foundation.layout.PaddingValues(
             start = 20.dp, end = 20.dp, bottom = 32.dp
@@ -101,6 +112,17 @@ private fun ResultContent(
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
+                    // Pack size and the product's own category. Both were already
+                    // being fetched and never shown, and they are the first things
+                    // that tell a reader we found the right product.
+                    val facts = listOfNotNull(analysis.quantity, analysis.categoryText)
+                    if (facts.isNotEmpty()) {
+                        Text(
+                            text = facts.joinToString(" · "),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
                     Spacer(Modifier.height(8.dp))
                     Text(
                         text = ScoreEngine.summary(analysis.ingredients),
@@ -126,6 +148,61 @@ private fun ResultContent(
                 Spacer(Modifier.height(8.dp))
             }
             item { Spacer(Modifier.height(12.dp)) }
+        }
+
+        // Nutrition comes before the ingredient list on purpose. For a
+        // single-ingredient product such as ghee, the ingredient list says
+        // "milk fat" and nothing else, while the panel carries the whole answer.
+        if (analysis.nutritionFindings.isNotEmpty()) {
+            item {
+                Text(
+                    text = "What the nutrition panel shows",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(Modifier.height(8.dp))
+            }
+            items(analysis.nutritionFindings) { finding ->
+                NutritionFindingRow(finding)
+                Spacer(Modifier.height(8.dp))
+            }
+            item { Spacer(Modifier.height(12.dp)) }
+        }
+
+        if (!analysis.nutrition.isEmpty) {
+            item {
+                NutritionPanel(analysis.nutrition)
+                Spacer(Modifier.height(20.dp))
+            }
+        } else if (analysis.barcode != null) {
+            // Silence here looks identical to a broken app. Open Food Facts is
+            // contributor-maintained and many Indian records carry only a name
+            // and an ingredient line, so saying the panel is missing - and that
+            // the packaging still has it - is more useful than showing nothing.
+            item {
+                Text(
+                    text = "No nutrition panel on record",
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    text = "Nobody has added the nutrition figures for this product " +
+                        "to Open Food Facts yet, so there is nothing for us to check " +
+                        "them against. The panel printed on the pack is still there, " +
+                        "and for a product like ghee or oil it is the part worth reading.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Spacer(Modifier.height(20.dp))
+            }
+        }
+
+        analysis.novaGroup?.let { nova ->
+            item {
+                NovaRow(nova)
+                Spacer(Modifier.height(20.dp))
+            }
         }
 
         item {
@@ -383,4 +460,150 @@ fun DisclaimerFooter() {
         style = MaterialTheme.typography.bodyMedium,
         color = MaterialTheme.colorScheme.onSurfaceVariant
     )
+}
+
+
+/**
+ * One nutrition finding: the amount, the published limit, and where it came from.
+ *
+ * The source is shown on the row rather than hidden behind a tap, because a
+ * statement like "68 g per 100 g against WHO's 22 g a day" is only worth
+ * anything if the reader can see who said 22.
+ */
+@Composable
+private fun NutritionFindingRow(finding: NutritionFinding) {
+    val tint = riskColor(finding.tier)
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(IntrinsicSize.Min)
+    ) {
+        Box(
+            modifier = Modifier
+                .width(4.dp)
+                .fillMaxHeight()
+                .background(tint, RoundedCornerShape(2.dp))
+        )
+        Spacer(Modifier.size(12.dp))
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = finding.title,
+                style = MaterialTheme.typography.titleSmall,
+                color = tint
+            )
+            Text(
+                text = finding.detail,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+            Spacer(Modifier.height(2.dp))
+            Text(
+                text = finding.source.title,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+    }
+}
+
+/**
+ * The declared panel, per 100 g or 100 ml.
+ *
+ * Only declared values appear. A nutrient nobody entered is omitted rather than
+ * shown as zero, because "not declared" and "none" are different claims.
+ */
+@Composable
+private fun NutritionPanel(nutrition: Nutrition) {
+    val rows = buildList {
+        nutrition.energyKcal100g?.let { add("Energy" to "${trim(it)} kcal") }
+        nutrition.fat100g?.let { add("Fat" to "${trim(it)} g") }
+        nutrition.saturatedFat100g?.let { add("  of which saturated" to "${trim(it)} g") }
+        nutrition.transFat100g?.let { add("  of which trans" to "${trim(it)} g") }
+        nutrition.carbohydrates100g?.let { add("Carbohydrate" to "${trim(it)} g") }
+        nutrition.sugars100g?.let { add("  of which sugars" to "${trim(it)} g") }
+        nutrition.fibre100g?.let { add("Fibre" to "${trim(it)} g") }
+        nutrition.proteins100g?.let { add("Protein" to "${trim(it)} g") }
+        nutrition.salt100g?.let { add("Salt" to "${trim(it)} g") }
+        nutrition.sodium100g?.let { add("Sodium" to "${trim(it)} g") }
+    }
+    if (rows.isEmpty()) return
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text(
+            text = "Nutrition, per 100 g or ml",
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+        Spacer(Modifier.height(4.dp))
+        HorizontalDivider(color = MaterialTheme.colorScheme.outline)
+        rows.forEach { (label, value) ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 9.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = label,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = if (label.startsWith("  ")) {
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    } else {
+                        MaterialTheme.colorScheme.onSurface
+                    }
+                )
+                Text(
+                    text = value,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
+            HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.4f))
+        }
+        Spacer(Modifier.height(8.dp))
+        Text(
+            text = "Declared values from Open Food Facts. Blank nutrients were " +
+                "not recorded, which is not the same as containing none.",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
+/**
+ * How heavily the food is processed, on the published NOVA scale.
+ *
+ * Open Food Facts derives this from the ingredient list using the NOVA
+ * classification, so it is a citable derivation rather than our opinion. Shown
+ * without a verdict attached: group 4 describes how a food was made, and is not
+ * by itself a finding about safety.
+ */
+@Composable
+private fun NovaRow(nova: NovaGroup) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text(
+            text = "Processing",
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+        Spacer(Modifier.height(6.dp))
+        Text(
+            text = nova.label,
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+        Text(
+            text = "${nova.summary}, as classified by Open Food Facts from the " +
+                "ingredient list.",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
+/** Drops a pointless trailing ".0" so a panel reads like a label. */
+private fun trim(value: Double): String {
+    val rounded = Math.round(value * 10) / 10.0
+    return if (rounded % 1.0 == 0.0) rounded.toInt().toString() else rounded.toString()
 }

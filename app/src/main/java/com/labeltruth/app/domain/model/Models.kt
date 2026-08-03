@@ -214,7 +214,22 @@ data class Analysis(
     val ingredients: List<AnalyzedIngredient>,
     val alerts: List<PersonalAlert>,
     val rawIngredientsText: String,
-    val category: ProductCategory = ProductCategory.FOOD
+    val category: ProductCategory = ProductCategory.FOOD,
+    /** Pack size as declared, for example "200 ml". Null for a photographed label. */
+    val quantity: String? = null,
+    /** The product's own category text, for example "Cooking Oils". */
+    val categoryText: String? = null,
+    /** The declared nutrition panel, per 100 g or 100 ml. */
+    val nutrition: Nutrition = Nutrition(),
+    /**
+     * What the nutrition panel shows against published limits.
+     *
+     * Separate from [ingredients] because these describe the product as a whole
+     * rather than one component of it, and because for a single-ingredient food
+     * like ghee this is the only thing there is to say.
+     */
+    val nutritionFindings: List<NutritionFinding> = emptyList(),
+    val novaGroup: NovaGroup? = null
 ) {
     val unmatchedCount: Int get() = ingredients.count { it.matched == null }
 
